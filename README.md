@@ -1,6 +1,4 @@
-\# Cursos de Cisco
+# Cursos de Cisco
 
-
-
-\-\[Linux](Linux)
+-[Linux](Linux)
 

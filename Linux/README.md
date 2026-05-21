@@ -649,4 +649,75 @@ _________________
 Una vez completado el comando, observe que el símbolo del sistema no ha cambiado, usted continua bajo la cuenta de inicio sysadmin. El comando `sudo` sólo proporciona acceso administrativo para la ejecución del comando especificado. Esto es una ventaja ya que reduce el riesgo de que un usuario ejecute accidentalmente un comando como usuario root. La intención de ejecutar un comando es clara; el comando se ejecuta como root si se prefija con el comando `sudo`. De lo contrario, el comando se ejecuta como usuario ordinario.
 
 
-Todo bien
+## Permisos
+
+Los permisos determinan la forma en que los diferentes usuarios pueden interactuar con un archivo o directorio. Al enumerar un archivo con el comando ls -l, el resultado incluye información sobre sus permisos. Para nuestro ejemplo usaremos un script llamado hello.sh ubicado en el directorio Documents:
+
+**Siga leyendo**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+```bash
+sysadmin@localhost:~/Documents$ ls -l hello.sh                                  
+-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh
+```
+
+A continuación repasamos los campos más relevantes para los permisos.
+
+**Tipo de archivo**
+
+`-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh`
+
+El primer carácter de esta salida indica el tipo de archivo. Recuerde que si el primer carácter es un -, este es un archivo ordinario. Si el carácter fuera una d, se trataría de un directorio.
+
+**Permisos**
+
+`-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh`
+
+Después del carácter de tipo de archivo, se muestran los permisos. Los permisos se dividen en tres grupos de tres caracteres:
+
+**Propietario**
+
+`-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh`
+
+El primer grupo se refiere al usuario que posee el archivo. Si su cuenta actual es la propietaria del archivo, se usará el primer grupo de permisos y los demás permisos no tendrán efecto.
+
+El usuario propietario del archivo y a quién se refieren estos permisos se puede determinar mediante el campo que muestra el usuario propietario:
+
+`-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh`
+
+**Grupo**
+
+`-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh`
+
+El segundo conjunto se refiere al grupo que posee el archivo. Si su cuenta actual no es la del propietario del archivo pero es miembro del grupo que posee el archivo, se aplicarán los permisos del grupo y los demás permisos no tendrán efecto.
+
+El grupo propietario para este archivo puede ser determinado en el campo grupo propietario:
+
+`-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh`
+
+**Otros**
+
+`-rw-r--r-- 1 sysadmin sysadmin 647 Dec 20  2017 hello.sh`
+
+El último grupo es para todos los demás, cualquiera a quien los dos primeros conjuntos de permisos no sean aplicables. Si no es el usuario que posee el archivo o un miembro del grupo que posee el archivo, se le aplicará el tercer conjunto de permisos.
+
+**Tipos de permisos**
+
+Un archivo o directorio puede presentar tres permisos diferentes: leer, escribir y ejecutar. La forma en que se aplican estos permisos difiere entre archivos y directorios, como se muestra en la tabla siguiente:
+
+| Permiso | Efectos sobre los Archivos | Efectos sobre los Directorios |
+|---|---|---|
+| leer (read) (r) | Permite que el contenido del archivo sea leído o copiado. | Sin el permiso para ejecutar, permite obtener un listado poco detallado de los archivos que contiene el directorio. Con el permiso para ejecutar, ls -l proporciona un listado detallado de archivos. |
+| escribir (write) (w) | Permite modificar o reescribir el contenido del archivo. Permite añadir o eliminar archivos en un directorio. | 	Para que este permiso funcione, el directorio debe tener permiso para ejecutar. |
+| ejecutar (execute) (x) | Permite que un archivo funcione como un proceso, aunque archivos script también requerirán el permiso leer (read). | Permite que el usuario se traslade del directorio si en el directorio padre también posee permiso escribir (write). |
+
+**A tener en cuenta**
+
+Comprender qué permisos se aplican en cada momento es una aptitud importante cuando trabajamos con Linux. Por ejemplo, considere el siguiente conjunto de permisos:
+
+`-r--rw-rwx. 1 sysadmin staff 999 Apr  10  2013 /home/sysadmin/test`
+
+En este escenario, el usuario sysadmin termina teniendo menos acceso a este archivo que los miembros del grupo staff o todos los demás. El usuario sysadmin sólo tiene los permisos de r--. No importa si sysadmin es miembro del grupo staff; una vez establecida la propiedad del usuario, solo se aplican los permisos del usuario propietario.git 

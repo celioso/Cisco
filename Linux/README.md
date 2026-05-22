@@ -831,5 +831,5 @@ Observe que para ejecutar el script en el ejemplo anterior, la siguiente combina
 
 `./hello.sh`
 
-Esto indica que el “comando” debe ejecutarse desde el directorio actual.
+Esto indica que el “comando” debe ejecutarse *desde* el directorio actual.
 

@@ -833,3 +833,261 @@ Observe que para ejecutar el script en el ejemplo anterior, la siguiente combina
 
 Esto indica que el comando debe ejecutarse desde el directorio actual.
 
+## Cambiar el propietario de un archivo
+
+Inicialmente, el propietario de un archivo es el usuario que lo crea. El comando `chown` se utiliza para cambiar el propietario de los archivos y directorios. Cambiar el usuario propietario requiere acceso administrativo. Un usuario ordinario no puede utilizar este comando para cambiar el usuario propietario de un archivo, ni tan solo para otorgar propiedad de uno de sus propios archivos a otro usuario. Sin embargo, el comando `chown` permite cambiar el grupo propietario, lo cual puede ser realizado por el usuario root o el propietario del archivo.
+
+Para cambiar el usuario propietario de un archivo, se puede utilizar la siguiente sintaxis. El primer argumento, [PROPIETARIO], especifica qué usuario debe ser el nuevo propietario. El segundo argumento, ARCHIVO, especifica el archivo al cual se está cambiando el propietario.
+
+`chown [OPCIONES] [PROPIETARIO] ARCHIVO`
+
+**Siga leyendo**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+Actualmente, todos los archivos del directorio Documents son propiedad del usuario sysadmin. Esto se puede verificar mediante el comando `ls -l`. Recuerde que la tercera columna indica cual es el usuario propietario.
+
+```bash
+sysadmin@localhost:~/Documents$ ls -l                                           
+total 144                                                                       
+drwx------ 5 sysadmin sysadmin  4096 Dec 20  2017 School                        
+drwx------ 2 sysadmin sysadmin  4096 Dec 20  2017 Work                          
+-rw-r--r-- 1 sysadmin sysadmin    39 Dec 20  2017 adjectives.txt                
+-rw-r--r-- 1 sysadmin sysadmin    90 Dec 20  2017 alpha-first.txt               
+-rw-r--r-- 1 sysadmin sysadmin   106 Dec 20  2017 alpha-second.txt              
+-rw-r--r-- 1 sysadmin sysadmin   195 Dec 20  2017 alpha-third.txt               
+-rw-r--r-- 1 sysadmin sysadmin   390 Dec 20  2017 alpha.txt                     
+-rw-r--r-- 1 sysadmin sysadmin    42 Dec 20  2017 animals.txt                   
+-rw-r--r-- 1 sysadmin sysadmin    14 Dec 20  2017 food.txt                      
+-rwxr--r-- 1 sysadmin sysadmin   647 Dec 20  2017 hello.sh                      
+-rw-r--r-- 1 sysadmin sysadmin    67 Dec 20  2017 hidden.txt                    
+-rw-r--r-- 1 sysadmin sysadmin    10 Dec 20  2017 letters.txt                   
+-rw-r--r-- 1 sysadmin sysadmin    83 Dec 20  2017 linux.txt                     
+-rw-r--r-- 1 sysadmin sysadmin 66540 Dec 20  2017 longfile.txt                  
+-rw-r--r-- 1 sysadmin sysadmin   235 Dec 20  2017 newhome.txt                   
+-rw-r--r-- 1 sysadmin sysadmin    10 Dec 20  2017 numbers.txt                   
+-rw-r--r-- 1 sysadmin sysadmin    77 Dec 20  2017 os.csv                        
+-rw-r--r-- 1 sysadmin sysadmin    59 Dec 20  2017 people.csv                    
+-rw-r--r-- 1 sysadmin sysadmin   110 Dec 20  2017 profile.txt                   
+-rw-r--r-- 1 sysadmin sysadmin    51 Dec 20  2017 red.txt
+```   
+
+Para cambiar el propietario actual del script hello.sh al usuario root, use root como primer argumento y hello.sh como segundo argumento. No olvide usar el comando `sudo` para obtener los privilegios administrativos necesarios. Utilice la contraseña netlab123 cuando se le solicite:
+
+```bash
+sysadmin@localhost:~/Documents$ sudo chown root hello.sh                        
+[sudo] password for sysadmin:
+```
+
+Confirme que el usuario propietario ha cambiado ejecutando el comando `ls -l`. Utilice el nombre del archivo como argumento para limitar la salida:
+
+```bash
+sysadmin@localhost:~/Documents$ ls -l hello.sh                                  
+-rwxr--r-- 1 root sysadmin 647 Dec 20  2017 hello.sh  
+```
+
+El campo de usuario propietario es ahora root, lo que indica que el cambio se ha realizado correctamente.
+
+`-rwxr--r-- 1 root sysadmin 647 Dec 20  2017 hello.sh`
+
+**A tener en cuenta**
+
+Intente ejecutar el script hello.sh de nuevo. ¡Error! ¿Por qué?
+
+```bash
+sysadmin@localhost:~/Documents$ ./hello.sh                                      
+-bash: ./hello.sh: Permission denied
+```
+
+Sólo el usuario propietario tiene permiso para ejecutar. Ahora el usuario root es el usuario propietario. Ahora este archivo requiere acceso administrativo para ejecutarse. Utilice el comando `sudo` para poder ejecutar el script como usuario root.
+
+```bash
+sysadmin@localhost:~/Documents$ sudo ./hello.sh                                 
+[sudo] password for sysadmin:                                                   
+ ______________                                                                 
+( Hello World! )                                                                
+ --------------                                                                 
+        \                                                                       
+         \                                                                      
+           <(^)                                                                 
+            ( )  
+```
+
+## Visualización de archivos
+
+Existen varios comandos en Linux disponibles para visualizar el contenido de los archivos. El comando `cat`, que significa “concatenar”, a menudo se usa para ver rápidamente el contenido de archivos pequeños.
+
+El comando `cat` mostrará todo el contenido del archivo, por lo que se recomienda principalmente para archivos pequeños para los que el resultado es limitado y no requiere desplazamientos de pantalla. Para ver el contenido de un archivo utilizando el comando `cat`, simplemente escriba el comando y utilice el nombre del archivo que desea ver como argumento:
+
+`cat [OPCIONES] [ARCHIVO]`
+
+Nuestra máquina virtual tiene algunos pequeños archivos de texto que puede visualizar con el comando cat. Uno de estos archivos es el archivo animals.txt:
+
+**Siga leyendo**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+```bash
+sysadmin@localhost:~/Documents$ cat animals.txt                            
+1 retriever                                                             
+2 badger                                                                
+3 bat                                                                  
+4 wolf                                                                  
+5 eagle
+```
+
+El comando `cat` muestra las cinco líneas del archivo de interés. Si lo usa para visualizar archivos más grandes, el comando `cat` puede generar un resultado muy largo que no puede pausarse o verse en secciones en la pantalla. Un mejor método para ver archivos de texto largos, es utilizar un comando de paginación con funcionalidad de pausa y que permite ver el contenido del archivo de interés en secciones.
+
+**Nota**
+
+Ejemplos de comandos de paginación incluyen los comandos `more` y `less`. Estos y otros comandos adicionales usados para visualizar archivos en Linux se examinan en el curso [NDG Linux Essentials](https://www.netdevgroup.com/online/courses/ndg_linux_essentials.html).
+
+Otra forma de ver el contenido de los archivos es utilizando los comandos `head` y `tail` . Estos comandos se utilizan para ver un número seleccionado de líneas desde la parte superior o inferior de un archivo. Echar un vistazo a algunas líneas de un archivo puede ser útil para asegurarse de que el archivo es realmente el que desea utilizar.
+
+Obtener una vista previa de las primeras o últimas líneas de un archivo es también útil para algunos archivos, como los archivos de registro del sistema, porque se actualizan con nuevas entradas frecuentemente. Al igual que el comando `cat`, los comandos `head` y `tail` utilizan el nombre del archivo a visualizar como argumento del comando:
+
+`head [OPCIONES] [ARCHIVO]`
+
+`tail [OPCIONES] [ARCHIVO]`
+
+Para comparar la salida de los comandos `head` y `tail` con la del comando `cat`, utilice el comando `cat` para ver todo el archivo alpha.txt:
+
+```bash
+sysadmin@localhost:~/Documents$ cat alpha.txt       
+A is for Apple                    
+B is for Bear           
+C is for Cat                      
+D is for Dog                               
+E is for Elephant                                      
+F is for Flower       
+G is for Grapes                     
+H is for Happy                                     
+I is for Ink                                                         
+J is for Juice                                   
+K is for Kangaroo
+L is for Lol                                                             
+M is for Monkey                       
+N is for Nickel                             
+O is for Oval                  
+P is for Pickle       
+Q is for Quark                         
+R is for Rat                          
+S is for Sloth                       
+T is for Turnip                        
+U is for Up                                     
+V is for Velvet                       
+W is for Walrus                    
+X is for Xenon                        
+Y is for Yellow         
+Z is for Zebra           
+sysadmin@localhost:~/Documents$
+```
+
+En el ejemplo anterior, se muestran las veintiséis líneas del archivo.
+
+Para visualizar solamente las primeras líneas del resultado anterior para el archivo alpha.txt, utilice el comando `head`:
+
+```bash
+sysadmin@localhost:~/Documents$ head alpha.txt                          
+A is for Apple                                                        
+B is for Bear                                                         
+C is for Cat                                                        
+D is for Dog                                                         
+E is for Elephant                                                     
+F is for Flower                                                       
+G is for Grapes                                                        
+H is for Happy                                                        
+I is for Ink                                                          
+J is for Juice
+```
+
+A continuación, para ver las últimas líneas del archivo alpha.txt, utilice el comando `tail`:
+
+```bash
+sysadmin@localhost:~/Documents$ tail alpha.txt                          
+Q is for Quark                                                         
+R is for Rat                                                           
+S is for Sloth                                                        
+T is for Turnip                                                        
+U is for Up                                                            
+V is for Velvet                                                      
+W is for Walrus                                                        
+X is for Xenon                                                        
+Y is for Yellow                                                        
+Z is for Zebra
+```
+
+Al examinar la salida de los comandos `head` y `tail` anteriores, puede ver que el comportamiento predeterminado de los comandos `head` y `tail` en este shell es mostrar diez líneas.
+
+La opción `-n` con los comandos head y tail se puede utilizar para especificar la cantidad de líneas a mostrar. Para utilizar la opción `-n`, especifique la cantidad de líneas del archivo que desea mostrar después de la opción y utilice el nombre de archivo como argumento:
+
+`head -n número_de_líneas archivo`
+
+Por ejemplo, para cambiar la salida por defecto del comando `head` y ver las cinco primeras líneas del archivo alpha.txt:
+
+```bash
+sysadmin@localhost:~/Documents$ head -n 5 alpha.txt                    
+A is for Apple                                                         
+B is for Bear                                                          
+C is for Cat                                                           
+D is for Dog                                                           
+E is for Elephant
+```
+
+Para ver las últimas cinco líneas del archivo alpha.txt:
+
+```bash
+sysadmin@localhost:~/Documents$ tail -n 5 alpha.txt 
+V is for Velvet                                                        
+W is for Walrus                                                         
+X is for Xenon                                                          
+Y is for Yellow                                                         
+Z is for Zebra            
+sysadmin@localhost:~/Documents$
+```
+
+## Copiar archivos
+
+Crear copias de archivos puede ser útil por numerosas razones:
+
+  - Si se ha creado una copia del archivo antes de que se hayan realizado cambios, siempre podremos revertir al archivo original.
+  - La copia de un archivo puede utilizarse para transferirlo a un dispositivo extraíble.
+  - La copia de un documento puede utilizarse como plantilla para un documento nuevo.
+
+`cp [OPCIONES] ORIGEN DESTINO`
+
+**Continuemos...**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+El comando `cp` se utiliza para copiar archivos. Similar al comando `mv`, requiere al menos dos argumentos: *un origen* y *un destino*. Por ejemplo, para copiar el archivo /etc/passwd en el directorio actual, utilice el siguiente comando:
+
+`sysadmin@localhost:~/Documents$ cp /etc/passwd`.
+
+**Nota**
+
+El segundo argumento es el carácter (.). Recuerde la sección Cambio de Directorio, este carácter es un atajo al directorio actual.
+
+Ejecutar el comando anterior resulta en una copia del contenido del archivo /etc/passwd en el directorio Documents, ya que este es nuestro directorio actual. Esto se puede confirmar usando el comando ls:
+
+```bash
+sysadmin@localhost:~/Documents$ ls
+School            alpha-third.txt  hidden.txt    numbers.txt  red.txt           
+Work              alpha.txt        letters.txt   os.csv                         
+adjectives.txt    animals.txt      linux.txt     passwd                         
+alpha-first.txt   food.txt         longfile.txt  people.csv                     
+alpha-second.txt  hello.sh         newhome.txt   profile.txt
+```
+
+**A tener en cuenta**
+
+Los permisos pueden afectar a los comandos de administración de archivos, como el comando `cp`. Para copiar un archivo, es necesario tener permiso de ejecución para acceder al directorio donde se encuentra el archivo y permiso de lectura para el archivo que se está copiando.
+
+También es necesario tener permiso de escritura y ejecución en el directorio al que se está copiando el archivo. Normalmente, hay dos lugares en los que siempre debe tener permisos de escritura y ejecución: su directorio home y el directorio /tmp.
+Copy files

@@ -1287,4 +1287,4 @@ En la siguiente tabla se resumen las expresiones regulares extendidas, que se de
 | pipe | Alternancia - el “o” lógico |
 | ( ) | Se usa para crear grupos |
 
-En esta sección solamente hemos tratado expresiones regulares básicas. Para obtener más información sobre las expresiones regulares extendidas consulte los cursos [NDG Linux Essentials](https://www.netdevgroup.com/online/courses/ndg_linux_essentials.html) y [NDG Introduction to Linux](https://www.netdevgroup.com/online/courses/ndg_introduction_to_linux_1.html).
+En esta sección solamente hemos tratado expresiones regulares básicas. Para obtener más información **sobre** las expresiones regulares extendidas consulte los cursos [NDG Linux Essentials](https://www.netdevgroup.com/online/courses/ndg_linux_essentials.html) y [NDG Introduction to Linux](https://www.netdevgroup.com/online/courses/ndg_introduction_to_linux_1.html).

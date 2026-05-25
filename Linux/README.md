@@ -1068,7 +1068,7 @@ Utilice el siguiente comando para cambiar al directorio Documents:
 
 El comando `cp` se utiliza para copiar archivos. Similar al comando `mv`, requiere al menos dos argumentos: *un origen* y *un destino*. Por ejemplo, para copiar el archivo /etc/passwd en el directorio actual, utilice el siguiente comando:
 
-`sysadmin@localhost:~/Documents$ cp /etc/passwd`.
+`sysadmin@localhost:~/Documents$ cp /etc/passwd .`
 
 **Nota**
 
@@ -1091,3 +1091,200 @@ Los permisos pueden afectar a los comandos de administración de archivos, como 
 
 También es necesario tener permiso de escritura y ejecución en el directorio al que se está copiando el archivo. Normalmente, hay dos lugares en los que siempre debe tener permisos de escritura y ejecución: su directorio home y el directorio /tmp.
 Copy files
+
+## Copiar archivos
+
+El comando **dd** se utiliza para copiar archivos o particiones enteras al nivel de bits.
+
+`dd [OPCIONES] OPERANDO`
+
+Este comando tiene varias características útiles, entre las que se incluyen:
+
+  - Se puede usar para clonar o eliminar (wipe) discos o particiones enteras.
+  - Se puede usar para copiar datos no procesados (raw) a dispositivos extraíbles como dispositivos USB o CD ROMS.
+  - Se puede usar para realizar una copia de reserva (backup) y restituir el MBR (Master Boot Record).
+  - Se puede usar para crear un archivo de un tamaño específico lleno de ceros binarios, el cual puede utilizarse como archivo de intercambio (swap file) (memoria virtual).
+
+Examinemos el siguiente ejemplo. El comando `dd` creará un archivo denominado */tmp/swapex* con 50 bloques de ceros de un megabyte de tamaño:
+
+Siga leyendo
+
+Utilice el siguiente comando `cd` para volver al directorio principal:
+
+`sysadmin@localhost:~/Documents$ cd ~`
+
+```bash
+sysadmin@localhost:~$ dd if=/dev/zero of=/tmp/swapex bs=1M count=50 
+50+0 records in
+50+0 records out
+52428800 bytes (52 MB) copied, 0.825745 s, 635 MB/s
+```
+
+El comando `dd` utiliza argumentos especiales para especificar cómo funcionará. A continuación se muestran algunos de los argumentos más utilizados:
+| Argumento | Descripción |
+|---|---|
+| if | Archivo de entrada (Input File): El archivo de entrada que se va a leer. `dd if=/dev/zero of=/tmp/swapex bs=1M count=50`El ejemplo lee el archivo /dev/zero, un archivo especial que contiene un número ilimitado de ceros. |
+| of | Archivo de salida (Output File): El archivo de salida que se va a escribir. `dd if=/dev/zero of=/tmp/swapex bs=1M count=50` |
+| bs | Tamaño de bloque (*Block Siz*e): El tamaño de bloque que se va a utilizar. De forma predeterminada, el valor se presenta en bytes. Utilice los sufijos siguientes para especificar otras unidades: K, M, G y T para kilobytes, megabytes, gigabytes y terabytes respectivamente. `dd if=/dev/zero of=/tmp/swapex bs=1M count=50` En el ejemplo se utiliza un tamaño de bloque de un megabyte.
+| count | Recuento: El número de bloques que se van a leer desde el archivo de entrada. `dd if=/dev/zero of=/tmp/swapex bs=1M count=50` En este ejemplo se leen 50 bloques. |
+
+**A tener en cuenta**
+
+No es necesario especificar el tamaño de bloque ni el recuento al copiar dispositivos enteros. Por ejemplo, para clonar de un disco duro (/dev/sda) a otro (/dev/sdb) ejecute el siguiente comando:
+
+`dd if=/dev/sda of=/dev/sdb`
+
+## Mover archivos
+
+El comando `mv` se utiliza para mover un archivo de una ubicación en el sistema de archivos a otra.
+
+`mv ORIGEN DESTINO`
+
+El comando `mv` requiere dos argumentos como mínimo. El primer argumento es la fuente u origen, la ruta al archivo que va a ser movido. El segundo argumento es el destino, la ruta al lugar donde se moverá el archivo. Generalmente, los archivos que se van a mover se denominan origen, y el lugar donde se van a colocar se denomina destino.
+
+**Siga leyendo**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+Para mover el archivo people.csv al directorio *Work*, utilice el nombre del archivo como origen y el nombre del directorio como destino:
+
+`sysadmin@localhost:~/Documents$ mv people.csv Work`
+
+Si un archivo se mueve de un directorio a otro sin especificar un nuevo nombre para el archivo, éste conservará su nombre original. El movimiento anterior se puede confirmar mediante el comando `ls` en el directorio *Work*:
+
+```bash
+sysadmin@localhost:~/Documents$ ls Work                                         
+people.csv
+```
+
+El comando `mv` puede utilizarse para mover varios archivos, siempre y cuando el argumento final proporcionado al comando sea el destino. Por ejemplo, para mover tres archivos al directorio *School*:
+
+```bash
+sysadmin@localhost:~/Documents$ mv numbers.txt letters.txt alpha.txt School        
+sysadmin@localhost:~/Documents$ ls School                                       
+Art  Engineering  Math  alpha.txt  letters.txt  numbers.txt 
+```
+
+Mover un archivo dentro del mismo directorio es una forma eficaz de cambiarlo de nombre. Por ejemplo, en el ejemplo siguiente, el archivo animals.txt recibe un nuevo nombre *zoo.txt*:
+
+`mv animals.txt zoo.txt`
+
+```bash
+sysadmin@localhost:~/Documents$ ls                                              
+School           alpha-second.txt  hello.sh      newhome.txt  red.txt           
+Work             alpha-third.txt   hidden.txt    os.csv                         
+adjectives.txt   animals.txt       linux.txt     passwd                         
+alpha-first.txt  food.txt          longfile.txt  profile.txt 
+sysadmin@localhost:~/Documents$ mv animals.txt zoo.txt                          
+sysadmin@localhost:~/Documents$ ls                                              
+School           alpha-second.txt  hidden.txt    os.csv       zoo.txt           
+Work             alpha-third.txt   linux.txt     passwd                         
+adjectives.txt   food.txt          longfile.txt  profile.txt                    
+alpha-first.txt  hello.sh          newhome.txt   red.txt   
+```
+
+**A tener en cuenta**
+
+Los permisos pueden afectar comandos de administración de archivos, incluyendo el comando `mv`. Mover un archivo requiere tener permisos de escritura y ejecución tanto en los directorios de origen como de destino.
+Penguins in Space! Nasa Uses Linux. International Space Station runs on Linux. Curiosity the Mars Rover. We migrated key functions from Windows to Linux because we needed an operating system that was stable and reliable.
+![Penguins In Space](images/messaging_4.png)
+
+*«¡Pingüinos en el espacio! NASA utiliza Linux. La Estación Espacial Internacional funciona con Linux. "Migramos funciones esenciales de Windows a Linux porque necesitábamos un sistema operativo más estable y fiable." Keith Chuvala, manager de Operaciones Informáticas Espaciales de NASA. Curiosity, el Rover en Marte.»*
+
+## Eliminar archivos
+
+El comando `rm` (remove) se utiliza para eliminar archivos y directorios. Es importante tener en cuenta que los archivos y directorios eliminados no aparecen en una “papelera” como ocurre con los sistemas operativos orientados a escritorio. Cuando un archivo se elimina con el comando rm, generalmente siempre desaparece de manera permanente.
+
+`rm [OPCIONES] ARCHIVO`
+
+**Siga leyendo**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+Sin ninguna opción, el comando rm normalmente se utiliza para eliminar archivos ordinarios:
+
+```bash
+sysadmin@localhost:~/Documents$ rm linux.txt
+sysadmin@localhost:~/Documents$ ls linux.txt
+ls: cannot access linux.txt: No such file or directory
+```
+
+El comando `rm` ignorará los directorios que se le pida eliminar. Para eliminar un directorio, utilice una opción recursiva, por ejemplo, las opciones `-r` o `-R`. Tenga cuidado ya que estas opciones son “recursivas”, y eliminarán todos los archivos y todos los subdirectorio:
+
+```bash
+sysadmin@localhost:~/Documents$ rm Work
+rm: cannot remove 'Work': Is a directory
+sysadmin@localhost:~/Documents$ rm -r Work
+sysadmin@localhost:~/Documents$ ls Work                                         
+ls: cannot access Work: No such file or directory
+```
+
+`Advertencia`
+
+El comando `rm` elimina los archivos de forma permanente. Para repetir los ejemplos anteriores, restablezca el terminal usando el botón de reinicio.
+
+**A tener el cuenta**
+
+Los permisos pueden afectar a los comandos de administración de archivos, como el comando `rm`.
+
+Para eliminar un archivo dentro de un directorio, el usuario debe tener permiso de escritura y ejecución en ese directorio. Normalmente, los usuarios ordinarios solo tienen este tipo de permiso en su directorio principal y subdirectorios correspondientes.
+
+## Filtrado de entradas
+
+El comando grep es un filtro de texto que busca líneas en una entrada y devolverá aquellas que coincidan con un patrón determinado.
+
+`grep [OPCIONES] PATRÓN [ARCHIVO]`
+
+**Siga leyendo**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+Si el siguiente ejemplo le devuelve un mensaje de error, repita el ejemplo de la Sección 11:
+
+`sysadmin@localhost:~/Documents$ cp /etc/passwd .`
+
+Por ejemplo, el archivo passwd que copiamos anteriormente al directorio Documents contiene los detalles de cuentas especiales del sistema y cuentas de usuarios en el sistema. Este archivo puede ser muy grande, sin embargo, el comando `grep` se puede utilizar para filtrar y obtener información sobre un usuario específico, como por ejemplo el usuario sysadmin. Utilice sysadmin como argumento de patrón y passwd como argumento de archivo:
+
+```bash
+sysadmin@localhost:~/Documents$ grep sysadmin passwd                               
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash 
+```
+
+El comando anterior devolvió la línea del passwd que contiene el patrón sysadmin.
+
+**Nota**
+
+Esta línea es la entrada */etc/passwd* que pertenece al usuario sysadmin y proporciona información que está más allá del alcance de este curso. Para obtener más información sobre este archivo, consulte [NDG Linux Essentials](https://www.netdevgroup.com/online/courses/ndg_linux_essentials.html).
+
+El ejemplo anterior utiliza un término de búsqueda simple como patrón; sin embargo `grep` es capaz de interpretar patrones de búsqueda mucho más complejos.
+
+## Expresiones regulares
+
+Las expresiones regulares tienen dos formas comunes: la forma básica y la forma extendida. La mayoría de los comandos que utilizan expresiones regulares pueden interpretar expresiones regulares básicas. Sin embargo, las expresiones regulares extendidas no están disponibles para todos los comandos y normalmente requieren una opción de comando para funcionar correctamente.
+
+En la siguiente tabla se resumen los caracteres básicos de las expresiones regulares:
+| Caracteres Básicos Regex | Significado |
+|---|---|
+| . | Cualquier carácter individual |
+| [ ] | Cualquier carácter especificado |
+| [^] | Cualquier carácter que no es el carácter especificado |
+| * | Cero o más del carácter anterior |
+| ^ | Si es el primer carácter del patrón, el patrón deberá estar al principio de la línea para coincidir, si no es así se tratará como un ^ literal. |
+| $ | Si es el último carácter del patrón, el patrón deberá estar al final de la línea para coincidir, si no es así se tratará como un $ literal. |
+
+En la siguiente tabla se resumen las expresiones regulares extendidas, que se deben utilizar con el comando `egrep` o la opción `-E` con el comando `grep`:
+| Caracteres Básicos Regex | Significado |
+|---|---|
+|+ | Uno o más del patrón anterior |
+| ? | El patrón es opcional |
+| { } | Especificar mínimo, máximo, o coincidencias exactas en el patrón anterior
+| pipe | Alternancia - el “o” lógico |
+| ( ) | Se usa para crear grupos |
+
+En esta sección solamente hemos tratado expresiones regulares básicas. Para obtener más información sobre las expresiones regulares extendidas consulte los cursos [NDG Linux Essentials](https://www.netdevgroup.com/online/courses/ndg_linux_essentials.html) y [NDG Introduction to Linux](https://www.netdevgroup.com/online/courses/ndg_introduction_to_linux_1.html).

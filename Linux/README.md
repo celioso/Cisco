@@ -1,4 +1,4 @@
-89# Curso de Linux Unhatched 
+# Curso de Linux Unhatched 
 
 ## ¿Por qué aprender Linux?
 
@@ -1287,4 +1287,335 @@ En la siguiente tabla se resumen las expresiones regulares extendidas, que se de
 | pipe | Alternancia - el “o” lógico |
 | ( ) | Se usa para crear grupos |
 
-En esta sección solamente hemos tratado expresiones regulares básicas. Para obtener más información **sobre** las expresiones regulares extendidas consulte los cursos [NDG Linux Essentials](https://www.netdevgroup.com/online/courses/ndg_linux_essentials.html) y [NDG Introduction to Linux](https://www.netdevgroup.com/online/courses/ndg_introduction_to_linux_1.html).
+En esta sección solamente hemos tratado expresiones regulares básicas. Para obtener más información sobre las expresiones regulares extendidas consulte los cursos [NDG Linux Essentials](https://www.netdevgroup.com/online/courses/ndg_linux_essentials.html) y [NDG Introduction to Linux](https://www.netdevgroup.com/online/courses/ndg_introduction_to_linux_1.html).
+
+## Patrones básicos
+
+Las expresiones regulares son patrones que sólo ciertos comandos pueden interpretar. Las expresiones regulares se pueden expandir para que coincidan con ciertas secuencias de caracteres en el texto. Los ejemplos que se muestran en esta página harán uso de expresiones regulares para demostrar su potencia cuando se utilizan con el comando `grep`. Además, estos ejemplos proporcionan una demostración muy visual de cómo funcionan las expresiones regulares, el texto que resulta de estas expresiones se mostrará en color rojo en el resultado (*output*).
+
+**Siga leyendo**
+
+Utilice el siguiente comando cd para cambiar al directorio Documents.
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+La más simple de todas las expresiones regulares solo usa caracteres de significado literal, como el ejemplo de la página anterior:
+
+sysadmin@localhost:~/Documents$ grep sysadmin passwd                               
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
+
+### Caracteres de anclaje
+
+Los caracteres de anclaje son una de las formas con que se pueden utilizar expresiones regulares para limitar los resultados de una búsqueda. Por ejemplo, el patrón root aparece muchas veces en el archivo /etc/passwd:
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'root' passwd
+root:x:0:0:root:/root:/bin/bash                                                 
+operator:x:1000:37::/root:
+```
+
+Para evitar que el shell los malinterprete como caracteres especiales del shell, estos patrones deben escribirse protegidos por comillas sólidas, lo que simplemente significa colocarlos entre comillas.
+
+El primer carácter de anclaje ^ se utiliza para indicar que el patrón debe aparecer al principio de la línea. Por ejemplo, para encontrar todas las líneas en */etc/passwd* que comienzan con *root* use el patrón *^root*. Tenga en cuenta que ^ debe ser el primer carácter del patrón para ser efectivo.
+
+```bash
+sysadmin@localhost:~/Documents$ grep '^root' /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+```
+
+Para el siguiente ejemplo, examine primero el archivo `alpha-first.txt`. El comando `cat` se puede utilizar para mostrar el contenido del archivo:
+
+```bash
+sysadmin@localhost:~/Documents$ cat alpha-first.txt                             
+A is for Animal                                                                 
+B is for Bear                                                                   
+C is for Cat                                                                    
+D is for Dog                                                                    
+E is for Elephant                                                               
+F is for Flower
+```
+
+El segundo carácter de anclaje `$` se puede utilizar para indicar que el patrón debe aparecer al *final de la línea*, reduciendo eficazmente los resultados de la búsqueda. Para encontrar las líneas que terminan con una `r` en el archivo `alpha-first.txt`, utilice el patrón `r$`:
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'r$' alpha-first.txt
+B is for Bear
+F is for Flower
+```
+
+Una vez más, la posición de este carácter es importante; el $ debe ser el último carácter en el patrón para ser eficaz como anclaje.
+
+### Encontrar caracteres coincidentes usando .
+
+Los siguientes ejemplos usan el archivo `red.txt`:
+
+```bash
+sysadmin@localhost:~/Documents$ cat red.txt
+Red
+Reef
+Rot
+Reeed
+Rd
+Rod
+Roof
+Reed
+Root
+reel
+read
+```
+
+Una de las expresiones más útiles es el carácter . (punto). Representa cualquier carácter excepto el carácter de nueva línea. El patrón `r..f` encontrará cualquier línea que contenga la letra `r` seguida de exactamente dos caracteres (que pueden ser cualquier carácter excepto el de nueva línea) y luego la letra `f`:
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'r..f' red.txt
+reef
+roof
+```
+
+El mismo concepto se puede repetir usando otras combinaciones. El comando en el ejemplo siguiente encontrará palabras de cuatro letras que comienzan con `r` y acaban con `d`:
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'r..d' red.txt
+reed
+read
+```
+
+Este carácter se puede utilizar tantas veces como se desee. Para encontrar todas las palabras de al menos cuatro caracteres se puede utilizar el siguiente patrón:
+
+```bash
+sysadmin@localhost:~/Documents$ grep '....' red.txt                             
+reef
+reeed
+roof           
+reed
+root
+reel
+read
+```
+
+La línea no tiene que coincidir exactamente, simplemente debe contener el patrón, como se ve a continuación cuando se busca `r..t` en el archivo `/etc/passwd`:
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'r..t' /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:1000:37::/root:
+```
+
+### Encontrar un carácter único usando []
+
+Los corchetes `[ ]` se utilizan para indicar caracteres *único*s o rangos de caracteres posibles en una lista.
+
+Por ejemplo, dado el archivo `profile.txt`:
+
+```bash
+sysadmin@localhost:~/Documents$ cat profile.txt
+Hello my name is Joe.
+I am 37 years old.
+3121991
+My favorite food is avocados.
+I have 2 dogs.
+123456789101112
+```
+
+Para encontrar todas las líneas en el archivo `profile.txt` que contienen un número, utilice el patrón `[0123456789]` o `[0-9]`:
+
+```bash
+sysadmin@localhost:~/Documents$ grep '[0-9]' profile.txt
+I am 37 years old.
+3121991
+I have 2 dogs.
+123456789101112
+```
+
+Por otro lado, para encontrar todas las líneas que contienen caracteres no numéricos, inserte un ^ como primer carácter dentro de los corchetes. Este carácter *niega* los caracteres que lo siguen:
+
+```bash
+sysadmin@localhost:~/Documents$ grep '[^0-9]' profile.txt
+Hello my name is Joe.
+I am 37 years old.
+My favorite food is avocados.
+I have 2 dogs.
+```
+
+**Nota**
+
+No confunda el resultado de `[^ 0-9]` con las líneas que no contienen números. En realidad, esta expresión se refiere a líneas que contienen *no-números* (caracteres no numéricos). Examine el archivo original para ver la diferencia. Las líneas tercera y sexta sólo contienen números, no contienen caracteres no numéricos, y por lo tanto no han sido incluidas en este último resultado.
+
+Cuando otros caracteres de expresión regular se colocan dentro de corchetes, se tratan como caracteres literales. Por ejemplo, el carácter . normalmente indica cualquier carácter. Pero si se coloca dentro de corchetes simplemente se referirá al carácter . (punto). En el siguiente ejemplo, sólo las líneas que contienen el carácter . se mostrarán en el resultado.
+
+```bash
+sysadmin@localhost:~/Documents$ grep '[.]' profile.txt
+Hello my name is Joe.
+I am 37 years old.
+My favorite food is avocados.
+I have 2 dogs.
+```
+
+### Indicar un carácter o patrón repetido utilizando el *
+
+El carácter de expresión regular * se utiliza para indicar la ausencia o la presencia una o más veces del carácter o patrón que lo precede. Por ejemplo, e* indicaría la ausencia (cero) o la presencia, una o más veces, de la letra e:
+
+```bash
+sysadmin@localhost:~/Documents$ cat red.txt
+red
+reef
+rot
+reeed
+rd
+rod
+roof
+reed
+root
+reel
+read
+sysadmin@localhost:~/Documents$ grep 're*d' red.txt
+red
+reeed
+rd
+reed
+```
+
+También es posible indicar la ausencia o presencia una o más veces de una lista de caracteres utilizando los corchetes. El patrón `[oe]*` utilizado en el siguiente ejemplo se refiere a líneas con ausencia o presencia una o más veces del carácter `o` o del carácter `e`:
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'r[oe]*d' red.txt
+red
+reeed
+rd
+rod
+reed
+```
+
+Cuando se usa con un solo carácter, `*` no resulta muy útil. Note que cualquiera de los siguientes patrones coincide con cada una de las líneas (string) del archivo: `.*` `e*` `b*` `z*`.
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'z*' red.txt
+red
+reef
+rot
+reeed
+rd
+rod
+roof
+reed
+root
+reel
+read
+```
+```bash
+sysadmin@localhost:~/Documents$ grep 'e*' red.txt
+red
+reef
+rot
+reeed
+rd
+rod
+roof
+reed
+root
+reel
+read
+```
+
+Esto se debe a que `*` puede indicar cero ocurrencias de un patrón. Para que el `*` sea útil, es necesario crear un patrón que incluya algo más que el carácter que precede al `*`. Por ejemplo, los resultados anteriores se pueden refinar agregando otra `e` para hacer que el patrón `ee*` coincida efectivamente con cada línea que contenga al menos una `e`.
+
+```bash
+sysadmin@localhost:~/Documents$ grep 'ee*' red.txt
+red
+reef
+reeed
+reed
+reel
+read
+```
+
+### Entrada estándar
+
+Si no se proporciona un nombre de archivo, el comando `grep` actuará sobre la entrada estándar, que normalmente proviene del teclado y de la entrada proporcionada por el usuario que está ejecutando el comando. Esto permite que el uso de `gre`p se convierta en una experiencia interactiva donde el usuario escribe y `grep` filtra la entrada a medida que avanza. Pruébelo. Simplemente presione **Ctrl+D** cuando esté listo para volver al intérprete de comandos (*prompt*).
+
+![entada estandar](images/comptia_1.gif)
+
+**Siga leyendo**
+
+Utilice el siguiente comando `cd` para volver al directorio principal:
+
+`sysadmin@localhost:~/Documents$ cd ~`
+![Linux is Open Source which makes it extremely versatile! Internet of Things, Big Data, Cloud Computing, Cyber Security, Networking and more.](images/messaging_5.png)
+
+«Linux es open source. ¡Esto lo hace extremadamente versátil!»
+
+## Apagar
+
+El comando `shutdown` prepara el sistema para un apagado seguro. Todos los usuarios que han iniciado una sesión reciben la notificación de que el sistema se está apagando y se evitan nuevos inicios de sesión en los cinco minutos previos al apagado completo del sistema.
+
+`shutdown [OPCIONES] HORA [MENSAJE]`
+
+**Siga leyendo**
+
+El comando `shutdown` requiere acceso administrativo, cambie a la cuenta `root` para esta sección utilizando el siguiente comando. Use *netlab123* como contraseña.
+
+```bash
+sysadmin@localhost:~$ su -                      
+Password:                         
+root@localhost:~#
+```
+
+¡En realidad nuestras máquinas virtuales no se apagan! Use el comando pero tenga en cuenta que, en lugar de apagar el sistema, solamente regresará a la línea de comandos. Quizás tenga que presionar **Enter** o **Ctrl+C** para volver a ver la línea de comandos.
+
+```bash
+root@localhost:~# shutdown now                                         
+                                
+Broadcast message from sysadmin@localhost                                       
+        (/dev/pts/0) at 2:05 ...                                              
+                
+The system is going down for maintenance NOW!
+```
+
+A diferencia de otros comandos utilizados para apagar el sistema, el comando shutdown requiere un argumento de tiempo para especificar cuándo debe comenzar el apagado. Los formatos de este argumento de tiempo pueden ser la palabra now (ahora), una hora del día en el formato *hh:mm* o el número de minutos de retraso utilizando el formato *+minutos*.
+
+**Piense sobre lo siguiente**
+
+El reloj de nuestro sistema puede estar configurado en una zona horaria diferente a la que se encuentra usted. Para verificar la hora en la terminal, use el comando `date`. En nuestras máquinas, el formato predeterminado de la salida del comando `date` es el siguiente:
+
+`dia_de_la_semana  mes  hora:minuto:segundo  UTC  año`
+
+o en ingles:
+
+`weekday month day hour:minute:second UTC year`
+
+Las letras UTC presentes en la salida indican que la hora se muestra de acuerdo con el Horario Coordinado Universal.
+
+```bash
+root@localhost:~# date                                                      
+Sat Oct  3 01:50:07 UTC 2020 
+root@localhost:~# shutdown 01:51                                                
+                                                                                
+Broadcast message from sysadmin@localhost                                       
+        (/dev/pts/0) at 1:50 ...                                              
+                                                                                
+The system is going down for maintenance in 1 minute!
+
+Broadcast message from sysadmin@localhost                                       
+        (/dev/pts/0) at 1:51 ...                                              
+                                                                                
+The system is going down for maintenance NOW!
+```
+
+El comando `shutdown` también posee la opción de añadir un mensaje como argumento. Este mensaje aparecerá en las terminales de todos los usuarios. Por ejemplo:
+
+```bash
+root@localhost:~# shutdown +1 "Goodbye World!"                                  
+                                                                                
+Broadcast message from sysadmin@localhost                                       
+        (/dev/pts/0) at 3:07 ...                                              
+                                                                                
+The system is going down for maintenance in 1 minute!                           
+Goodbye World!                                                                  
+shutdown: Unable to shutdown system                                             
+root@localhost:~#                                                             
+Broadcast message from sysadmin@localhost                                       
+        (/dev/pts/0) at 3:08 ...                                              
+                                                                                
+The system is going down for maintenance NOW!                                   
+Goodbye World!
+```

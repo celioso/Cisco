@@ -1619,3 +1619,78 @@ Broadcast message from sysadmin@localhost
 The system is going down for maintenance NOW!                                   
 Goodbye World!
 ```
+
+## Configuración de redes
+
+El comando `ifconfig` significa “configuración de interfaz” (*interface configuration*) y se utiliza para mostrar información sobre la configuración de red.
+
+`ifconfig [OPCIONES]`
+
+Nota
+
+El comando iwconfig es similar al comando ifconfig, pero se refiere a interfaces de redes inalámbricas (wireless).
+
+No todas las configuraciones de red son importantes para este módulo, pero en el siguiente ejemplo es importante tener en cuenta que la dirección IPv4 del dispositivo de red principal eth0 es 192.168.1.2 y que el dispositivo está activo actualmente (UP):
+
+root@localhost:~# ifconfig                                     
+eth0      Link encap:Ethernet  HWaddr 02:42:c0:a8:01:02                         
+          inet addr:192.168.1.2  Bcast:192.168.1.255  Mask:255.255.255.0        
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1                    
+          RX packets:59 errors:0 dropped:0 overruns:0 frame:0                   
+          TX packets:86 errors:0 dropped:0 overruns:0 carrier:0                 
+          collisions:0 txqueuelen:1000                                          
+          RX bytes:4346 (4.3 KB)  TX bytes:5602 (5.6 KB)                        
+                                                                                
+lo        Link encap:Local Loopback                                             
+          inet addr:127.0.0.1  Mask:255.0.0.0                                   
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1                              
+          RX packets:2 errors:0 dropped:0 overruns:0 frame:0                    
+          TX packets:2 errors:0 dropped:0 overruns:0 carrier:0                  
+          collisions:0 txqueuelen:1000                                          
+          RX bytes:100 (100.0 B)  TX bytes:100 (100.0 B)           
+Piense sobre lo siguiente
+
+El dispositivo lo se conoce como dispositivo de loopback. Es un dispositivo de red especial utilizado por el sistema cuando envía datos basados en red a sí mismo.
+
+El comando ifconfig también se puede utilizar para modificar temporalmente la configuración de red. Normalmente, estos cambios deben ser permanentes, por lo que raramente se usa el comando ifconfig para realizar dichos cambios.
+
+El comando ping se utiliza para verificar la conectividad entre dos equipos. Para hacer esto, envía paquetes a otra máquina a través de la red. Que el remitente reciba una respuesta indica que es posible conectarse a esa máquina.
+
+La información se envía mediante “paquetes”; que es la unidad encapsulada de datos enviada a través de una red. Para que los paquetes encuentren la otra computadora, necesitan una dirección. El comando ping utiliza direcciones IP para identificar un equipo en la red al que desea conectarse.
+
+De forma predeterminada, el comando ping continuará enviando paquetes hasta que se introduzca el comando break (CTL +C) en la consola. Para limitar el número de pings que se envían, utilice la opción -c seguida del número de pings que desea enviar. El siguiente ejemplo muestra un ping limitado a 4 iteraciones usando -c 4.
+
+Si el comando ping funciona, obtendrá un resultado como el siguiente:
+
+root@localhost:~# ping -c 4 192.168.1.2                                       
+PING 192.168.1.2 (192.168.1.2) 56(84) bytes of data.                          
+64 bytes from 192.168.1.2: icmp_req=1 ttl=64 time=0.051 ms                    
+64 bytes from 192.168.1.2: icmp_req=2 ttl=64 time=0.064 ms                    
+64 bytes from 192.168.1.2: icmp_req=3 ttl=64 time=0.050 ms                    
+64 bytes from 192.168.1.2: icmp_req=4 ttl=64 time=0.043 ms                    
+                                                                              
+--- 192.168.1.2 ping statistics ---                                           
+4 packets transmitted, 4 received, 0% packet loss, time 2999ms                
+rtt min/avg/max/mdev = 0.043/0.052/0.064/0.007 ms                             
+root@localhost:~#
+Si el comando ping falla, recibirá un mensaje indicando que no se encontró el ordenador de destino o máquina remota (Destination Host Unreachable):
+
+root@localhost:~# ping -c 4 192.168.1.3                                       
+PING 192.168.1.3 (192.168.1.3) 56(84) bytes of data.                            
+From 192.168.1.2 icmp_seq=1 Destination Host Unreachable                        
+From 192.168.1.2 icmp_seq=2 Destination Host Unreachable                        
+From 192.168.1.2 icmp_seq=3 Destination Host Unreachable                        
+From 192.168.1.2 icmp_seq=4 Destination Host Unreachable                        
+                                                                                
+--- 192.168.1.3 ping statistics ---                                             
+4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 3065ms     
+pipe 4  
+root@localhost:~#
+El comando ping puede fallar aunque la máquina remota esté conectada a la red. Esto se debe a que, como medida de seguridad, algunos administradores configuran sus equipos, o incluso redes enteras, para que no respondan a solicitudes ping. El comando ping también funciona con un nombre de host, o con un nombre de dominio como yahoo.com. Usar ésto primero puede ahorrar tiempo, ya que si ese comando ping tiene éxito, indica que hay una resolución de nombre adecuada Y que la dirección IP también funciona correctamente.
+
+Siga leyendo
+
+Salga de la cuenta root mediante el comando exit:
+
+root@localhost:~# exit                                                        
+logout

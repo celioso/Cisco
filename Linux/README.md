@@ -1626,12 +1626,13 @@ El comando `ifconfig` significa “configuración de interfaz” (*interface con
 
 `ifconfig [OPCIONES]`
 
-Nota
+**Nota**
 
-El comando iwconfig es similar al comando ifconfig, pero se refiere a interfaces de redes inalámbricas (wireless).
+El comando `iwconfig` es similar al comando `ifconfig`, pero se refiere a interfaces de redes inalámbricas (*wireless*).
 
 No todas las configuraciones de red son importantes para este módulo, pero en el siguiente ejemplo es importante tener en cuenta que la dirección IPv4 del dispositivo de red principal eth0 es 192.168.1.2 y que el dispositivo está activo actualmente (UP):
 
+```bash
 root@localhost:~# ifconfig                                     
 eth0      Link encap:Ethernet  HWaddr 02:42:c0:a8:01:02                         
           inet addr:192.168.1.2  Bcast:192.168.1.255  Mask:255.255.255.0        
@@ -1647,21 +1648,25 @@ lo        Link encap:Local Loopback
           RX packets:2 errors:0 dropped:0 overruns:0 frame:0                    
           TX packets:2 errors:0 dropped:0 overruns:0 carrier:0                  
           collisions:0 txqueuelen:1000                                          
-          RX bytes:100 (100.0 B)  TX bytes:100 (100.0 B)           
-Piense sobre lo siguiente
+          RX bytes:100 (100.0 B)  TX bytes:100 (100.0 B)
+```
+
+
+**Piense sobre lo siguiente**
 
 El dispositivo lo se conoce como dispositivo de loopback. Es un dispositivo de red especial utilizado por el sistema cuando envía datos basados en red a sí mismo.
 
-El comando ifconfig también se puede utilizar para modificar temporalmente la configuración de red. Normalmente, estos cambios deben ser permanentes, por lo que raramente se usa el comando ifconfig para realizar dichos cambios.
+El comando `ifconfig` también se puede utilizar para modificar temporalmente la configuración de red. Normalmente, estos cambios deben ser permanentes, por lo que raramente se usa el comando `ifconfig` para realizar dichos cambios.
 
-El comando ping se utiliza para verificar la conectividad entre dos equipos. Para hacer esto, envía paquetes a otra máquina a través de la red. Que el remitente reciba una respuesta indica que es posible conectarse a esa máquina.
+El comando `ping` se utiliza para verificar la conectividad entre dos equipos. Para hacer esto, envía paquetes a otra máquina a través de la red. Que el remitente reciba una respuesta indica que es posible conectarse a esa máquina.
 
-La información se envía mediante “paquetes”; que es la unidad encapsulada de datos enviada a través de una red. Para que los paquetes encuentren la otra computadora, necesitan una dirección. El comando ping utiliza direcciones IP para identificar un equipo en la red al que desea conectarse.
+La información se envía mediante “paquetes”; que es la unidad encapsulada de datos enviada a través de una red. Para que los paquetes encuentren la otra computadora, necesitan una dirección. El comando `ping` utiliza direcciones IP para identificar un equipo en la red al que desea conectarse.
 
-De forma predeterminada, el comando ping continuará enviando paquetes hasta que se introduzca el comando break (CTL +C) en la consola. Para limitar el número de pings que se envían, utilice la opción -c seguida del número de pings que desea enviar. El siguiente ejemplo muestra un ping limitado a 4 iteraciones usando -c 4.
+De forma predeterminada, el comando `ping` continuará enviando paquetes hasta que se introduzca el comando break (**CTL +C**) en la consola. Para limitar el número de pings que se envían, utilice la opción `-c` seguida del número de pings que desea enviar. El siguiente ejemplo muestra un `ping` limitado a 4 iteraciones usando `-c 4`.
 
-Si el comando ping funciona, obtendrá un resultado como el siguiente:
+Si el comando `ping` funciona, obtendrá un resultado como el siguiente:
 
+```bash
 root@localhost:~# ping -c 4 192.168.1.2                                       
 PING 192.168.1.2 (192.168.1.2) 56(84) bytes of data.                          
 64 bytes from 192.168.1.2: icmp_req=1 ttl=64 time=0.051 ms                    
@@ -1673,8 +1678,11 @@ PING 192.168.1.2 (192.168.1.2) 56(84) bytes of data.
 4 packets transmitted, 4 received, 0% packet loss, time 2999ms                
 rtt min/avg/max/mdev = 0.043/0.052/0.064/0.007 ms                             
 root@localhost:~#
-Si el comando ping falla, recibirá un mensaje indicando que no se encontró el ordenador de destino o máquina remota (Destination Host Unreachable):
+```
 
+Si el comando `ping` falla, recibirá un mensaje indicando que no se encontró el ordenador de destino o máquina remota (Destination Host Unreachable):
+
+```bash
 root@localhost:~# ping -c 4 192.168.1.3                                       
 PING 192.168.1.3 (192.168.1.3) 56(84) bytes of data.                            
 From 192.168.1.2 icmp_seq=1 Destination Host Unreachable                        
@@ -1686,11 +1694,367 @@ From 192.168.1.2 icmp_seq=4 Destination Host Unreachable
 4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 3065ms     
 pipe 4  
 root@localhost:~#
-El comando ping puede fallar aunque la máquina remota esté conectada a la red. Esto se debe a que, como medida de seguridad, algunos administradores configuran sus equipos, o incluso redes enteras, para que no respondan a solicitudes ping. El comando ping también funciona con un nombre de host, o con un nombre de dominio como yahoo.com. Usar ésto primero puede ahorrar tiempo, ya que si ese comando ping tiene éxito, indica que hay una resolución de nombre adecuada Y que la dirección IP también funciona correctamente.
+```
 
-Siga leyendo
+El comando `ping` puede fallar aunque la máquina remota esté conectada a la red. Esto se debe a que, como medida de seguridad, algunos administradores configuran sus equipos, o incluso redes enteras, para que no respondan a solicitudes `ping`. El comando `ping` también funciona con un nombre de host, o con un nombre de dominio como yahoo.com. Usar ésto primero puede ahorrar tiempo, ya que si ese comando `ping` tiene éxito, indica que hay una resolución de nombre adecuada Y que la dirección IP también funciona correctamente.
+
+**Siga leyendo**
+
+Salga de la cuenta root mediante el comando `exit`:
+
+```bash
+root@localhost:~# exit                    
+logout
+```
+
+## Visualización de procesos
+
+Ejecutar un comando da como resultado algo llamado proceso. En el sistema operativo Linux, los procesos se ejecutan en función de los privilegios del usuario que ejecuta el comando. Esto permite que los procesos se limiten a ciertas funciones dependiendo de la identidad del usuario.
+
+Aunque hay excepciones, generalmente el sistema operativo diferenciará entre los usuarios en función de si son o no el administrador. Normalmente, los usuarios habituales, como el usuario sysadmin, no pueden controlar los procesos de otro usuario. Los usuarios que tienen privilegios administrativos, como la cuenta root, pueden controlar cualquier proceso de cualquier usuario, incluyendo la detención de cualquier proceso.
+
+El comando ps se puede utilizar para enumerar los procesos.
+
+`ps [OPCIONES]`
+
+```bash
+sysadmin@localhost:~$ ps
+  PID TTY          TIME CMD
+   80 pts/0        00:00:00 bash
+   94 pts/0        00:00:00 ps
+```
+
+Por defecto, el comando ps mostrará los procesos que se están ejecutando en la terminal actual. En el ejemplo anterior, la última línea corresponde al proceso generado al ejecutar el comando ps. La salida incluye las siguientes columnas de información:
+
+ - PID: El identificador para el proceso (process identifier), el cual es único para cada proceso. Esta información es útil cuando necesitamos controlar los procesos según su número identificador (ID).
+
+ - TTY: El nombre de la terminal en la que está funcionando el proceso. Esta información es útil para distinguir entre diferentes procesos que tienen el mismo nombre.
+
+ - TIME: La cantidad total de tiempo de procesado que utiliza un proceso determinado. Normalmente, los usuarios normales no utilizan esta información.
+
+ - CMD: El comando que inició el proceso.
+
+En lugar de ver sólo los procesos que se están ejecutando en la terminal actual, los usuarios pueden querer ver todos los procesos que se están ejecutando en el sistema. La opción `-e` muestra todos estos procesos:
+
+```dash
+sysadmin@localhost:~$ ps -e
+  PID TTY          TIME CMD                                                     
+    1 pts/0        00:00:00 init                                                    
+   33 ?            00:00:00 rsyslogd                                                
+   37 ?            00:00:00 cron                                                    
+   39 ?            00:00:00 sshd                                                    
+   56 ?            00:00:00 named                                                   
+   69 pts/0        00:00:00 login                                                   
+   79 pts/0        00:00:00 bash                                                    
+   94 pts/0        00:00:00 ps 
+```
+
+Muchas veces se puede utilizar la opción `-f` para proporcionar un resultado más detallado que incluya las opciones y los argumentos de cada proceso. Localice el comando `ps` en la última línea, la columna CMD ahora incluye las opciones utilizadas con el comando:
+
+```bash
+sysadmin@localhost:~$ ps -ef
+UID        PID  PPID  C STIME TTY          TIME CMD                             
+root         1     0  0 19:16 pts/0        00:00:00 /sbin??? /init                  
+syslog      33     1  0 19:16 ?            00:00:00 /usr/sbin/rsyslogd              
+root        37     1  0 19:16 ?            00:00:00 /usr/sbin/cron                  
+root        39     1  0 19:16 ?            00:00:00 /usr/sbin/sshd                  
+bind        56     1  0 19:16 ?            00:00:00 /usr/sbin/named -u bind         
+root        69     1  0 19:16 pts/0        00:00:00 /bin/login -f                   
+sysadmin    79    69  0 19:16 pts/0        00:00:00 -bash                           
+sysadmin    95    79  0 19:43 pts/0        00:00:00 ps -ef  
+```
+
+![Imagen de mujer en una entrevista de trabajo. Contratar talento de código abierto es una alta prioridad para el 97 por ciento de los gerentes de contratación encuestados en 2021.](images/OpenSourceImages-01.png)
+
+«Contratar talento de Open Source (código abierto) es una alta prioridad para el 97% de los gerentes de contratación encuestados en 2021.»
+
+## Administración de paquetes
+
+La administración de paquetes es un sistema mediante el cual un software puede ser instalado, actualizado, consultado o eliminado de un sistema de archivos. En Linux, hay muchos sistemas de gestión de paquetes de software diferentes, pero los dos más populares son Debian y Red Hat. Las máquinas virtuales de este curso utilizan Ubuntu, un derivado de Debian.
+
+En el nivel más bajo del sistema de administración de paquetes Debian se encuentra el comando dpkg. Este comando puede ser complicado para los usuarios más nuevos a Linux. La herramienta Advanced Package Tool, `apt-get`, un programa front-end para la herramienta `dpkg`, facilita la gestión de paquetes.
+
+**Nota:**
+
+Un programa front-end es un programa que los usuarios pueden ver y con el que pueden interactuar.
+
+**Siga leyendo**
+
+Muchos de los comandos de administración de paquetes requieren acceso administrativo, por lo que se precederán del comando `sudo`. Use netlab123 como contraseña cuando se le solicite.
+
+### Instalación de paquetes
+
+Los paquetes de archivos normalmente se instalan por descarga directa desde repositorios ubicados en servidores de Internet. Los repositorios Debian contienen más de 65.000 paquetes de software diferentes. Antes de instalar un paquete, es recomendable actualizar la lista de paquetes disponibles usando el comando `apt-get update`.
+
+Los siguientes comandos pueden tardar unos minutos en ejecutarse.
+
+`sudo apt-get update`
+
+```bash
+sysadmin@localhost:~$ sudo apt-get update                                       
+[sudo] password for sysadmin:                                                   
+Ign file: amd64/ InRelease                                                      
+Ign file: amd64/ Release.gpg                                                    
+Ign file: amd64/ Release                                                        
+Reading package lists... Done
+```
+
+Para buscar palabras clave (keyword) dentro de estos paquetes, puede utilizar el comando apt-cache search.
+
+`apt-cache search [keyword]`
+
+La palabra clave que se utiliza debe coincidir con parte del nombre o descripción del paquete que se intenta localizar. Se pueden usar varias palabras clave para especificar aún más la búsqueda; por ejemplo, el término de búsqueda web server proporcionará mejores resultados que web o server.
+
+Para buscar paquetes asociados con la palabra clave cow:
+
+```bash
+sysadmin@localhost:~$ apt-cache search cow
+cowsay - configurable talking cow
+```
+
+Una vez encontrado el paquete (package) que desea instalar, puede utilizar el comando apt-get install para instalarlo:
+
+`sudo apt-get install [package]`
+
+```bash
+sysadmin@localhost:~$ sudo apt-get install cowsay
+[sudo] password for sysadmin:                
+Reading package lists... Done             
+Building dependency tree                   
+Reading state information... Done
+Suggested packages:
+  filters                                                                       
+The following NEW packages will be installed:
+  cowsay
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.                  
+Need to get 0 B/18.5 kB of archives.
+After this operation, 90.1 kB of additional disk space will be used.
+                                                                                
+Selecting previously unselected package cowsay.
+(Reading database ... 24313 files and directories currently installed.) 
+Preparing to unpack .../cowsay_3.03+dfsg1-6_all.deb ...
+Unpacking cowsay (3.03+dfsg1-6) ...             
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+Setting up cowsay (3.03+dfsg1-6) ...
+```
+
+**A tener en cuenta**
+
+¡El comando `cowsay` es una vaca parlante configurable! Use una palabra o frase como argumento:
+
+```bash
+sysadmin@localhost:~$ cowsay 'NDG Linux Unhatched'                              
+ _____________________                                                          
+< NDG Linux Unhatched >                                                         
+ ---------------------                                                          
+        \   ^__^                                                                
+         \  (oo)\_______                                                        
+            (__)\       )\/\                                                    
+                ||----w |                                                       
+                ||     ||
+```
+
+Recomendamos incluir el argumento entre comillas simples para evitar que el shell interprete caracteres especiales.
+
+### Actualización de paquetes
+
+El comando `apt-get install` también puede actualizar un paquete, si ese paquete ya está instalado y existe una versión más reciente disponible. Si el paquete aún no está en el sistema, se instalará; si está en el sistema, se actualizará.
+
+La actualización de todos los paquetes del sistema debe realizarse en dos pasos. Primero, actualice la caché de todos los paquetes disponibles utilizando `apt-get update`. En segundo lugar, ejecute el comando `apt-get upgrade` para actualizar todos los paquetes y sus dependencias.
+
+`apt-get update`
+
+`apt-get upgrade`
+
+```bash
+sysadmin@localhost:~$ sudo apt-get update 
+[sudo] password for sysadmin:
+Ign file: amd64/ InRelease
+Ign file: amd64/ Release.gpg
+Ign file: amd64/ Release
+Reading package lists... Done 
+sysadmin@localhost:~$ sudo apt-get upgrade
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+Calculating upgrade... Done
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+```
+
+### Eliminación de paquetes
+
+El comando `apt-get` puede eliminar o purgar un paquete. La diferencia entre los dos es que purgar suprime todos los archivos del paquete, mientras que eliminar suprime todos los archivos del paquete, excepto los archivos de configuración.
+
+Un administrador puede ejecutar el comando `apt-get remove` para eliminar un paquete o el comando `apt-get purge` para purgar un paquete completamente del sistema.
+
+`apt-get remove [package]`
+
+`apt-get purge [package]`
+
+Por ejemplo, para purgar `cowsay` por completo, ejecute el siguiente comando. Escriba Y cuando se le solicite:
+
+```bash
+sysadmin@localhost:~$ sudo apt-get purge cowsay 
+Reading package lists... Done 
+Building dependency tree
+Reading state information... Done
+The following packages will be REMOVED:
+  cowsay*
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+After this operation, 90.1 kB disk space will be freed.
+Do you want to continue? [Y/n] y
+(Reading database ... 24377 files and directories currently installed.)
+Removing cowsay (3.03+dfsg1-6) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+```
+
+## Actualización de contraseñas de usuario
+
+El comando `passwd` se utiliza para actualizar la contraseña de un usuario. Los usuarios solo pueden cambiar sus propias contraseñas, mientras que el usuario root puede actualizar la contraseña para cualquier usuario.
+
+`passwd [OPCIONES] [USUARIO]`
+
+Por ejemplo, ya que hemos iniciado sesión como usuario sysadmin, podemos cambiar la contraseña de esa cuenta. Ejecute el comando `passwd`. Se le pedirá que introduzca la contraseña actual una vez y la contraseña nueva dos veces. Por razones de seguridad, no se muestra ningún resultado mientras se está escribiendo la contraseña. La salida se muestra de la siguiente manera:
+
+```bash
+sysadmin@localhost:~$ passwd                                                    
+Changing password for sysadmin.                                                 
+(current) UNIX password: netlab123                                                       
+Enter new UNIX password:                                                       
+Retype new UNIX password:                                                       
+passwd: password updated successfully
+```
+
+Si el usuario desea ver información sobre su contraseña, puede utilizar la opción -S:
+
+```bash
+sysadmin@localhost:~$ passwd -S sysadmin                                        
+sysadmin P 12/20/2017 0 99999 7 -1
+```
+
+Los campos de salida se explican a continuación:
+
+| Campo | Ejemplo | Significado |
+|---|---|---|
+| Nombre del usuario | sysadmin | El nombre del usuario. |
+| Estado de la contraseña | P | P indica que es una contraseña utilizable. L indica que la contraseña está bloqueada. NP indica que no hay contraseña. |
+| Fecha de actualización | 03/01/2015 | La fecha en la que la contraseña fue actualizada por última vez. |
+| Mínimo | 0 | El número mínimo de días que deben pasar antes de que el usuario pueda cambiar la contraseña actual. |
+| Máximo | 99999 | El máximo número de días que restan hasta que expire la contraseña. |
+| Aviso | 7 | El número de días precedentes a la expiración de la contraseña para que el usuario reciba el aviso. |
+| Inactividad | -1 | El número de días después de la expiración de la contraseña que la cuenta del usuario se mantendrá activa. |
+
+**Siga leyendo**
+
+Cambie a la cuenta root mediante el siguiente comando:
+
+```sysadmin@localhost:~$ su root                                                   
+Password:    
+root@localhost:~#
+```
+
+Use netlab123 como contraseña.
+
+El usuario root puede cambiar la contraseña de cualquier usuario. Si el usuario root desea cambiar la contraseña de sysadmin, ejecutará el siguiente comando:
+
+```bash
+root@localhost:~# passwd sysadmin
+Enter new UNIX password:        
+Retype new UNIX password: 
+passwd: password updated successfully
+```
+
+**Siga leyendo**
 
 Salga de la cuenta root mediante el comando exit:
 
-root@localhost:~# exit                                                        
-logout
+```bash
+root@localhost:~# exit              
+exit
+```
+
+## Redirección
+
+Agregar contenido a archivos en Linux puede hacerse de varias maneras. Linux posee algunos editores de texto que pueden usarse para agregar contenido a un archivo. Sin embargo, este método requiere cierta familiaridad con los comandos del editor de texto de Linux.
+
+**Nota**
+
+Los editores de texto de Linux están cubiertos en la siguiente sección de este curso.
+
+En Linux, se puede agregar contenido a un archivo rápidamente usando una función de línea de comandos llamada redirección de entrada/salida (E/S) (input/output; I/O). La redirección E/S (I/O) permite enviar la información de la línea de comandos a archivos, dispositivos y otros comandos. La entrada o salida de un comando se redirige desde su destino predeterminado a una ubicación diferente. La redirección E/S es como una serie de vías de tren, donde se puede habilitar un conmutador para dirigir la salida de un comando a una vía diferente que vaya a otro lugar en el shell. En esta sección, escribiremos a archivos a través de la redirección de la salida de un comando hacia otro archivo.
+
+Cuando se trata de comandos de entrada y salida, existen tres rutas, o “vías”. Estas rutas se denominan descriptores de archivos. El primer descriptor de archivo es la entrada estándar, abreviada como STDIN (standard input). La entrada estándar es la información que el comando recibe y procesa cuando se ejecuta, esencialmente lo que un usuario escribe en el teclado. El segundo descriptor de archivo es la salida estándar, abreviada como STDOUT (standard output). La salida estándar es la información que muestra el comando, la salida del comando. El último descriptor de archivo es el error estándar, abreviado como STDERR (standard error). STDERR, son los mensajes de error generados por comandos que no se ejecutan correctamente. Los siguientes son ejemplos de cómo aparecerán los descriptores de archivos en la terminal:
+
+**Entrada estándar (STDIN)**
+
+`sysadmin@localhost:~$ ls ~/Documents`
+
+**Salida estándar (STDOUT)**
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+```
+**Error estándar (STDERR)**
+
+```bash
+sysadmin@localhost:~$ ls fakefile 
+ls: cannot access fakefile: No such file or directory
+```
+
+Esta sección cubrirá uno de los tres descriptores de archivos, STDOUT, y cómo redirigir STDOUT desde donde normalmente aparece en el terminal, a un archivo en el sistema de archivos. Para ejecutar la redirección, simplemente use el símbolo “mayor que” > junto al nombre del archivo:
+
+`[COMANDO] > [ARCHIVO]`
+
+Para demostrar cómo funciona la redirección, usaremos la salida del comando `cat`. Sin redirección, la salida del comando cat se mostrará en el terminal:
+
+**Siga leyendo**
+
+Utilice el siguiente comando para cambiar al directorio Documents:
+
+`sysadmin@localhost:~$ cd ~/Documents`
+
+```bash
+sysadmin@localhost:~/Documents$ cat food.txt
+Food is good.
+```
+
+Ahora utilice el carácter > para redirigir el STDOUT del comando cat food.txt anterior a un nuevo archivo llamado *newfile1.txt*:
+
+`sysadmin@localhost:~/Documents$ cat food.txt > newfile1.txt`
+
+Como puede ver, no se muestra ninguna salida ya que el STDOUT se ha redirigido al archivo newfile1.txt. Compruebe que el STDOUT del comando `cat food.txt` se encuentra en newfile1.txt:
+
+```bash
+sysadmin@localhost:~/Documents$ cat newfile1.txt                     
+Food is good.
+```
+
+Esta función es útil si necesita copiar contenido de un archivo importante a otro archivo para editar su contenido sin modificar el archivo original. Sin embargo, ¿qué sucede si desea agregar un comentario o una nota a un archivo ya existente? Para hacer esto, puede usar el comando `echo`. El comando `echo` se utiliza para imprimir una salida en la terminal:
+
+```bash
+sysadmin@localhost:~/Documents$ echo "Hello"           
+Hello  
+```                                                                 
+Imprimir comentarios en la pantalla es una función curiosa, pero el comando echo puede ser más útil cuando se usa con la redirección. Mediante el comando echo, puede agregar contenido al archivo newfile1.txt:
+
+```bash
+sysadmin@localhost:~/Documents$ cat newfile1.txt         
+Food is good.     
+sysadmin@localhost:~/Documents$ echo "I like food." > newfile1.txt
+sysadmin@localhost:~/Documents$ cat newfile1.txt             
+I like food.
+```
+
+Observe que el STDOUT del comando echo ha reemplazado el contenido original del archivo. Esto se debe a que el carácter > sobrescribe cualquier contenido de un archivo existente. Para añadir contenido a un archivo, en lugar de sobrescribir, utilice el símbolo “mayor que” dos veces >>:
+
+```bash
+sysadmin@localhost:~/Documents$ echo "This food is good." >> newfile1.txt
+sysadmin@localhost:~/Documents$ cat newfile1.txt              
+I like food.                                                      
+This food is good.
+```
+
+**Importante**
+
+Para redirigir la información a un archivo existente, el usuario debe tener permisos de escritura para ese archivo.

@@ -1683,14 +1683,13 @@ Si el comando `ping` falla, recibirá un mensaje indicando que no se encontró e
 
 ```bash
 root@localhost:~# ping -c 4 192.168.1.3                                       
-PING 192.168.1.3 (192.168.1.3) 56(84) bytes of data.                            
-From 192.168.1.2 icmp_seq=1 Destination Host Unreachable                        
-From 192.168.1.2 icmp_seq=2 Destination Host Unreachable                        
-From 192.168.1.2 icmp_seq=3 Destination Host Unreachable                        
-From 192.168.1.2 icmp_seq=4 Destination Host Unreachable                        
-                                                                                
---- 192.168.1.3 ping statistics ---                                             
-4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 3065ms     
+PING 192.168.1.3 (192.168.1.3) 56(84) bytes of data.
+From 192.168.1.2 icmp_seq=1 Destination Host Unreachable 
+From 192.168.1.2 icmp_seq=2 Destination Host Unreachable
+From 192.168.1.2 icmp_seq=3 Destination Host Unreachable 
+From 192.168.1.2 icmp_seq=4 Destination Host Unreachable
+--- 192.168.1.3 ping statistics ---    
+4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 3065ms
 pipe 4  
 root@localhost:~#
 ```
@@ -2327,31 +2326,16 @@ Una buena comprensión de Linux permite que los estudiantes de ciberseguridad pu
 
 | Objetivos de Aprendizaje de Linux Unhatched	| Aptitudes Cisco Certified CyberOps Associate |
 |---|---|
-Listar Archivos
-Visualizar Archivos
-Filtrar Entradas
-Patrones Básicos
-Redireccionamiento
-| Analizar Archivos |
-Visualizar Archivos
-Copiar Archivos
-Redireccionamiento
-Editores de Texto
-Permisos de Archivos
-Cambios de Propietario de Archivos
-Manipulación de Archivos
-Editores de Texto
-Modificar y Crear Archivos de Configuración
-Permisos de Archivos
-Permisos de Usuario y de Grupo
-Acceso Administrativo
-Actualizar Contraseñas de Usuario
-Permisos
-Configuración de Redes
-Configuración de Redes
+| -Listar Archivos<br>-Visualizar Archivos<br>- Filtrar Entradas<br>- Patrones Básicos<br>- Redireccionamiento | Analizar Archivos |
+| - Visualizar<br>- Archivos<br>- Copiar Archivos<br>- Redireccionamiento<br>- Editores de Texto<br>- Permisos de Archivos<br>- Cambios de Propietario de Archivos | Manipulación de Archivos |
+| Editores de Texto | Modificar y Crear Archivos de Configuración |
+| -Permisos de Archivos<br>- Permisos de Usuario y de Grupo<br>- Acceso Administrativo<br>- Actualizar Contraseñas de Usuario | Permisos |
+| Configuración de Redes | Configuración de Redes |
+
 Con el presente curso usted aprendió a realizar operaciones básicas con Linux, incluyendo tareas administrativas y aquellas relacionadas con la seguridad. Los expertos en ciberseguridad deben saber cómo realizar estas tareas en una variedad de sistemas operativos, Windows, MacOS y Linux incluidos. Los cursos NDG Linux están diseñados para enseñarle una variedad de comandos, términos y utilidades que le ayudarán a prepararse para una carrera profesional en ciberseguridad. Vea a continuación algunos de los comandos de Linux necesarios para Cisco Certified CyberOps Associate:
 
 [Linux commands for Cisco Certified CyberOps Associate. Commands include apt, cat, cd, ls, sudo, tail, ssh, and more!](images/Unhatched_ccna_commands.png)
 «*Comandos Linux para Cisco Certified CyberOps Associate. Cursos NDG Linux - la manera inteligente de prepararse paraCisco Certified CyberOps Associate.*»
 
-Para obtener más información sobre Linux y los comandos y utilidades necesarios para crear una base de conocimientos fundamentales sobre Linux que le ayuden a ir más lejos en la carrera de formación Cisco Certified CyberOps Associate, eche un vistazo a otros cursos NDG Linux. Para obtener más información sobre el curso Cisco Certified CyberOps Associate haga clic aquí.
+Para obtener más información sobre Linux y los comandos y utilidades necesarios para crear una base de conocimientos fundamentales sobre Linux que le ayuden a ir más lejos en la carrera de formación Cisco Certified CyberOps Associate, eche un vistazo a otros cursos [NDG Linux](https://www.netdevgroup.com/online/content/linux/). Para obtener más información sobre el curso Cisco Certified CyberOps Associate haga clic [aquí](https://www.netacad.com/courses/security/ccna-cybersecurity-operations).
+

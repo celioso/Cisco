@@ -2058,3 +2058,301 @@ This food is good.
 **Importante**
 
 Para redirigir la información a un archivo existente, el usuario debe tener permisos de escritura para ese archivo.
+
+## Editor de texto
+
+El principal editor de texto para Linux y UNIX es un programa llamado vi. Si bien hay numerosos editores disponibles para Linux incluyendo desde el pequeño editor nano hasta el editor masivo emacs, el editor vi tiene varias ventajas:
+
+ - El editor `vi` está disponible en todas las distribuciones Linux del mundo. Esto no ocurre con ningún otro editor.
+
+ - El editor `vi` se puede ejecutar tanto en una CLI (interfaz de línea de comandos) como en una GUI (interfaz gráfica de usuario).
+
+ - Aunque se han añadido nuevas características al editor `vi`, las funciones principales han existido durante décadas. Esto significa que si alguien aprendió a usar el editor `vi` en la década de 1970, podrá usar la versión moderna sin ningún problema. Aunque eso pueda parecer trivial, puede que dentro de veinte años no sea tan trivial.
+
+**A tener en cuenta**
+
+La forma correcta de pronunciar el nombre del editor vi es *vi-ay*. Las letras vi representan visual, pero nunca se pronunció de esta manera. En su lugar se pronuncia la letra v (*vi*) seguida de la letra i (*ay*) en inglés.
+
+En realidad, la mayoría de los sistemas Linux no incluyen el editor `vi` original, sino una versión mejorada del mismo conocida como `vim` (vi mejorada) (vi improved). Este hecho puede estar oculto en la mayoría de las distribuciones de Linux. En su mayor parte, `vim` funciona igual que `vi`, pero presenta funciones adicionales. Para los temas que se tratan en este curso, tanto `vi` como `vim` funcionarán perfectamente
+
+Para comenzar a usar `vi`, simplemente escriba el comando seguido del nombre de ruta del archivo que quiere editar o crear:
+
+`sysadmin@localhost:~$ vi newfile.txt`
+
+Los tres modos utilizados en `vi` son los siguientes: modo de comando, modo de inserción y modo ex.
+
+### Modo de comando: Movimiento
+
+Inicialmente, el programa empieza en modo de comando. El modo de comando se utiliza para escribir comandos, como los utilizados para desplazarse por un documento, manipular texto o acceder a los otros dos modos. Para volver al modo de comando en cualquier momento, presione la tecla **Esc**.
+
+Una vez haya agregado texto a un documento, deberá presionar la tecla **Esc** para volver al modo de comando y realizar acciones como mover el cursor. Esto parece que sea mucho trabajo, pero recuerde que `vi` funciona en un entorno terminal en el cual un mouse es inservible.
+
+Los comandos de movimiento en `vi` tienen dos aspectos, el movimiento (*motion*) y un prefijo numérico opcional (*count*) que indica cuántas veces se debe repetir ese movimiento. El formato general es el siguiente:
+
+`[número] movimento`
+
+En la siguiente tabla se resumen las teclas de movimiento disponibles:
+
+| Movimiento | Resultado |
+|---|---|
+| h | Un carácter a la izquierda |
+| j | A la línea siguiente |
+| k | A la línea anterior |
+| l | Un carácter a la derecha |
+| w | Una palabra adelante |
+| b | Una palabra hacia atrás |
+| ^ | Al principio de la línea |
+| $ | Al final de la línea |
+
+**Nota**
+
+En la actualización `vim` también es posible usar las teclas de flecha ← ↓ ↑ → en lugar de los caracteres h j k l respectivamente.
+
+Estos movimientos se pueden anteponer con un número para indicar cuántas veces se debe realizar el movimiento. Por ejemplo, 5h moverá el cursor cinco caracteres a la izquierda y 3w moverá el cursor tres palabras a la derecha.
+
+Para mover el cursor a un número de línea específico, escriba ese número de línea seguido del carácter G. Por ejemplo, para llegar a la quinta línea del archivo, escriba 5G. Puede usar 1G o gg para moverse a la primera línea del archivo, mientras que una G única le llevará a la última línea. Para averiguar en qué línea se encuentra el cursor, utilice **CTRL+G**.
+
+### Modo de comando: Acciones
+
+La convención estándar para editar contenido con procesadores de texto es usando copiar, cortar y pegar. El programa vi no tiene ninguno de estos. En su lugar, vi utiliza los tres comandos siguientes:
+
+| Estándar | Vi | Significado |
+|---|---|---|
+| cortar | d	eliminar (delete) |
+| copiar | y | sacar (yank) |
+| pegar | P o p | poner (put) |
+
+Los movimientos aprendidos en la página anterior se utilizan para especificar dónde se llevará a cabo la acción, comenzando siempre con la ubicación actual del cursor. Cualquiera de los siguientes formatos generales es aceptable para comandos de acción:
+
+`acción [número] movimento`
+`[número] acción movimento`
+
+### Eliminar
+
+Eliminar (*delete)* suprime el texto indicado de la página y lo guarda en el búfer, siendo el búfer el equivalente al “portapapeles” (*clipboard*) utilizado en Windows o Mac OSX. En la siguiente tabla se proporcionan algunos ejemplos de uso comunes:
+
+| Acción | Resultado |
+|---|---|
+| dd | Elimina la línea actual |
+| 3dd | Elimina las tres líneas siguientes |
+| dw | Elimina la palabra actual |
+| d3w | Elimina las tres palabras siguientes |
+| d4h | Elimina cuatro caracteres hacia la izquierda |
+
+### Cambiar
+
+La función cambiar (change) es muy similar a la de eliminar; el texto se elimina y se guarda en el búfer. Sin embargo, el programa cambia a modo de inserción y permite la introducción de cambios inmediatos en el texto. En la siguiente tabla se proporcionan algunos ejemplos de uso comunes:
+
+| Acción | Resultado |
+|---|---|
+| cc | Cambiar la línea actual | 
+| cw | Cambiar la palabra actual |
+| c3w | Cambiar las tres palabras siguientess |
+| c5h | Cambiar cinco caracteres hacia la izquierda |
+
+### Sacar
+
+Sacar (*yank*) coloca el contenido en el búfer sin eliminarlo. En la siguiente tabla se proporcionan algunos ejemplos de uso comunes:
+
+| Acción | Resultado |
+|---|---|
+| yy | Sacar la línea actual |
+| 3yy | Sacar las tres líneas siguientes |
+| yw | Sacar la palabra actual |
+| y$ | Sacar el fragmento desde el cursor hasta el final de la línea actual |
+
+### Poner
+
+Poner (put) coloca el texto guardado en el búfer antes o después de la posición del cursor. Tenga en cuenta que estas son las dos únicas opciones, poner no utiliza movimientos como los comandos de acción anteriores.
+
+Acción	Resultado
+p	Poner o pegar después del cursor
+P	Poner antes del cursor
+
+### Buscar en vi
+
+Otra función estándar que ofrecen los procesadores de texto es la función de búsqueda (find). A menudo, las personas usan **CTRL+F** o miran en el menú de edición. El programa vi utiliza la búsqueda. La función de búsqueda es más potente que la función find porque admite patrones de texto literales y expresiones regulares.
+
+Para buscar hacia adelante desde la posición actual del cursor, use la / para iniciar la búsqueda, escriba un término de búsqueda y, a continuación, presione la tecla **Enter** para iniciar la búsqueda. El cursor se moverá al primer resultado que coincida con su término de búsqueda.
+
+Para proceder al siguiente resultado coincidente usando el mismo patrón, presione la tecla n. Para volver al resultado anterior, presione la tecla N. Si se alcanza el final o el comienzo del documento, la búsqueda se ajustará automáticamente para continuar con el resto del documento.
+
+Para empezar a buscar desde la posición del cursor hacia atrás, empiece por escribir ?, entonces escriba el patrón de búsqueda y presione la tecla Enter.
+
+### Modo Insertar
+
+El modo Insertar se utiliza para agregar texto a un documento. Hay algunas maneras de entrar en el modo de inserción desde el modo de comando, cada una diferenciada por donde comienza la inserción de texto. La siguiente tabla presenta los más comunes:
+
+| Entrada | Función |
+|---|---|
+| a | Comenzar a insertar justo después del cursor |
+| A | Comenzar a insertar al final de la línea |
+| I | Comenzar a insertar justo antes del cursor |
+| I | Comenzar a insertar al principio de la línea |
+| o | Comenzar a insertar en una nueva línea después del cursor |
+| O | Comenzar a insertar en una nueva línea antes del cursor |
+
+### Modo Ex
+
+Originalmente, el editor `vi` se llamaba editor `ex`. El nombre `vi` era la abreviatura del comando visual en el editor `ex` que cambiaba el editor al modo “visual”.
+
+En el modo normal original, el editor `ex` sólo permitía a los usuarios ver y modificar una línea cada vez. En el modo visual, los usuarios podían ver la mayor parte del documento que podía caber en la pantalla. Dado que la mayoría de los usuarios preferían el modo visual al modo de edición por línea, el archivo de programa `ex `se vinculó a un archivo `vi`. De este modo los usuarios podían iniciar `ex` directamente en modo visual al ejecutar el enlace `vi`.
+
+Eventualmente, el archivo de programa fue renombrado `vi` y el editor `ex` se convirtió en un enlace que apuntaba al editor `vi`.
+
+Cuando se utiliza el modo ex del editor `vi`, es posible ver o cambiar su configuración, así como ejecutar comandos de archivo como abrir, guardar o cancelar cambios en un documento. Para acceder al modo ex, escriba el carácter : en el modo de comando. En la tabla siguiente se enumeran algunas acciones comunes realizadas en modo ex:
+
+| Entrada | Función |
+|---|---|
+| :w | Escribir el documento actual al sistema de archivos |
+| :w nombre_del_archivo | Guardar una copia del documento actual bajo el nombre nombre_del_archivo |
+| :w!	Forzar escritura al documento actual |
+| :1 | Ir a la primera línea (o otra línea indicada por el número) |
+| :e | nombre_del_archivo	Abrir nombre_del_archivo |
+| :q | Suspender (salir) (quit) si no se han realizado cambios al documento |
+| :q! | Suspender sin guardar los cambios realizados al documento |
+
+Un análisis rápido de la tabla anterior revela que cuando un signo de exclamación, ! , se agrega a un comando, se intentará forzar la operación. Por ejemplo, imagine que realiza cambios a un archivo en el editor vi y luego intenta salir usando :q, solo para descubrir que el comando falla. En este caso, el editor vi no quiere salir del documento sin guardar los cambios realizados, pero usted puede forzar la salida con el comando ex :q!.
+
+**A tener en cuenta**
+
+Aunque el modo ex ofrece varias maneras de guardar y salir, también está disponible el comando ZZ; éste es el equivalente a :wq. Hay muchas más funciones que se solapan entre el modo ex y el modo de comando. Por ejemplo, el modo ex se puede utilizar para navegar a cualquier línea del documento escribiendo : seguido del número de línea, mientras que G se puede utilizar en modo de comando como se ha demostrado anteriormente.
+
+**Siga leyendo**
+
+Si tiene un archivo de texto abierto, salga ejecutando el comando :q!. Esto lo cerrará sin guardar cambios.
+
+```bash
+~
+~
+:q!_
+```
+
+## Cómo seguir avanzando
+
+Esperamos que haya disfrutado de esta breve introducción al mundo de Linux. El contenido de este curso se alinea con los conocimientos de Linux cubiertos por los objetivos del examen LPI Linux Essentials. ¡Pero hay mucho más! Avance en su carrera profesional adquiriendo más conocimientos sobre Linux con una certificación.
+
+### NDG Linux Essentials
+
+Si está interesado en ampliar sus conocimientos sobre Linux, Cisco Networking Academy ofrece tres cursos de Linux. [NDG Linux Essentials](https://www.netacad.com/courses/os-it/ndg-linux-essentials) es perfecto para principiantes que buscan comprender conceptos básicos. La [NDG Linux Series](https://www.netacad.com/courses/os-it/ndg-linux-I), también está dirigida a principiantes, pero presenta el contenido con más profundidad y rigor.
+
+![NDG Linux Essentials. Learn the fundamentals of the Linux operating system and command line and basic open source concepts. Image of students looking at monitors.](images/linux_essentials.png)
+
+«*NDG Linux Essentials. Adquiera conocimientos fundamentales sobre el sistema operativo Linux, la línea de comandos y conceptos básicos sobre sistemas de código abierto.*»
+
+El curso NDG Linux Essentials está diseñado para prepararlo para el certificado de desarrollo profesional Linux Essentials Professional Development Certificate del Linux Professional Institute, que valida que usted posee una comprensión demostrada de los conceptos siguientes:
+
+ - FOSS, las diferentes comunidades y licencias
+ - Conocimientos sobre aplicaciones de código abierto en el lugar de trabajo y cómo se comparan a aplicaciones equivalentes de código cerrado
+ - Conceptos básicos sobre hardware, procesos, programas y los componentes del Sistema Operativo Linux
+ - Cómo usar la línea de comando y trabajar con archivos
+ - Cómo crear y restaurar copias de seguridad y archivos comprimidos
+ - Seguridad del sistema, usuarios/grupos y permisos para directorios públicos y privados
+ - Cómo crear y ejecutar scripts simples
+
+Para obtener el certificado de desarrollo profesional de Linux Essentials debe completar el curso Linux Essentials (LPI-010) que cubre:
+
+ - La comunidad Linux y una carrera profesional trabajando con código abierto
+ - Saber moverse en el entorno Linux
+ - El poder de la línea de comando
+ - El sistema operativo Linux
+ - Seguridad y permisos de archivos
+El certificado de desarrollo profesional de Linux Essentials es el comienzo de su camino hacia convertirse en un profesional certificado Linux. Puede encontrar información sobre las certificaciones del Linux Professional Institute en [http://www.lpi.org](https://content.netdevgroup.com/contents/unhatched/bCdL9YLvTR/).
+
+No se preocupe si tiene poca o ninguna experiencia con Linux. Este curso es el punto de partida perfecto. Está diseñado para enseñarle todos los conceptos partiendo de cero. Sin embargo, si encuentra que este material no es lo suficientemente estimulante, considere comenzar con NDG Introduction to Linux I, un curso introductorio más riguroso.
+
+### [NDG Linux Series](https://www.netacad.com/courses/ndg-intro-linux/)
+
+![NDG Linux I and II. Learn Linux system administration skills and prepare for LPI LPIC-1 or CompTIA Linux+ powered by LPI certification. Image of two male students looking at a monitor.](images/NDG_Introduction_to_Linux_Course___Cisco_NetAcad.png)
+«*Aprenda sobre la administración de sistemas Linux y prepárese para las certificaciones LPI LPIC-1 o CompTIA Linux+. Inscríbase ahora.*»
+
+La serie NDG Linux está diseñada para prepararle para la certificación de nivel 1 del Linux Professional Institute (LPIC-1). LPIC-1 es una certificación Linux Server Professional para administradores de Linux que confirma que usted está capacitado para realizar las siguientes tareas:
+
+ - Trabajar con la línea de comandos Linux
+ - Completar tareas de mantenimiento simples: asistir a usuarios, añadir usuarios a sistemas más grandes, realizar copias de seguridad (backups) y restaurar, cerrar y reiniciar el sistema.
+ - Instalar y configurar una estación de trabajo (incluyendo X) y conectarla a la LAN, o un PC a internet.
+
+Para obtener la certificación LPIC-1 debe aprobar los exámenes 101 y 102. NDG Introduction to Linux I está diseñado para prepararle para el examen 101, que abarca:
+
+ - Arquitectura del Sistema
+ - Instalación de Linux y Administración de Paquetes
+ - GNU y Comandos Unix
+ - Dispositivos, Sistemas de Archivos Linux, Estándares de Jerarquía en el Sistema de Archivos
+
+NDG Introduction to Linux II se alinea con los objetivos del examen 102, que abarcan:
+
+ - Shells, Scripts y Administración de Datos
+ - Interfaces y Escritorios (Desktops)
+ - Tareas Administrativas
+ - Servicios de Sistema Esenciales
+ - Fundamentos sobre Gestión de Redes
+ - Seguridad
+La certificación LPIC-1 es la primera de tres certificaciones profesionales LPI. Información sobre todas las certificaciones del Linux Professional Institute está disponible en http://www.lpi.org.
+
+###[IT Essentials](https://www.netacad.com/courses/it-essentials/)
+
+Para obtener más información sobre conceptos fundamentales de informática y carreras profesionales y trabajos de iniciación en TI, consulte el resto de [IT Essentials](https://www.netacad.com/courses/it-essentials/).
+
+![IT Essentials. Learn how to build and set up a computer and connect it securely to a network, your first step to an IT career. Students looking at interior of a computer.](images/it_essentials.png)
+
+«*IT Essentials. Aprenda a configurar una computadora y conectarla de manera segura a la red. Sus primeros pasos hacia una carrera en TI.*»
+
+IT Essentials cubre los conceptos fundamentales de informática y las posibles carreras y empleos de TI de nivel básico. El plan de estudios de IT Essentials incluye horas de prácticas que proporcionan experiencia real. Además, las herramientas virtuales ayudan a perfeccionar su capacidad para resolver problemas y practicar lo que aprende.
+
+ - Obtener conocimientos prácticos sobre el funcionamiento de las computadoras
+ - Desarrollar pensamiento crítico y capacidad para resolver problemas complejos mediante clases prácticas y herramientas de aprendizaje virtual
+ - Emplear conceptos y procedimientos para instalar y actualizar hardware y software y solucionar problemas de sistemas
+ - Practicar y aplicar lo aprendido sobre equipos reales y utilizando la herramienta de simulación Cisco Packet Tracer
+ - Obtener feedback inmediato sobre su trabajo mediante cuestionarios y tests incorporados
+ - Conectarse a la comunidad global Cisco Networking Academy
+
+![Gráfico de encuesta de los aspectos más destacados del trabajo en código abierto. El código abierto lo ejecuta todo. Más oportunidades para trabajar de forma remota. Modelo de desarrollo colaborativo. El 58% de los profesionales informa que siguió una carrera de código abierto porque la tecnología moderna se ejecuta en código abierto. Informe de trabajo de código abierto 2021 - Linux Foundation Research.](images/Open_Source_Images-02.png)
+«*Lo más destacado sobre trabajar con código abierto. El código abierto lo ejecuta todo. Más oportunidades para trabajar de forma remota. Modelo de desarrollo colaborativo. El 58% de los profesionales informa que siguió una carrera de código abierto porque la tecnología moderna se ejecuta en código abierto.*»
+
+## Linux para Cisco Certified CyberOps Associate
+
+¡Enhorabuena, ha terminado este breve curso introductorio de Linux! Acaba de aprender muchos conceptos de Linux que le ayudarán a avanzar su carrera en TI. Hemos destacado que Linux está en todas partes. También hemos hecho hincapié en que aprender Linux es beneficioso para una amplia variedad de carreras tecnológicas. Puede continuar sus estudios de TI en una variedad de áreas, incluyendo redes, IoT y en una de las especialidades de TI con más demanda actualmente, la ciberseguridad.
+
+Uno de los retos más importantes al que nos enfrentamos actualmente en nuestro universo digital es la ciberseguridad. Hay una cantidad creciente de dispositivos inteligentes que se pueden conectar a redes, cosa que es muy conveniente para los usuarios que desean permanecer conectados. Sin embargo, esto también puede resultar en redes vulnerables a personas y organizaciones que intentan obtener acceso malintencionado a tales dispositivos y redes. Como resultado, el campo de la ciberseguridad está creciendo y en los últimos años la formación de profesionales en ciberseguridad se ha convertido en una prioridad para las instituciones de tecnología de la información.
+
+Cisco Network Academy ha desarrollado un programa de certificación para aquellas personas interesadas en una trayectoria profesional en ciberseguridad. La certificación Cisco Certified CyberOps Associate está diseñada para proporcionar conocimientos sobre las tareas específicas necesarias para monitorear los sistemas de información. Con esto en mente, si usted está comenzando sus estudios de TI, o si está interesado en explorar carreras en TI, vale la pena señalar que existe una demanda de profesionales formados en Cisco Certified CyberOps Associate.
+
+![Sea el arma de seguridad cibernética de TI de su empresa. Cursos NDG Linux - la manera inteligente de prepararse para Cisco Certified CyberOps Associate.](images/Cisco_CCNA_Social_Posts_V2_Cisco-CCNA-4.jpg)
+«*Sea el arma de seguridad cibernética de TI de su empresa. Cursos NDG Linux - la manera inteligente de prepararse para Cisco Certified CyberOps Associate.*»
+
+La mejor parte es que los conocimientos básicos de Linux cubiertos en este curso son aplicables, junto con aprendizaje adicional, a una carrera de formación Cisco Certified CyberOps Associate. Aprender conceptos básicos de Linux puede mejorar su capacidad para realizar tareas específicas en el curso Cisco Certified CyberOps Associate, así como comprender los conceptos y objetivos que se enseñan en Cisco Certified CyberOps Associate.
+
+Tenga en cuenta que mientras aprenden a monitorear y detectar amenazas, los estudiantes de Cisco Certified CyberOps Associate también deben aprender cómo funcionan los diferentes sistemas operativos y cómo resolver problemas y analizar tales sistemas operativos. Dado que Linux se utiliza en dispositivos móviles, servidores y máquinas cliente, resulta muy útil saber navegar por el sistema operativo Linux. Por esta razón, muchos de los objetivos de aprendizaje del curso Cisco Certified CyberOps Associate se refieren al análisis de servidores que ejecutan Linux.
+
+Una buena comprensión de Linux permite que los estudiantes de ciberseguridad puedan analizar pericialmente el sistema de archivos Linux, monitorear servidores Linux, así como máquinas cliente, dispositivos y otras tecnologías que ejecutan Linux. Algunos de los comandos y herramientas cubiertos en este curso son requisitos básicos para las aptitudes mencionadas anteriormente. La siguiente tabla muestra los conceptos que ha aprendido en este curso que serán beneficiosos para una formación futura Cisco Certified CyberOps Associate:
+
+| Objetivos de Aprendizaje de Linux Unhatched	| Aptitudes Cisco Certified CyberOps Associate |
+|---|---|
+Listar Archivos
+Visualizar Archivos
+Filtrar Entradas
+Patrones Básicos
+Redireccionamiento
+| Analizar Archivos |
+Visualizar Archivos
+Copiar Archivos
+Redireccionamiento
+Editores de Texto
+Permisos de Archivos
+Cambios de Propietario de Archivos
+Manipulación de Archivos
+Editores de Texto
+Modificar y Crear Archivos de Configuración
+Permisos de Archivos
+Permisos de Usuario y de Grupo
+Acceso Administrativo
+Actualizar Contraseñas de Usuario
+Permisos
+Configuración de Redes
+Configuración de Redes
+Con el presente curso usted aprendió a realizar operaciones básicas con Linux, incluyendo tareas administrativas y aquellas relacionadas con la seguridad. Los expertos en ciberseguridad deben saber cómo realizar estas tareas en una variedad de sistemas operativos, Windows, MacOS y Linux incluidos. Los cursos NDG Linux están diseñados para enseñarle una variedad de comandos, términos y utilidades que le ayudarán a prepararse para una carrera profesional en ciberseguridad. Vea a continuación algunos de los comandos de Linux necesarios para Cisco Certified CyberOps Associate:
+
+Linux commands for Cisco Certified CyberOps Associate. Commands include apt, cat, cd, ls, sudo, tail, ssh, and more!
+«Comandos Linux para Cisco Certified CyberOps Associate. Cursos NDG Linux - la manera inteligente de prepararse paraCisco Certified CyberOps Associate.»
+
+Para obtener más información sobre Linux y los comandos y utilidades necesarios para crear una base de conocimientos fundamentales sobre Linux que le ayuden a ir más lejos en la carrera de formación Cisco Certified CyberOps Associate, eche un vistazo a otros cursos NDG Linux. Para obtener más información sobre el curso Cisco Certified CyberOps Associate haga clic aquí.

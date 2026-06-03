@@ -2352,7 +2352,7 @@ Configuración de Redes
 Configuración de Redes
 Con el presente curso usted aprendió a realizar operaciones básicas con Linux, incluyendo tareas administrativas y aquellas relacionadas con la seguridad. Los expertos en ciberseguridad deben saber cómo realizar estas tareas en una variedad de sistemas operativos, Windows, MacOS y Linux incluidos. Los cursos NDG Linux están diseñados para enseñarle una variedad de comandos, términos y utilidades que le ayudarán a prepararse para una carrera profesional en ciberseguridad. Vea a continuación algunos de los comandos de Linux necesarios para Cisco Certified CyberOps Associate:
 
-Linux commands for Cisco Certified CyberOps Associate. Commands include apt, cat, cd, ls, sudo, tail, ssh, and more!
-«Comandos Linux para Cisco Certified CyberOps Associate. Cursos NDG Linux - la manera inteligente de prepararse paraCisco Certified CyberOps Associate.»
+[Linux commands for Cisco Certified CyberOps Associate. Commands include apt, cat, cd, ls, sudo, tail, ssh, and more!](images/Unhatched_ccna_commands.png)
+«*Comandos Linux para Cisco Certified CyberOps Associate. Cursos NDG Linux - la manera inteligente de prepararse paraCisco Certified CyberOps Associate.*»
 
 Para obtener más información sobre Linux y los comandos y utilidades necesarios para crear una base de conocimientos fundamentales sobre Linux que le ayuden a ir más lejos en la carrera de formación Cisco Certified CyberOps Associate, eche un vistazo a otros cursos NDG Linux. Para obtener más información sobre el curso Cisco Certified CyberOps Associate haga clic aquí.

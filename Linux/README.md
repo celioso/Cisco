@@ -1628,9 +1628,9 @@ El comando `ifconfig` significa “configuración de interfaz” (*interface con
 
 **Nota**
 
-El comando `iwconfig` es similar al comando `ifconfig`, pero se refiere a interfaces de redes inalámbricas (*wireless*).
+El comando `iwconfig` es similar al comando `ifconfig`, pero se refiere a interfaces de redes inalámbricas (wireless).
 
-No todas las configuraciones de red son importantes para este módulo, pero en el siguiente ejemplo es importante tener en cuenta que la dirección IPv4 del dispositivo de red principal eth0 es 192.168.1.2 y que el dispositivo está activo actualmente (UP):
+No todas las configuraciones de red son importantes para este módulo, pero en el siguiente ejemplo es importante tener en cuenta que la dirección IPv4 del dispositivo de red principal `eth0` es `192.168.1.2` y que el dispositivo está activo actualmente (UP):
 
 ```bash
 root@localhost:~# ifconfig                                     
@@ -1649,12 +1649,11 @@ lo        Link encap:Local Loopback
           TX packets:2 errors:0 dropped:0 overruns:0 carrier:0                  
           collisions:0 txqueuelen:1000                                          
           RX bytes:100 (100.0 B)  TX bytes:100 (100.0 B)
-```
+```        
 
+### Piense sobre lo siguiente
 
-**Piense sobre lo siguiente**
-
-El dispositivo lo se conoce como dispositivo de loopback. Es un dispositivo de red especial utilizado por el sistema cuando envía datos basados en red a sí mismo.
+El dispositivo lo se conoce como dispositivo de *loopback*. Es un dispositivo de red especial utilizado por el sistema cuando envía datos basados en red a sí mismo.
 
 El comando `ifconfig` también se puede utilizar para modificar temporalmente la configuración de red. Normalmente, estos cambios deben ser permanentes, por lo que raramente se usa el comando `ifconfig` para realizar dichos cambios.
 

@@ -1100,4 +1100,39 @@ sysadmin@localhost:~$ echo /etc/*[9-0]*
 sysadmin@localhost:~$
 ```
 
+## 4.11.4 Signo de Exclamación (!)
+
+El signo de exclamación se utiliza en conjunto con los corchetes para negar un intervalo. Por ejemplo, el comando `echo [!DP]* mostrará cualquier archivo que no comienza con `D` o `P`.
+
+## 4.12 Las Comillas
+
+Hay tres tipos de comillas que tienen significado especial para el shell Bash: comillas dobles ", comillas simples ' y comilla invertida `. Cada conjunto de comillas indica al shell que debe tratar el texto dentro de las comillas de una manera distinta a la normal.
+
+## 4.12.1 Comillas Dobles
+
+Las comillas dobles detendrán al shell de la *interpretación* de algunos metacaracteres, incluyendo los comodines. Dentro de las comillas dobles, el asterisco es sólo un asterisco, un signo de interrogación es sólo un signo de interrogación y así sucesivamente. Esto significa que cuando se utiliza el segundo comando `echo` más abajo, el shell BASH no convierte el patrón de globbing en nombres de archivos que coinciden con el patrón:
+
+```bash
+sysadmin@localhost:~$ echo /etc/[DP]*                                         
+/etc/DIR_COLORS /etc/DIR_COLORS.256color /etc/DIR_COLORS.lightbgcolor /etc/PackageKit                                                                  
+sysadmin@localhost:~$ echo "/etc/[DP]*"                                       
+/etc/[DP]*                                                                    
+sysadmin@localhost:~$
+```
+
+Esto es útil cuando quieres mostrar algo en la pantalla, lo que suele ser un carácter especial para el shell:
+
+```bash
+sysadmin@localhost:~$ echo "The glob characters are *, ? and [ ]"      
+The glob characters are *, ? and [ ]                                   
+sysadmin@localhost:~$
+```
+
+Las comillas dobles todavía permiten la sustitución de comando (se tratará más adelante en este capítulo), sustitución de variable y permiten algunos metacaracteres de shell sobre los que aún no hemos hablado. Por ejemplo, en la siguiente demostración, notarás que el valor de la variable `PATH es desplegada:
+
+```bash
+sysadmin@localhost:~$ echo "The path is $PATH"                          
+The path is /usr/bin/custom:/home/sysadmin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games                          
+sysadmin@localhost:~$
+```
 

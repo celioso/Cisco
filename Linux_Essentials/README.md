@@ -1033,3 +1033,71 @@ En el ejemplo siguiente se mostrarán todos los archivos en el directorio `/etc`
 sysadmin@localhost:~$ echo /etc/r*.conf                             
 /etc/resolv.conf /etc/rsyslog.conf
 ```
+
+
+## 4.11.2 Signo de Interrogación (?)
+
+El signo de interrogación representa cualquier carácter único. Cada carácter de signo de interrogación coincide con exactamente un carácter, nada más y nada menos.
+
+Supongamos que quieres visualizar todos los archivos en el directorio `/etc` que comienzan con la letra `t` y que tienen exactamente 7 caracteres después del carácter de `t`:
+
+```bash
+sysadmin@localhost:~$ echo /etc/t???????      
+/etc/terminfo /etc/timezone                                  
+sysadmin@localhost:~$
+```
+
+Los comodines pueden utilizarse juntos para encontrar patrones más complejos. El comando `echo /etc/*????????????????????` imprimirá sólo los archivos del directorio /etc con veinte o más caracteres en el nombre del archivo:
+
+```bash
+sysadmin@localhost:~$ echo /etc/*????????????????????            
+/etc/bindresvport.blacklist /etc/ca-certificates.conf            
+sysadmin@localhost:~$
+```
+
+El asterisco y el signo de interrogación también podrían usarse juntos para buscar archivos con extensiones de tres letras ejecutando el comando `echo /etc/*.???`:
+
+```bash
+sysadmin@localhost:~$ echo /etc/*.???                
+/etc/blkid.tab /etc/issue.net                                
+sysadmin@localhost:~$
+```
+
+## 4.11.3 Corchetes [ ]
+
+Los corchetes se utilizan para coincidir con un carácter único representando un intervalo de caracteres que pueden coincidir con los caracteres. Por ejemplo, `echo /etc/[gu]*` imprimirá cualquier archivo que comienza con el carácter `g` o `u y contiene cero o más caracteres adicionales:
+
+```bash
+sysadmin@localhost:~$ echo /etc/[gu]*                              
+/etc/gai.conf /etc/groff /etc/group /etc/group- /etc/gshadow /etc/gshadow- /etc/ucf.conf /etc/udev /etc/ufw /etc/update-motd.d /etc/updatedb.conf            
+sysadmin@localhost:~$
+```
+
+Los corchetes también pueden ser utilizados para representar un intervalo de caracteres. Por ejemplo, el comando `echo /etc/[a-d]* mostrará todos los archivos que comiencen con cualquier letra entre e incluyendo `a` y `d:
+
+```bash
+sysadmin@localhost:~$ echo /etc/[a-d]*                             
+/etc/adduser.conf /etc/adjtime /etc/alternatives /etc/apparmor.d 
+/etc/apt /etc/bash.bashrc /etc/bash_completion.d /etc/bind /etc/bindresvport.blacklist /etc/blkid.conf /etc/blkid.tab /etc/ca-certificates /etc/ca-certificates.conf /etc/calendar /etc/cron.d /etc/cron.daily /etc/cron.hourly /etc/cron.monthly /etc/cron.weekly /etc/crontab /etc/dbus-1 /etc/debconf.conf /etc/debian_version /etc/default 
+/etc/deluser.conf /etc/depmod.d /etc/dpkg                          
+sysadmin@localhost:~$
+```
+
+El comando echo `/etc/*[0-9]* mostrará todos los archivos que contienen al menos un número:
+
+```bash
+sysadmin@localhost:~$ echo /etc/*[0-9]*                            
+/etc/dbus-1 /etc/iproute2 /etc/mke2fs.conf /etc/python2.7 /etc/rc0.d
+/etc/rc1.d /etc/rc2.d /etc/rc3.d /etc/rc4.d /etc/rc5.d /etc/rc6.d   
+sysadmin@localhost:~$
+```
+
+El intervalo se basa en el cuadro de texto de ASCII. Esta tabla define una lista de caracteres disponiéndolos en un orden estándar específico. Si proporcionas un orden inválido, no se registrará ninguna coincidencia:
+
+```bash
+sysadmin@localhost:~$ echo /etc/*[9-0]*                           
+/etc/*[9-0]*                                                       
+sysadmin@localhost:~$
+```
+
+

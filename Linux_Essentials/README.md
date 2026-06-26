@@ -1136,3 +1136,123 @@ The path is /usr/bin/custom:/home/sysadmin/bin:/usr/local/sbin:/usr/local/bin:/u
 sysadmin@localhost:~$
 ```
 
+## 4.12.2 Comillas Simples
+
+Las comillas simples evitan que el shell interprete algunos caracteres especiales. Esto incluye comodines, variables, sustitución de comando y otro metacarácter que aún no hemos visto.
+
+Por ejemplo, si quieres que el carácter `$` simplemente signifique un `$`, en lugar de actuar como un indicador del shell para buscar el valor de una variable, puedes ejecutar el segundo comando que se muestra a continuación:
+
+```bash
+sysadmin@localhost:~$ echo The car costs $100                           
+The car costs 00                                                        
+sysadmin@localhost:~$ echo 'The car costs $100'                        
+The car costs $100                                                      
+sysadmin@localhost:~$
+```
+
+## 4.12.3 Barra Diagonal Inversa (\)
+
+Puedes utilizar una técnica alternativa para citar un carácter con comillas simples. Por ejemplo, supón que quieres imprimir lo siguiente: `“The services costs $100 and the path is $PATH"`. Si pones esto entre las comillas dobles, `$1` y `$PATH` se consideran variables. Si pones esto entre las comillas simples, $1 y $PATH no son variables. Pero ¿qué pasa si quieres tener `$PATH` tratado como una variable y no a `$1`?
+
+Si colocas una barra diagonal invertida `\` antes del otro carácter, tratará al otro carácter como un carácter de "comillas simples". El tercer comando más abajo muestra cómo utilizar el carácter `\`, mientras que los otros dos muestran cómo las variables serían tratadas si las pones entre las comillas dobles y simples:
+
+```bash
+sysadmin@localhost:~$ echo "The service costs $100 and the path is $PATH"
+The service costs 00 and the path is /usr/bin/custom:/home/sysadmin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games 
+sysadmin@localhost:~$ echo 'The service costs $100 and the path is $PATH' 
+The service costs $100 and the path is $PATH                         
+sysadmin@localhost:~$ echo The service costs \$100 and the path is $PATH
+The service costs $100 and the path is /usr/bin/custom:/home/sysadmin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games 
+sysadmin@localhost:~$
+```
+
+## 4.12.4 Comilla Invertida
+
+Las comillas invertidas se utilizan para especificar un comando dentro de un comando, un proceso de sustitución del comando. Esto permite un uso muy potente y sofisticado de los comandos.
+
+Aunque puede sonar confuso, un ejemplo debe hacer las cosas más claras. Para empezar, fíjate en la salida del comando `date`:
+
+```bash
+sysadmin@localhost:~$ date                                           
+Mon Nov  2 03:35:50 UTC 2015
+```
+
+Ahora fíjate en la salida de la línea de comandos `echo Today is date` (o «eco La fecha de hoy es» en español):
+
+```bash
+sysadmin@localhost:~$ echo Today is date                               
+Today is date                                                           
+sysadmin@localhost:~$
+```
+
+En el comando anterior la palabra `date` (o «fecha» en español) es tratada como texto normal y el shell simplemente pasa `date` al comando `echo`. Pero, probablemente quieras ejecutar el comando `date` y tener la salida de ese comando enviado al comando `echo`. Para lograr esto, deberás ejecutar la línea de comandos **echo Today is `date`**:
+
+```bash
+sysadmin@localhost:~$ echo Today is `date`                         
+Today is Mon Nov 2 03:40:04 UTC 2015                         
+sysadmin@localhost:~$
+```
+
+## 4.13 Instrucciones de Control
+
+Las instrucciones de control te permiten utilizar varios comandos a la vez o ejecutar comandos adicionales, dependiendo del éxito de un comando anterior. Normalmente estas instrucciones de control se utilizan en scripts o secuencias de comandos, pero también pueden ser utilizadas en la línea de comandos.
+
+## 4.13.1 Punto y Coma
+
+El punto y coma puede utilizarse para ejecutar varios comandos, uno tras otro. Cada comando se ejecuta de forma independiente y consecutiva; no importa el resultado del primer comando, el segundo comando se ejecutará una vez que el primero haya terminado, luego el tercero y así sucesivamente.
+
+Por ejemplo, si quieres imprimir los meses de enero, febrero y marzo de 2015, puedes ejecutar `cal 1 2015; cal 2 2015; cal 3 2015` en la línea de comandos:
+
+```bash
+sysadmin@localhost:~$ cal 1 2015; cal 2 2015; cal 3 2015               
+    January 2015                                                        
+Su Mo Tu We Th Fr Sa                                 
+             1  2  3                                            
+ 4  5  6  7  8  9 10                                            
+11 12 13 14 15 16 17                                                 
+18 19 20 21 22 23 24                                                    
+25 26 27 28 29 30 31                                                            
+                                                               
+    February 2015                                                     
+Su Mo Tu We Th Fr Sa                                                   
+ 1  2  3  4  5  6  7                                                   
+ 8  9 10 11 12 13 14                                                   
+15 16 17 18 19 20 21                                                   
+22 23 24 25 26 27 28                                                           
+
+     March 2015                                                        
+Su Mo Tu We Th Fr Sa                                                   
+ 1  2  3  4  5  6  7                                                   
+ 8  9 10 11 12 13 14                                                  
+15 16 17 18 19 20 21                                                   
+22 23 24 25 26 27 28                                                   
+29 30 31    
+```
+
+## 4.13.2 Ampersand Doble (&&)
+
+El símbolo de ampersand doble `&&` actúa como un operador "y" lógico. Si el primer comando tiene éxito, entonces el segundo comando (a la derecha de la `&&`) también se ejecutará. Si el primer comando falla, entonces el segundo comando no se ejecutará.
+
+Para entender mejor como funciona esto, consideremos primero el concepto de fracaso y éxito para los comandos. Los comandos tienen éxito cuando algo funciona bien y fallan cuando algo sale mal. Por ejemplo, considera la línea de comandos `ls /etc/xml`. El comando tendrá éxito si el directorio `/etc/xml` es accesible y fallará cuando no es accesible.
+
+Por ejemplo, el primer comando tendrá éxito porque el directorio `/etc/xml` existe y es accesible mientras que el segundo comando fallará porque no hay un directorio `/junk`:
+
+```bash
+sysadmin@localhost:~$ ls /etc/xml                  
+catalog  catalog.old  xml-core.xml  xml-core.xml.old           
+sysadmin@localhost:~$ ls /etc/junk                             
+ls: cannot access /etc/junk: No such file or directory
+sysadmin@localhost:~$
+```
+La manera en que usarías el éxito o fracaso del comando `ls` junto con `&&` sería ejecutando una línea de comandos como la siguiente:
+
+```bash
+sysadmin@localhost:~$ ls /etc/xml && echo success          
+catalog  catalog.old  xml-core.xml  xml-core.xml.old        
+success                                              
+sysadmin@localhost:~$ ls /etc/junk && echo success          
+ls: cannot access /etc/junk: No such file or directory           
+sysadmin@localhost:~$
+```
+
+En el primer ejemplo arriba, el comando `echo` fue ejecutado, porque tuvo éxito el comando `ls`. En el segundo ejemplo, el comando `echo` no fue ejecutado debido a que el comando `ls` falló.

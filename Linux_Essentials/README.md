@@ -1256,3 +1256,20 @@ sysadmin@localhost:~$
 ```
 
 En el primer ejemplo arriba, el comando `echo` fue ejecutado, porque tuvo éxito el comando `ls`. En el segundo ejemplo, el comando `echo` no fue ejecutado debido a que el comando `ls` falló.
+
+## 4.13.3 Línea Vertical Doble
+
+La línea vertical doble `||` es un operador lógico "o". Funciona de manera similar a `&&`; dependiendo del resultado del primer comando, el segundo comando se ejecutará o será omitido.
+
+Con la línea vertical doble, si el primer comando se ejecuta con éxito, el segundo comando es omitido. Si el primer comando falla, entonces se ejecutará el segundo comando. En otras palabras, esencialmente estás diciendo al shell, "O bien ejecuta este primer comando o bien el segundo".
+
+En el ejemplo siguiente, el comando `echo` se ejecutará sólo si falla el comando `ls`:
+
+```bash
+sysadmin@localhost:~$ ls /etc/xml || echo failed                 
+catalog  catalog.old  xml-core.xml  xml-core.xml.old               
+sysadmin@localhost:~$ ls /etc/junk || echo failed                  
+ls: cannot access /etc/junk: No such file or directory             
+failed                                                            
+sysadmin@localhost:~$
+```

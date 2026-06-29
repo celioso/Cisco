@@ -1273,3 +1273,35 @@ ls: cannot access /etc/junk: No such file or directory
 failed                                                            
 sysadmin@localhost:~$
 ```
+
+# Laboratorio
+
+## 4.1 Introducción
+
+Este es Lab 4: Los fundamentos de la Línea de Comandos. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán cómo utilizar las funciones básicas del shell.
+
+En este capítulo harás las siguientes tareas:
+
+ - Explorar características Bash
+ - Usar variables shell
+ - Entender como usar globbing
+ - Ser capaz de usar comillas
+
+## 4.2 Los Archivos y los Directorios
+
+En esta tarea vamos a acceder a la interfaz de línea de comandos (CLI) para Linux para explorar cómo ejecutar los comandos básicos y ver como afecta la forma en que se pueden ejecutar.
+
+La mayoría de los usuarios probablemente están más familiarizados con cómo se ejecutan los comandos utilizando una interfaz gráfica de usuario (GUI). Por lo tanto, probablemente esta tarea presente algunos conceptos nuevos para ti, si no habías trabajado previamente con una CLI. Para utilizar una CLI, tendrás que introducir el comando que quieras ejecutar.
+
+La ventana donde escribirás el comando se conoce como un emulador de la terminal. Dentro de la ventana de la terminal, el sistema está mostrando un prompt (símbolo), que actualmente contiene un prompt seguido por un cursor parpadeante:
+
+`sysadmin@localhost:~$`
+
+**Recuerda:** Es posible que tengas que presionar **Entrar** en la ventana para visualizar la línea.
+
+El promt te dice que eres un usuario `sysadmin`; el host o la computadora que estás utilizando: `localhost`; y el directorio en el que te encuentras: `~, lo cuál representa el directorio inicial.
+
+Cuando introduces un comando, éste aparecerá en el cursor de texto. Puedes utilizar las teclas como **inicio**, **fin**, **retroceso**, y **teclas de flecha** para la editar el comando que estás introduciendo.
+
+Una vez que hayas introducido el comando correctamente, presiona **Entrar** para ejecutarlo.
+

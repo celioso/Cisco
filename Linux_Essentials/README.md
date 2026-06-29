@@ -1512,3 +1512,113 @@ sysadmin@localhost:~$
 El siguiente metacarácter glob que vamos a examinar es el signo de interrogación `?`. El signo de interrogación coincide exactamente con un carácter. Este único carácter puede ser cualquier carácter posible.
 
 Al igual que el asterisco, se puede utilizar en cualquier lugar de una cadena y puede aparecer varias veces.
+
+## 4.4.5 Paso 5
+
+Dado que cada signo de interrogación coincide con un carácter desconocido, introduciendo seis de ellos coincidirán con los nombres de archivo de seis caracteres. Introduce lo siguiente para mostrar los nombres de los archivos que tienen exactamente seis caracteres:
+
+`echo ??????`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo ??????
+Public Videos
+sysadmin@localhost:~$
+```
+
+**Importante**: Cada carácter ?  debe coincidir exactamente con un carácter en un nombre de archivo, ni más ni menos de un carácter.
+
+## 4.4.6 Paso 6
+
+Utilizando el signo de interrogación con otros caracteres se limitarán las coincidencias. Escribe lo siguiente para mostrar los nombres de los archivos que comienzan con la letra D y tienen exactamente nueve caracteres:
+
+`echo D????????`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo D????????
+Documents Downloads
+sysadmin@localhost:~$
+```
+
+## 4.4.7 Paso 7
+
+Los comodines o caracteres glob pueden combinarse entre sí. El siguiente comando mostrará los nombres de archivo que tienen al menos seis caracteres y terminan en la letra s.
+
+`echo ?????*s`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo ?????*s
+Documents Downloads Pictures Templates Videos
+sysadmin@localhost:~$
+```
+
+Piensa en el patrón ?????*s en el sentido de «coincide con los nombres de archivo que comienzan con cualquier cinco caracteres, y luego tenga cero o más caracteres y luego termine con el carácter s».
+
+## 4.4.8 Paso 8
+
+El siguiente glob es similar al glob signo de interrogación para especificar un carácter. Este glob utiliza un par de corchetes `[ ]` para especificar qué se le permitirá a un carácter. Los caracteres permitidos se pueden especificar como una serie, una lista, o por lo que se conoce como una clase de caracteres.
+
+Los caracteres permitidos también pueden ser anulados con un signo de exclamación `!`.
+
+En el primer ejemplo, el primer carácter del nombre de archivo puede ser o bien una D o una P. En el segundo ejemplo, el primer carácter puede ser cualquier carácter excepto una D o P:
+
+```bash
+echo [DP]*
+echo [!DP]*
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo [DP]*
+Desktop Documents Downloads Pictures Public
+sysadmin@localhost:~$ echo [!DP]*
+Music Templates Videos
+sysadmin@localhost:~$
+```
+
+## 4.4.9 Paso 9
+
+En estos siguientes ejemplos se especifica una serie de caracteres. En el primer ejemplo, el primer carácter del nombre de archivo puede ser cualquier carácter que comienze cualquier carácter entre la  D y la P. En el segundo ejemplo, este rango de caracteres es negado, lo que significa cualquier carácter individual coincidirá, excepto si está entre la letra D y la P:
+
+```bash
+echo [D-P]*
+echo [!D-P]*
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo [D-P]*
+Desktop Documents Downloads Music Pictures Public
+sysadmin@localhost:~$ echo [!D-P]*
+Templates Videos
+sysadmin@localhost:~$
+```
+
+Te podrías preguntar «¿quién decide qué letras haya entre la D y la P? ». En este caso la respuesta es bastante obvia (E, F, G, H, I, J, K, L, M, N y O), pero ¿qué tal que el rango fuese [1-A]?
+
+Para determinar el rango de caracteres se utiliza la tabla de texto ASCII. Puedes consultar esta tabla mediante su búsqueda en Internet o introduciendo el comando siguiente, el comando `ascii`.
+
+Por lo tanto, ¿con qué caracteres coincidirá el glob [1-A] ? De acuerdo con la tabla de texto ASCII: 1, 2, 3, 4, 5, 6, 7, 8, 9, :, ;, <, =, >, ?, @ y A.
+
+## 4.5 Las Comillas
+
+Hay tres tipos de comillas utilizadas por Shell Bash: comillas simples ('), comillas dobles (") comilla invertida (`). Estas comillas tienen características especiales dentro de shell bash tal como se describe a continuación.
+
+Para entender las comillas simples y dobles, considera que a veces no quieres que el shell trate algunos caracteres como «especiales». Por ejemplo, como viste anteriormente en este laboratorio, el carácter * se utiliza como comodín. ¿Y que pasa si quieres que el carácter * signifique solamente un asterisco?
+
+Las comillas simples evitan que el shell «interprete» o expanda todos los caracteres especiales. A menudo, las comillas simples se utilizan para proteger una cadena de ser cambiada por el shell, por lo que la cadena puede ser interpretada por un comando como parámetro para afectar la forma en la cuál se ejecuta el comando.
+
+Las comillas dobles detienen la expansión de los caracteres glob como el asterisco (*), signo de interrogación (?) y corchetes ( [ ] ). Las comillas dobles no permiten que la expansión de las variables y la sustitución de los comandos (ver comilla invertida) se lleve a cabo.
+
+Las comillas invertidas causan «sustitución del comando», que permite que un comando ejecute dentro de la línea de otro comando.
+
+Al utilizar las comillas, se deben introducir en pares o de lo contrario el shell no considerará el comando como completo.
+
+Mientras que las comillas simples son útiles para que el shell no interprete uno o más caracteres, el shell también proporciona una manera de bloquear la interpretación de un solo carácter llamado «escaping». Para «evadir» el significado especial de un metacarácter del shell, se utiliza la barra invertida \ como un prefijo para ese único carácter.

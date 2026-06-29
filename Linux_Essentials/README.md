@@ -1305,3 +1305,53 @@ Cuando introduces un comando, éste aparecerá en el cursor de texto. Puedes uti
 
 Una vez que hayas introducido el comando correctamente, presiona **Entrar** para ejecutarlo.
 
+## 4.2.1 Paso 1
+El siguiente comando mostrará la misma información que ves en la primera parte del prompt. Asegúrate de que hayas seleccionado (hecho clic) la primera ventana de la Terminal  e introducido el siguiente comando seguido por la tecla Entrar:
+
+`whoami`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ whoami
+sysadmin
+sysadmin@localhost:~$
+```
+
+La salida del comando `whoami` visualiza el nombre del usuario actual. Aunque en este caso el nombre de usuario se muestra en el prompt, este comando se podría utilizar para obtener esta información en una situación en la que el prompt no contuviera tal información.
+
+## 4.2.2 Paso 2
+
+El siguiente comando muestra información sobre el sistema actual. Para poder ver el nombre del kernel que estás utilizando, introduce el siguiente comando en la terminal:
+
+`uname`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ uname
+Linux
+```
+
+Muchos de los comandos que se ejecutan producen salida de texto como ésta. Puedes cambiar la salida producida con un comando mediante el uso de las opciones  después del nombre del comando.
+
+Las opciones para un comando se pueden especificar de varias formas. Tradicionalmente, en UNIX, las opciones se expresaban por un guión seguido por otro carácter, por ejemplo: `-n`.
+
+En Linux, las opciones pueden a veces también ser dadas por dos caracteres de guión seguidos por una palabra o palabra con guión, por ejemplo: `--nodename`.
+
+Ejecuta el comando `uname` de nuevo dos veces en la terminal, una vez con la opción `-n` y de nuevo con la opción `--nodename. Esto mostrará el nombre del host del nodo de la red, también visualizado en el prompt.
+
+```bash
+uname -n
+uname --nodename
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ uname -n
+localhost
+sysadmin@localhost:~$ uname --nodename
+localhost
+```
+

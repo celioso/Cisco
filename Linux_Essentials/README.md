@@ -1622,3 +1622,260 @@ Las comillas invertidas causan «sustitución del comando», que permite que un 
 Al utilizar las comillas, se deben introducir en pares o de lo contrario el shell no considerará el comando como completo.
 
 Mientras que las comillas simples son útiles para que el shell no interprete uno o más caracteres, el shell también proporciona una manera de bloquear la interpretación de un solo carácter llamado «escaping». Para «evadir» el significado especial de un metacarácter del shell, se utiliza la barra invertida \ como un prefijo para ese único carácter.
+
+## 4.5.1 Paso 1
+
+Ejecuta el siguiente comando para usar las comillas invertidas ` para ejecutar el comando `date` dentro de la línea del comando echo:
+
+echo Today is `date`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo Today is `date`
+Today is Tue Jan 19 15:48:57 UTC 2016
+sysadmin@localhost:~$
+```
+
+## 4.5.2 Paso 2
+
+También puedes colocar un *$ ( antes del y )* después del comando para llevar a cabo la sustitución de comandos:
+
+`echo Today is $(date)`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo Today is $(date)
+Today is Tue Jan 19 15:51:09 UTC 2016
+sysadmin@localhost:~$
+```
+¿Por qué dos métodos diferentes pueden lograr lo mismo? Las comillas invertidas se parecen mucho a las comillas simples, por lo que es más difícil «ver» lo que un comando debería hacer. Originalmente los shell utilizaban las comillas invertidas; el formato $(*comando*)  se añadió en una versión posterior del shell bash para que la instrucción fuera visualmente más clara.
+
+## 4.5.3 Paso 3
+
+Si no quieres que se usen las comillas invertidas para ejecutar un comando, coloca alrededor de ellas las comillas simples. Ejecuta lo siguiente:
+
+echo This is the command '`date`'
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo This is the command '`date`'
+This is the command `date`
+sysadmin@localhost:~$
+```
+
+## 4.5.4 Paso 4
+
+Ten en cuenta que también puedes colocar una barra invertida delante de cada comilla invertida. Ejecuta lo siguiente:
+
+echo This is the command \`date\`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo This is the command \`date\`
+This is the command `date`
+sysadmin@localhost:~$
+```
+
+## 4.5.5 Paso 5
+
+Las comillas dobles no tienen ningún efecto sobre las comillas invertidas. El shell las seguirá utilizando como una sustitución del comando. Ejecuta lo siguiente para ver una demostración:
+
+echo This is the command "`date`"
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo This is the command "`date`"
+This is the command Tue Jan 19 16:05:41 UTC 2016
+sysadmin@localhost:~$
+```
+
+## 4.5.6 Paso 6
+
+Las comillas dobles tendrán efecto sobre los caracteres comodín de tal manera que deshabilitan su significado especial. Ejecuta lo siguiente:
+
+```bash
+echo D*
+echo "D*"
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo D*
+Desktop Documents Downloads
+sysadmin@localhost:~$ echo "D*"
+D*
+sysadmin@localhost:~$
+```
+
+**Importante:**
+
+Las comillas pueden parecer triviales y raras en este momento, pero a medida que adquieras más experiencia de trabajo en el shell de comandos, descubrirás que entender bien cómo las diferentes comillas funcionan es fundamental para el uso del shell.
+
+## 4.6 Las Instrucciones de Control
+
+Por lo general, introduces un solo comando y lo ejecutas presionando **Entrar**. El shell Bash ofrece tres estados diferentes que se pueden utilizar para separar varios comandos escritos juntos.
+
+El separador más simple es el punto y coma (`;`). El uso de punto y coma entre múltiples comandos les permite ejecutarse el uno tras el otro de forma secuencial de la izquierda a la derecha.
+
+Los caraceters `&&` crean una lógica e instrucción. Los comandos separados por `&&` se ejecutan de manera condicional. Si el comando a la izquierda de `&&` tiene éxito, entonces el comando a la derecha de `&&` también será ejecutado. Si el comando a la izquierda de `&&` falla, entonces el comando a la derecha de la `&&` no se ejecuta.
+
+Los caracteres `||` crean una lógica o una instrucción que también causa una ejecución condicional. Cuando los comandos están separados por `||`, entonces sólo si el comando a la izquierda falla, el comando a la derecha de `||` se ejecuta. Si el comando a la izquierda de `||` tiene éxito, entonces el comando a la derecha de la `||` no se ejecuta.
+
+Para ver cómo funcionan instrucciones de control, podrás utilizar dos ejecutables especiales: `true` y `false`. El ejecutable true siempre tiene éxito cuando se ejecuta, mientras que, el ejecutable `false` siempre falla. Si bien esto no te puede proporcionar ejemplos realistas acerca de cómo `&&` y `||` funcionan, proporciona un medio para demostrar cómo funcionan sin tener que introducir nuevos comandos.
+
+## 4.6.1 Paso 1
+
+Ejecuta los tres siguientes comandos juntos separadas por punto y coma:
+
+`echo Hello; echo Linux; echo Student`
+
+Como puedes ver en la salida, los tres comandos se ejecutan de forma secuencial:
+
+```bash
+sysadmin@localhost:~$ echo Hello; echo Linux; echo Student
+Hello
+Linux
+Student
+sysadmin@localhost:~$
+```
+
+## 4.6.2 Paso 2
+
+Ahora, pon juntos los tres comandos separados por punto y coma, donde el primer comando se ejecuta con un resultado de fallo:
+
+`false; echo Not; echo Conditional`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ false; echo Not; echo Conditional          
+Not
+Conditional
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que en el ejemplo anterior, los tres comandos se ejecutan a pesar de que el primero falle. Aunque no lo puedes ver en la salida del comando `false`, éste se ejecutó. Sin embargo, cuando los comandos están separadas por el carácter ;, son completamente independientes entre sí.
+
+## 4.6.3 Paso 3
+
+A continuación, utiliza «logical and» («y» lógico) y para separar los comandos:
+
+`echo Start && echo Going && echo Gone`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo Start && echo Going && echo Gone          
+Start
+Going
+Gone
+sysadmin@localhost:~$
+```
+
+Debido a que cada instrucción `echo` se ejecuta correctamente, se proporciona un valor de retorno de éxito, permitiendo que la siguiente instrucción también se ejecute.
+
+## 4.6.4 Paso 4
+
+Usa «y lógico» con un comando que falla como se muestra a continuación:
+
+`echo Success && false && echo Bye`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo Success && false && echo Bye
+Success
+sysadmin@localhost:~$
+```
+
+El primer comando `echo` se ejecuta correctamente y vemos su salida. El comando false se ejecuta con un resultado de fallo, por lo que el último comando `echo` no se ejecuta.
+
+## 4.6.5 Paso 5
+
+Los carácteres or que separan los siguientes comandos muestra cómo el fracaso antes de la instrucción or provoca que el siguiente comando sea ejecutado; sin embargo, la primera instrucción exitosa hace que el comando no se ejecute:
+
+```bash
+false || echo Fail Or
+true || echo Nothing to see here
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ false || echo Fail Or
+Fail Or
+sysadmin@localhost:~$ true || echo Nothing to see here
+sysadmin@localhost:~$
+```
+
+## 4.7 Historia del Shell
+
+El shell bash mantiene un historial de los comandos que introduces. Los comandos anteriores son fácilmente accesibles en esta historia de varias maneras.
+
+La primera y más fácil manera de llamar o recordar un comando anterior es el uso de la **tecla de flecha arriba**. Cada presión de la **tecla de flecha arriba** va hacia atrás un comando a través del historial. Si accidentalmente vas atrás demasiado, entonces la tecla de flecha abajo irá hacia delante a través del historial de los comandos.
+
+Cuando encuentres el comando que quieres ejecutar, puedes utilizar las **teclas de flecha hacia izquierda** y **flecha hacia derecha** para colocar el cursor para edición. Otras teclas útiles para edición incluyen  **Inicio**, **Fin**, **Retroceso** y **Suprimir**.
+
+Otra forma de utilizar el historial de comandos es ejecutar el comando `history` para poder ver una lista  numerada  del historial. El número que aparece a la izquierda del comando se puede utilizar para ejecutar el comando de nuevo. El comando `history` también tiene una serie de opciones y argumentos que pueden manipular cuáles de los comando se almacenarán o se mostrarán.
+
+## 4.7.1 Paso 1
+
+Ejecuta algunos comandos y luego ejecuta el comando `history`:
+
+```bash
+date
+clear
+echo Hi
+history
+```
+
+**Recuerda:** El comando `date` imprimirá la fecha y la hora en el sistema. El comando `clear` borra la pantalla.
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo Hi
+Hi
+sysadmin@localhost:~$ history
+    1 date
+    2 clear
+    3 echo Hi 
+    4 history
+sysadmin@localhost:~$
+```
+
+Tus números de comando probablemente serán diferentes de los proporcionados anteriormente. Esto se debe a que es probable que hayas ejecutado un número diferente de comandos.
+
+## 4.7.2 Paso 2
+
+Para ver un número limitado de comandos, el comando `history` puede tomar un número como un parámetro para mostrar exactamente ese número de entradas recientes. Introduce el siguiente comando para mostrar los últimos cinco comandos de tu historial:
+
+`history 5`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ history 5
+185  false || Fail Or
+186  false || echo Fail Or
+187  true || echo Nothing to see here
+188  history
+189  history 5
+sysadmin@localhost:~$
+```
+
+## 4.7.3 Paso 3
+
+Para ejecutar un comando, introduce el signo de exclamación y el número de la lista del historial. Por ejemplo, para ejecutar el comando número 94 en la lista del historial, tienes que ejecutar lo siguiente:
+
+`!94`
+
+## 4.7.4 Paso 4
+
+A continuación, experimenta con el acceso a tu historial utilizando las **teclas de flecha hacia arriba** y **teclas de flecha hacia abajo**. Mantén presionada la tecla de flecha arriba hasta encontrar un comando que quieras ejecutar. Si fuera necesario, utiliza otras teclas para editar el comando y, a continuación, presiona **Entrar** para ejecutar el comando.

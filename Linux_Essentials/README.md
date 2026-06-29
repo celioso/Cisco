@@ -1377,3 +1377,138 @@ El tilde `~`  que ves en el prompt también está indicando cuál es el director
 **Considera Esto**
 
 El comando `pwd` significa «imprimir el directorio de trabajo». A pesar de que las versiones modernas en realidad no «imprimen», las máquinas UNIX más antiguas no tenían monitores y la salida de los comandos iban a una impresora, de ahí el nombre divertido de `pwd`.
+
+## 4.3 Variables del Shell
+
+Las variables del Shell se utilizan para almacenar los datos en Linux. Estos datos los utiliza el propio shell, los programas y los usuarios.
+
+El enfoque de esta sección es aprender cómo mostrar los valores de las variables del Shell.
+
+## 4.3.1 Paso 1
+
+El comando `echo` se puede utilizar para imprimir el texto, el valor de una variable y mostrar cómo el entorno del shell expande los metacaracteres (más detailles sobre los metacaracteres más adelante en este laboratorio). Introduce el siguiente comando para que de salida a texto literal:
+
+`echo Hello Student`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo Hello Student
+Hello Student
+sysadmin@localhost:~$
+```
+
+## 4.3.2 Paso 2
+
+Introduce el siguiente comando para mostrar el valor de la variable PATH:
+
+`echo $PATH`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo $PATH
+/home/sysadmin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+sysadmin@localhost:~$
+```
+
+La variable PATH se visualiza mediante la colocación del carácter `$` delante del nombre de la variable.
+
+Esta variable se utiliza para encontrar la ubicación de los comandos. Cada uno de los directorios mencionados anteriormente se buscan cuando ejecutas un comando. Por ejemplo, si intentas a ejecutar el comando `date`, el shell buscará el comando primero en el directorio `/home/sysadmin/bin`, luego en el directorio `/usr/local/sbin`  y así sucesivamente. Una vez el shell encuentra el comando `date`, «lo ejecuta».
+
+## 4.3.3 Paso 3
+
+Utiliza el comando `which` para determinar si existe un archivo ejecutable llamado `date` ubicado en un directorio que aparece en el valor PATH:
+
+`which date`
+
+El resultado debe ser similar al siguiente:
+
+```BASH
+sysadmin@localhost:~$ which date
+/bin/date
+sysadmin@localhost:~$
+```
+
+La salida del comando `which` te dice que cuando ejecutas el comando `date`, el sistema ejecutará el comando `/bin/date`. El comando `which` hace uso de la variable PATH para determinar la ubicación del comando `date`
+
+## 4.4 Globbing
+
+El uso de los caracteres *glob* en Linux es similar a lo que muchos sistemas operativos se refieren como caracteres «wildcard». Utilizando los caracteres glob haces coincidir los nombres de archivos usando patrones.
+
+Los caracteres glob son una característica del shell, no es algo propio de algún comando específico. Como resultado de ello, puedes utilizar los caracteres glob con cualquier comando de Linux.
+
+Cuando se utilizan los caracteres glob, el shell «expande» todo el patrón para coincidir con todos los archivos en el directorio especificado que coincide con el patrón.
+
+A efectos de demostración, vamos a utilizar el comando `echo` para visualizar este proceso de expansión.
+
+## 4.4.1 Paso 1
+
+Utiliza el siguiente comando `echo` para mostrar todos los nombres de archivo en el directorio actual que coincide con el patrón global *:
+
+`echo *`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo *
+Desktop Documents Downloads Music Pictures Public Templates Videos   
+sysadmin@localhost:~$
+```
+
+El asterisco `*` busca «cero o más» coincidencias de caracteres en un nombre de archivo. En el ejemplo anterior, esto se traduce en la adecuación de todos los nombres del archivo en el directorio actual.
+
+El comando `echo`, a su vez, muestra los nombres del archivo que fueron agrupados.
+
+## 4.4.2 Paso 2
+
+Los siguientes comandos mostrarán todos los archivos en el directorio actual que comienzan con la letra D y la letra P:
+
+```bash
+echo D*
+echo P*
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo D*
+Desktop Documents Downloads
+sysadmin@localhost:~$ echo P*
+Pictures Public
+sysadmin@localhost:~$
+```
+
+Piensa en el primer ejemplo, D*, como «coincidencia con todos los nombres de archivo en el directorio actual que comienzan con la letra d en mayúscula y tienen cero o más de cualquier otro carácter después de la letra D».
+
+## 4.4.3 Paso 3
+
+El asterisco `*` se puede utilizar en cualquier lugar de la cadena. El siguiente comando mostrará todos los archivos en tu directorio actual que terminan en la letra s:
+
+`echo *s`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo *s
+Documents Downloads Pictures Templates Videos
+sysadmin@localhost:~$
+```
+
+## 4.4.4 Paso 4
+
+Observa que el asterisco también puede aparecer varias veces o en medio de varios caracteres:
+
+`echo D*n*s`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo D*n*s
+Documents Downloads
+sysadmin@localhost:~$
+```
+
+El siguiente metacarácter glob que vamos a examinar es el signo de interrogación `?`. El signo de interrogación coincide exactamente con un carácter. Este único carácter puede ser cualquier carácter posible.
+
+Al igual que el asterisco, se puede utilizar en cualquier lugar de una cadena y puede aparecer varias veces.

@@ -1879,3 +1879,95 @@ Para ejecutar un comando, introduce el signo de exclamación y el número de la 
 ## 4.7.4 Paso 4
 
 A continuación, experimenta con el acceso a tu historial utilizando las **teclas de flecha hacia arriba** y **teclas de flecha hacia abajo**. Mantén presionada la tecla de flecha arriba hasta encontrar un comando que quieras ejecutar. Si fuera necesario, utiliza otras teclas para editar el comando y, a continuación, presiona **Entrar** para ejecutar el comando.
+
+
+## 5.1 Introducción
+
+Si le preguntas a los usuarios qué característica del Sistema Operativo Linux disfrutan más, muchos responderán «el poder proporcionado por el entorno de la línea de comandos». Esto es porque hay literalmente miles de comandos disponibles con muchas opciones, resultando en herramientas poderosas.
+
+Sin embargo, con este poder viene la complejidad. La complejidad, a su vez, puede crear confusión. Como resultado, saber encontrar ayuda cuando trabajas en Linux es una habilidad esencial para cualquier usuario. Referirte a la ayuda te permite recordar cómo funciona un comando, además de ser un recurso de información al aprender nuevos comandos.
+
+![Linux Foundation & Dice](images/5-LPI-Graphics.png)
+
+*93% de los directores de recursos humano planea contratar a un profesional de Linux en los próximos seis meses. Y casi 90% mencionó que es difícil encontrar profesionales experimentados en Linux. Esto significa muchas oportunidades de trabajo para aquellos con habilidades de Linux.*
+
+## 5.2 Las Páginas man
+
+Como se mencionó anteriormente, UNIX era el sistema operativo desde el cual se construyó la base de Linux. Los desarrolladores de UNIX crearon los documentos de ayuda llamados *páginas man* (man significa manual).
+
+Las páginas man se utilizan para describir las características de los comandos. Te proporcionarán una descripción básica de la finalidad del comando, así como los detalles de las opciones del comando.
+
+## 5.2.1 Visualizando las Páginas de Comando Man
+
+Para ver una página man de un comando, ejecuta el *man comando* en la ventana del terminal. Por ejemplo, el comando `man cal` mostrará la página man para el comando `cal`:
+
+```bash
+CAL(1)                    BSD General Commands Manual             CAL(1) 
+
+NAME                                                                
+cal, ncal -- displays a calendar and the date of Easter               
+
+SYNOPSIS                                                               
+cal [-3hjy] [-A number] [-B number] [[month] year]                     
+cal [-3hj] [-A number] [-B number] -m month [year]                     
+ncal [-3bhjJpwySM] [-A number] [-B number] [-s country_code] [[month]  
+year]                                                              
+ ncal [-3bhJeoSM] [-A number] [-B number] [year]                      
+ ncal [-CN] [-H yyyy-mm-dd] [-d yyyy-mm]                                    
+
+DESCRIPTION                                                            
+    The cal utility displays a simple calendar in traditional format and    ncal offers an alternative layout, more options and the date of         Easter. The new format is a little cramped but it makes a year fit      on a 25x80 terminal.  If arguments are not specified, the current       month is displayed.      
+                                                                
+         The options are as follows:                                               
+ -h      Turns off highlighting of today.                                   
+                                                 
+ Manual page cal(1) line 1 (press h for help or q to quit)
+ ```
+
+## 5.2.2 Controlar la Visualización de la Página man
+
+El comando `man` utiliza un «localizador» para mostrar documentos. Este localizador es normalmente el comando `less`, pero en algunas distribuciones puede ser el comando `more`. Ambos son muy similares en cómo se ejecutan y los trataremos en más detalle en un capítulo posterior.
+
+Si quieres ver los diferentes comandos de movimiento que están disponibles, puedes introducir la letra **h** mientras visualizas una página man. Esto mostrará una página de ayuda:
+
+**Nota**: Si estás trabajando en una distribución Linux que utiliza el comando `more` como un localizador, su salida será diferente que el ejemplo que se muestra aquí.
+
+```bash
+ SUMMARY OF LESS COMMANDS                                     
+                                               
+    Commands marked with * may be preceded by a number, N.     
+    Notes in parentheses indicate the behavior if N is given.        
+    A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.      
+                                                                  
+  h  H                 Display this help.                             
+  q  :q  Q  :Q  ZZ     Exit.                                          
+ -----------------------------------------------------------------------
+                                                                    
+                         MOVING                                         
+
+e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).             
+y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).              
+f  ^F  ^V  SPACE  *  Forward  one window (or N lines).             
+b  ^B  ESC-v      *  Backward one window (or N lines).
+z                 *  Forward  one window (and set window to N).  
+w                 *  Backward one window (and set window to N).      
+ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.
+d  ^D             *  Forward  one half-window (and set half-window to N)
+u  ^U             *  Backward one half-window (and set half-window to N)
+ESC-)  RightArrow *  Left  one half screen width (or N positions).     
+HELP -- Press RETURN for more, or q when done
+```
+
+Si tu distribución usa el comando `less`, podría estar un poco abrumado por la gran cantidad de «comandos» que están disponibles. La tabla siguiente proporciona un resumen de los comandos más útiles:
+
+| Comando | Función |
+|---|---|
+| Return (o Intro) | Bajar una línea |
+| Space (o Espacio) | Bajar una página |
+| /term(o /término | Buscar un término |
+| n | Buscar el siguiente elemento de la búsqueda |
+| 1G | Ir a Inicio |
+| G | Ir a la final |
+| h | Mostrar ayuda |
+| q | Cerrar página man |
+

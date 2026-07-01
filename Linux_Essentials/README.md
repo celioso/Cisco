@@ -1971,3 +1971,45 @@ Si tu distribución usa el comando `less`, podría estar un poco abrumado por la
 | h | Mostrar ayuda |
 | q | Cerrar página man |
 
+## 5.2.3 Las Secciones de la Página man
+
+Las páginas man se dividen en secciones. Cada sección está diseñada para proporcionar información específica acerca de un comando. Si bien hay secciones comunes que verás en la mayoría de las páginas man, algunos desarrolladores también crean secciones que sólo verás en una página man específica.
+
+La siguiente tabla describe algunas de las secciones más comunes que encontrarás en las páginas del comando `man`:
+
+| Nombre de la Sección | Propósito |
+|---|---|
+| NAME (Nombre) | Proporciona el nombre del comando y una breve descripción.<br>`NAME`<br>`ls - list directory contents` |
+| SYNOPSIS (Sinopsis) | Proporciona ejemplos de cómo se ejecuta el comando. Información detallada a continuación.<br>`SYNOPSIS`<br> `ls [OPTION]... [FILE]...` |
+| DESCRIPTION (Descripción)	| Proporciona una descripción más detallada del comando.<br> `DESCRIPTION `<br> `List  information  about  the FILEs (the current directory by default).`<br> `Sort entries alphabetically if none of -cftuvSUX nor --sort  is  speci-fied. ` |
+| OPTIONS (Opciones) | Muestra las opciones para el comando, así como una descripción de cómo se utilizan. A menudo esta información se encontrará en la sección DESCRIPTION (o «DESCRIPCIÓN» en español) y no en una sección separada de OPTIONS (o «OPCIONES» en español). <br>-a, --all <br>do not ignore entries starting with .  <br>-A, --almost-all<br>do not list implied . and ..<br>--author<br>with -l, print the author of each file <br>-b, --escape<br>print C-style escapes for nongraphic characters  <br>--block-size=SIZE   <br>scale sizes by SIZE before printing them; e.g., '--block-size=M' <br>prints sizes in units of 1,048,576 bytes; see SIZE format below   |
+
+FILES (Archivos)	Muestra las opciones para el comando, así como una descripción de cómo se utilizan. Estos archivos pueden utilizarse para configurar las características más avanzadas del comando. A menudo esta información se encontrará en la sección de DESCRIPTION y no en una sección separada de OPTIONS.
+AUTHOR (Autor)	
+El nombre de la persona que creó la página man y (a veces) la manera de contactar a la persona.
+
+AUTHOR                                                                          
+       Written by Richard M. Stallman and David MacKenzie.
+REPORTING BUGS (Reportando Errores)	
+Proporciona información sobre cómo reportar problemas con el comando.
+
+REPORTING BUGS                                                                  
+       GNU coreutils online help: <http://www.gnu.org/software/coreutils/>      
+       Report ls translation bugs to <http://translationproject.org/team/>
+COPYRIGHT (Derechos de Autor)	
+Proporciona información básica de los derechos de autor.
+
+COPYRIGHT                                                                       
+       Copyright (C) 2017 Free Software Foundation, Inc.  License GPLv3+:  GNU  
+       GPL version 3 or later <http://gnu.org/licenses/gpl.html>.               
+       This  is  free  software:  you  are free to change and redistribute it.  
+       There is NO WARRANTY, to the extent permitted by law.   
+SEE ALSO (Ver También)	
+Proporciona una idea de dónde puedes encontrar información adicional. También suele incluir otros comandos que están relacionados con este comando.
+
+SEE ALSO                                                                        
+       Full documentation at: <http://www.gnu.org/software/coreutils/ls>        
+       or available locally via: info '(coreutils) ls invocation'  
+
+
+

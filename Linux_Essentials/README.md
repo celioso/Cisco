@@ -1984,14 +1984,10 @@ La siguiente tabla describe algunas de las secciones más comunes que encontrar�
 | DESCRIPTION (Descripción)	| Proporciona una descripción más detallada del comando.<br> `DESCRIPTION `<br> `List  information  about  the FILEs (the current directory by default).`<br> `Sort entries alphabetically if none of -cftuvSUX nor --sort  is  speci-fied. ` |
 | OPTIONS (Opciones) | Muestra las opciones para el comando, así como una descripción de cómo se utilizan. A menudo esta información se encontrará en la sección DESCRIPTION (o «DESCRIPCIÓN» en español) y no en una sección separada de OPTIONS (o «OPCIONES» en español). <br>-a, --all <br>do not ignore entries starting with .  <br>-A, --almost-all<br>do not list implied . and ..<br>--author<br>with -l, print the author of each file <br>-b, --escape<br>print C-style escapes for nongraphic characters  <br>--block-size=SIZE   <br>scale sizes by SIZE before printing them; e.g., '--block-size=M' <br>prints sizes in units of 1,048,576 bytes; see SIZE format below   |
 
-FILES (Archivos)	Muestra las opciones para el comando, así como una descripción de cómo se utilizan. Estos archivos pueden utilizarse para configurar las características más avanzadas del comando. A menudo esta información se encontrará en la sección de DESCRIPTION y no en una sección separada de OPTIONS.
-AUTHOR (Autor)	
-El nombre de la persona que creó la página man y (a veces) la manera de contactar a la persona.
-
-AUTHOR                                                                          
-       Written by Richard M. Stallman and David MacKenzie.
-REPORTING BUGS (Reportando Errores)	
-Proporciona información sobre cómo reportar problemas con el comando.
+| FILES (Archivos) | Muestra las opciones para el comando, así como una descripción de cómo se utilizan. Estos archivos pueden utilizarse para configurar las características más avanzadas del comando. A menudo esta información se encontrará en la sección de DESCRIPTION y no en una sección separada de OPTIONS. |
+| AUTHOR (Autor) | El nombre de la persona que creó la página man y (a veces) la manera de contactar a la persona.
+<br>AUTHOR<br>Written by Richard M. Stallman and David MacKenzie. |
+| REPORTING BUGS (Reportando Errores) | Proporciona información sobre cómo reportar problemas con el comando.
 
 REPORTING BUGS                                                                  
        GNU coreutils online help: <http://www.gnu.org/software/coreutils/>      

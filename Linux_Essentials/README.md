@@ -1983,29 +1983,8 @@ La siguiente tabla describe algunas de las secciones más comunes que encontrar�
 | SYNOPSIS (Sinopsis) | Proporciona ejemplos de cómo se ejecuta el comando. Información detallada a continuación.<br>`SYNOPSIS`<br> `ls [OPTION]... [FILE]...` |
 | DESCRIPTION (Descripción)	| Proporciona una descripción más detallada del comando.<br> `DESCRIPTION `<br> `List  information  about  the FILEs (the current directory by default).`<br> `Sort entries alphabetically if none of -cftuvSUX nor --sort  is  speci-fied. ` |
 | OPTIONS (Opciones) | Muestra las opciones para el comando, así como una descripción de cómo se utilizan. A menudo esta información se encontrará en la sección DESCRIPTION (o «DESCRIPCIÓN» en español) y no en una sección separada de OPTIONS (o «OPCIONES» en español). <br>-a, --all <br>do not ignore entries starting with .  <br>-A, --almost-all<br>do not list implied . and ..<br>--author<br>with -l, print the author of each file <br>-b, --escape<br>print C-style escapes for nongraphic characters  <br>--block-size=SIZE   <br>scale sizes by SIZE before printing them; e.g., '--block-size=M' <br>prints sizes in units of 1,048,576 bytes; see SIZE format below   |
-
 | FILES (Archivos) | Muestra las opciones para el comando, así como una descripción de cómo se utilizan. Estos archivos pueden utilizarse para configurar las características más avanzadas del comando. A menudo esta información se encontrará en la sección de DESCRIPTION y no en una sección separada de OPTIONS. |
-| AUTHOR (Autor) | El nombre de la persona que creó la página man y (a veces) la manera de contactar a la persona.
-<br>AUTHOR<br>Written by Richard M. Stallman and David MacKenzie. |
-| REPORTING BUGS (Reportando Errores) | Proporciona información sobre cómo reportar problemas con el comando.
-
-REPORTING BUGS                                                                  
-       GNU coreutils online help: <http://www.gnu.org/software/coreutils/>      
-       Report ls translation bugs to <http://translationproject.org/team/>
-COPYRIGHT (Derechos de Autor)	
-Proporciona información básica de los derechos de autor.
-
-COPYRIGHT                                                                       
-       Copyright (C) 2017 Free Software Foundation, Inc.  License GPLv3+:  GNU  
-       GPL version 3 or later <http://gnu.org/licenses/gpl.html>.               
-       This  is  free  software:  you  are free to change and redistribute it.  
-       There is NO WARRANTY, to the extent permitted by law.   
-SEE ALSO (Ver También)	
-Proporciona una idea de dónde puedes encontrar información adicional. También suele incluir otros comandos que están relacionados con este comando.
-
-SEE ALSO                                                                        
-       Full documentation at: <http://www.gnu.org/software/coreutils/ls>        
-       or available locally via: info '(coreutils) ls invocation'  
-
-
-
+| AUTHOR (Autor) | El nombre de la persona que creó la página man y (a veces) la manera de contactar a la persona.<br>AUTHOR<br>Written by Richard M. Stallman and David MacKenzie. |
+| REPORTING BUGS (Reportando Errores) | Proporciona información sobre cómo reportar problemas con el comando.<br>REPORTING <br>BUGS <br>GNU coreutils online help: <http://www.gnu.org/software/coreutils/>  <br>Report ls translation bugs to <http://translationproject.org/team/><br> |
+| COPYRIGHT (Derechos de Autor) | Proporciona información básica de los derechos de autor.<br>COPYRIGHT <br>Copyright (C) 2017 Free Software Foundation, Inc.  License GPLv3+:  GNU<br>GPL version 3 or later <http://gnu.org/licenses/gpl.html>. <br>This  is  free  software:  you  are free to change and redistribute it. <br>There is NO WARRANTY, to the extent permitted by law. |
+| SEE ALSO (Ver También) | Proporciona una idea de dónde puedes encontrar información adicional. También suele incluir otros comandos que están relacionados con este comando. <br>SEE ALSO <br>Full documentation at: <http://www.gnu.org/software/coreutils/ls> <br> or available locally via: info '(coreutils) ls invocation' | 

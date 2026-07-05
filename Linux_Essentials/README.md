@@ -1988,3 +1988,102 @@ La siguiente tabla describe algunas de las secciones más comunes que encontrar�
 | REPORTING BUGS (Reportando Errores) | Proporciona información sobre cómo reportar problemas con el comando.<br>`REPORTING`<br>`BUGS`<br>`GNU coreutils online help: <http://www.gnu.org/software/coreutils/>`<br>`Report ls translation bugs to <http://translationproject.org/team/>`<br> |
 | COPYRIGHT (Derechos de Autor) | Proporciona información básica de los derechos de autor.<br>`COPYRIGHT`<br>`Copyright (C) 2017 Free Software Foundation, Inc.  License GPLv3+:  GNU`<br>`GPL version 3 or later <http://gnu.org/licenses/gpl.html>.`<br>`This  is  free  software:  you  are free to change and redistribute it.` <br>`There is NO WARRANTY, to the extent permitted by law.` |
 | SEE ALSO (Ver También) | Proporciona una idea de dónde puedes encontrar información adicional. También suele incluir otros comandos que están relacionados con este comando. <br>`SEE ALSO`<br>`Full documentation at: <http://www.gnu.org/software/coreutils/ls>`<br>`or available locally via: info '(coreutils) ls invocation'` | 
+
+## 5.2.4 La sección SYNOPSIS de la Página man
+
+La sección de SYNOPSIS (o «SINOPSIS» en español) de una página man puede ser difícil de entender, pero es muy importante porque proporciona un ejemplo conciso de cómo utilizar el comando. Por ejemplo, considera la SYNOPSIS de la página man para el comando `cal`:
+
+```bash
+SYNOPSIS
+    cal [-3hjy] [-A number] [-B number] [[[day] month] year]
+```
+Los corchetes [ ] se utilizan para indicar que esta característica no es necesaria para ejecutar el comando. Por ejemplo, [-3hjy] significa que puedes usar las opciones -h, -j, -y, 1 o 3, pero ninguna de estas opciones son necesarias para el correcto funcionamiento del comando `cal`.
+
+El segundo conjunto de corchetes en la SYNOPSIS del comando `cal ([[[day] month] year])` muestra otra característica. Esto significa que puedes especificar un año por sí mismo, pero si se especifica un mes también se debe especificar un año. Además, si especificas un día entonces también necesitarás especificar un mes y un año.
+
+Otro componente de SYNOPSIS que puede causar cierta confusión puede verse en SYNOPSIS del comando date:
+
+```bash
+SYNOPSIS
+    date [OPTION][+FORMAT]
+    date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
+```
+En estaSYNOPSIS hay dos sintaxis para el comando `date`. El primero de ellos se utiliza para mostrar la fecha en el sistema mientras que el segundo se utiliza para fijar la fecha.
+
+Las elipses siguientes a [OPTION], ..., indican que uno o más ítems antes de la opción pueden usarse.
+
+Además, la notación [-u|--utc|--universal] significa que puedes utilizar la opción -u , la opción --utc o la opción --universal . Normalmente esto significa que las tres opciones hacen lo mismo, pero a veces este formato (uso del carácter |) sirve para indicar que no se utilicen las opciones combinadas, tal como un operador lógico «o».
+
+## 5.2.5 Buscando dentro de la Página man
+
+Para buscar un término en la página man, pulsa `/` e introduce el término seguido por la tecla `Entrar`. El programa buscará desde la ubicación actual hacia el final de la página para tratar de localizar y resaltar el término.
+
+Si el término no se encuentra, o has llegado al final de las coincidencias, el programa reportará Pattern not found (press Return) (o «Patrón no encontrado (presiona Regresar)» en español). Si se encuentra una coincidencia y quieres pasar al siguiente término, pulsa **n**. Para volver al término anterior pulsa **N**.
+
+1[Un gif que representa a un usuario que busca una palabra clave en una página de manual.](images/LEv2_6_1.gif)
+
+## 5.2.6 Las Páginas man Categorizadas por Secciones
+
+Hasta ahora, hemos estado visualizando las páginas man de comandos. Sin embargo, a veces los archivos de configuración también tienen sus páginas man. Los archivos de configuración (a veces llamados archivos de sistema) contienen datos que se utilizan para almacenar información sobre el Sistema Operativo o servicios.
+
+Adicionalmente, existen varios tipos de comandos (comandos de usuario, comandos del sistema y comandos de administración), así como otras funciones que requieren documentación, como las librerías y los componentes del Kernel.
+
+Como resultado, hay miles de páginas man en una distribución típica de Linux. Para organizar todas estas páginas, las páginas se clasifican por secciones, al igual que cada página man se divide en secciones.
+
+**Para considerar**:
+
+Por defecto, hay nueve secciones de las páginas man:
+
+ 1. Programas ejecutables o comandos del shell
+ 2. Llamadas del sistema (funciones proporcionados por el kernel)
+ 3. Llamadas de la librería (funciones dentro de las librerías de los programas)
+ 4. Archivos especiales (generalmente se encuentran en /dev)
+ 5. Formatos de archivo y convenciones, por ejemplo /etc/passwd
+ 6. Juegos
+ 7. Otros (incluyendo paquetes macro y convenciones), por ejemplo, man(7), groff(7)
+ 8. Comandos de administración de sistema (generalmente sólo para el root)
+ 9. Rutinas del kernel [No estándar]
+
+Cuando utilizas el comando `man`, éste busca cada una de estas secciones por orden hasta que encuentra al primer "match" (o «coincidencia» en español). Por ejemplo, si ejecutas el comando `man cal`, en la primera sección (programas ejecutables o comandos del shell) se buscará la página man llamada cal. Si no lo encuentra, entonces se busca en la segunda sección. Si no se encuentra ninguna página man tras buscar en todas las secciones, recibirás un mensaje de error:
+
+```bash
+sysadmin@localhost:~$ man zed
+No manual entry for zed
+sysadmin@localhost:~$
+```
+
+## 5.2.6.1 Determinar la Sección
+
+Para determinar a qué sección pertenece una página man específica tienes que ver el valor numérico de la primera línea de la salida de la página man. Por ejemplo, si ejecutas el comando `man cal`, verás que el comando `cal` pertenece a la primera sección de las páginas man:
+
+`CAL(1)      BSD General Commands Manual     CAL(1)`
+
+## 5.2.6.2 Especificar una Sección
+
+En algunos casos, necesitarás especificar la sección para visualizar la página man correcta. Esto es necesario porque a veces habrá páginas man con el mismo nombre en diferentes secciones.
+
+Por ejemplo, hay un comando llamado `passwd` que permite cambiar tu contraseña. También hay un archivo llamado passwd que almacena la información de la cuenta. Ambos, el comando y el archivo tienen una página man.
+
+El comando `passwd` es un comando de "user" (o «usuario» en español), por lo que el comando `man passwd` mostrará la página man para el comando `passwd` por defecto:
+
+`PASSWD(1)           User Commands          PASSWD(1)`
+
+Para especificar una sección diferente, proporciona el número de la sección como el primer argumento del comando `man`. Por ejemplo, el comando `man 5 passwd` buscará la página man de passwd` sólo en la sección 5:
+
+`PASSWD(5)           File Formats and Conversions           PASSWD(5)`
+
+## 5.2.6.3 Buscar las Secciones
+
+A veces no es claro en qué sección se almacena una página man. En estos casos, puedes buscar una página man por nombre.
+
+La opción `-f` para el comando man mostrará páginas que coinciden, o parcialmente coinciden, con un nombre específico y provee una breve descripción de cada página man:
+
+```bash
+sysadmin@localhost:~$ man -f passwd
+passwd (5)           - the password file
+passwd (1)           - change user password
+passwd (1ssl)        - compute password hashes
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que en la mayoría de las distribuciones de Linux, el comando `whatis` hace lo mismo que el comando `man -f`. En esas distribuciones, ambos comandos producen la misma salida.

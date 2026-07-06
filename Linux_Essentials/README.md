@@ -2397,12 +2397,23 @@ sysadmin@localhost:~$
 Como puedes ver en la salida anterior, todavía habrá muchos resultados cuando utilices la opción `-b`. Para limitar la salida aún más, coloca un carácter *\* delante del término de búsqueda. Este carácter limita la salida a los nombres de archivo que coincidan exactamente con el término:
 
 ```bash
-sysadmin@localhost:~$ locate -b "\passwd"                              
+sysadmin@localhost:~$ locate -b "\passwd"
 /etc/passwd      
 /etc/cron.daily/passwd    
-/etc/pam.d/passwd                                                      
+/etc/pam.d/passwd                                
 /usr/bin/passwd        
-/usr/share/doc/passwd   
-/usr/share/lintian/overrides/passwd  
+/usr/share/doc/passwd  
+/usr/share/lintian/overrides/passwd 
 sysadmin@localhost:~$
 ```
+
+# Laboratorio
+
+## 5.1 Introducción
+
+Este es Lab 5: Obteniendo ayuda. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán cómo obtener ayuda acerca de los comandos y encontrar archivos.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+ 1. Utilizar varios sistemas de ayuda para obtener ayuda para los comandos.
+ 2. Aprender a localizar los comandos.

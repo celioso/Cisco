@@ -2087,3 +2087,193 @@ sysadmin@localhost:~$
 ```
 
 Ten en cuenta que en la mayoría de las distribuciones de Linux, el comando `whatis` hace lo mismo que el comando `man -f`. En esas distribuciones, ambos comandos producen la misma salida.
+
+## 5.2.7 Buscar Páginas man por una Palabra Clave
+
+Desafortunadamente, no siempre te acordarás del nombre exacto de la página man que quieres ver. En estos casos puedes buscar páginas man que coincidan con una palabra clave mediante el uso de la opción `-k` del comando `man`.
+
+Por ejemplo, ¿qué pasa si quieres ver una página que muestra cómo cambiar la contraseña, pero no recuerdas el nombre exacto? Puedes ejecutar el comando `man -k password`:
+
+```bash
+sysadmin@localhost:~$ man -k passwd                                    
+chgpasswd (8)        - update group passwords in batch mode            
+chpasswd (8)         - update passwords in batch mode                 
+fgetpwent_r (3)      - get passwd file entry reentrantly               
+getpwent_r (3)       - get passwd file entry reentrantly               
+gpasswd (1)          - administer /etc/group and /etc/gshadow         
+pam_localuser (8)    - require users to be listed in /etc/passwd      
+passwd (1)           - change user password                           
+passwd (1ssl)        - compute password hashes                        
+passwd (5)           - the password file                               
+passwd2des (3)       - RFS password encryption                         
+update-passwd (8)    - safely update /etc/passwd, /etc/shadow and /etc/group    
+sysadmin@localhost:~$
+```
+
+Al utilizar esta opción puedes recibir una gran cantidad de salidas. El comando anterior, por ejemplo, dió salida a 60 resultados.
+Recuerda que hay miles de páginas man, así que cuando buscas por una palabra clave, sé tan específico como sea posible. Usando una palabra genérica, como "the" (o «el/la» en español), podría resultar en cientos o incluso miles de resultados.
+
+Ten en cuenta que en la mayoría de las distribuciones de Linux, el comando `apropos` hace lo mismo que el comando `man -k`. En esas distribuciones, ambas producen la misma salida.
+
+## 5.3 Comando info
+
+Las páginas man son unas fuentes extensas de información, pero suelen tener algunas desventajas. Un ejemplo de una desventaja es que cada página man es un documento independiente y no está relacionado con ninguna otra página man. Aunque algunas páginas man tienen una sección SEE ALSO (o «Ver También» en español) que puede hacer referencia a otras páginas man, en realidad tienden a ser relacionadas con las fuentes de documentación.
+
+El comando `info` también proporciona documentación sobre funciones y comandos del sistema operativo. El objetivo de este comando es ligeramente diferente de las páginas man: proporcionar un recurso de documentación que proporciona una estructura lógica, facilitando la lectura de la documentación.
+
+En los documentos info la información se desglosa en categorías que funcionan de una manera parecida que una tabla de contenido en un libro. Se proporcionan hipervínculos hacia páginas con la información sobre los temas individuales para un comando específico o función. De hecho, toda la documentación se combina en un solo "book" (o «libro» en español) en el que puedes ir a un nivel superior de la documentación y ver la tabla de contenido que representa toda la documentación disponible.
+
+Otra ventaja del comando info sobre las páginas man es que el estilo de escritura de los documentos info es típicamente más propicio para aprender un tema. Considera que las páginas man son un recurso de referencias y los documentos info sirven más como una guía de aprendizaje.
+
+## 5.3.1 Visualizar la Documentación Info para un Comando
+
+Para visualizar la documentación info de un comando, ejecuta el comando *info command* (reemplaza *command* con el nombre del comando sobre cuál buscas la información). Por ejemplo, la siguiente pantalla muestra la salida del comando `info ls`:
+
+```bash
+File: coreutils.info,  Node: ls invocation,  Next: dir invocation,  Up: Directo\ry listing                                                                      
+                                                                       
+10.1 `ls': List directory contents                                     
+==================================                                              
+                                                                      
+    The `ls' program lists information about files (of any type, including directories).  Options and file arguments can be intermixed arbitrarily, as usual.                                                          
+                                                                       
+    For non-option command-line arguments that are directories, by    
+default `ls' lists the contents of directories, not recursively, and   
+omitting files with names beginning with `.'.  For other non-option    
+arguments, by default `ls' lists just the file name.  If no non-option 
+argument is specified, `ls' operates on the current directory, acting  
+as if it had been invoked with a single argument of `.'.                        
+                                                                       
+    By default, the output is sorted alphabetically, according to the  
+locale settings in effect.(1) If standard output is a terminal, the    
+output is in columns (sorted vertically) and control characters are    
+output as question marks; otherwise, the output is listed one per line 
+and control characters are output as-is.                              
+--zz-Info: (coreutils.info.gz)ls invocation, 58 lines --Top-------------
+Welcome to Info version 5.2. Type h for help, m for menu item.
+```
+Observa que la primera línea proporciona información que te indica dónde dentro de la documentación info estás ubicado. Esta documentación se divide en *nodes* (o «nodos» en español) y en el ejemplo anterior estás actualmente en el nodo *ls invocation*. Si pasaras al siguiente nodo (tal como ir al siguiente capítulo en un libro), estarías en el nodo *dir invocation*. Si te pasaras un nivel hacia arriba estarías en el nodo *Directory listing*.
+
+## 5.3.2 Cambiando de Posición mientras se Visualiza un Documento info
+
+Igual que el comando `man`, puedes obtener un listado de comandos de movimiento escribiendo la letra h al leer la documentación info:
+
+```bash
+Basic Info command keys                                                        
+l           Close this help window.                                   
+q           Quit Info altogether.                                     
+H           Invoke the Info tutorial.                                           
+Up          Move up one line.                                          
+Down        Move down one line.                                        
+DEL         Scroll backward one screenful.                             
+SPC         Scroll forward one screenful.                              
+Home        Go to the beginning of this node.                          
+End         Go to the end of this node.                                         
+TAB         Skip to the next hypertext link.                           
+RET         Follow the hypertext link under the cursor.               
+l           Go back to the last node seen in this window.                       
+[           Go to the previous node in the document.                   
+]           Go to the next node in the document.                       
+p           Go to the previous node on this level.                    
+n           Go to the next node on this level.                         
+u           Go up one level.                                           
+-----Info: *Info Help*, 466 lines --Top---------------------------------
+```
+
+Ten en cuenta que si quieres cerrar la pantalla de ayuda, debes introducir la letra l. Esto te regresa a tu documento y te permite a continuar leyendo. Para salir completamente, introduce la letra **q**.
+
+La tabla siguiente proporciona un resumen de los comandos útiles:
+
+| Comando | Función |
+|---|---|
+| **Flecha abajo ↓** | Bajar una línea |
+| **Espacio** | Bajar una página |
+| **s** | Buscar un término |
+| **[** | Ir al nodo anterior |
+| **]** | Vaya al siguiente nodo |
+| **u** | Subir un nivel | 
+| **TABULADOR** | Saltar al siguiente hipervínculo |
+| **INICIO** | Ir a inicio |
+| **FIN** | Ir al final |
+| **h** | Mostrar ayuda |
+| **L** | Cerrar la página de ayuda |
+| **q** | Cerrar el comando info |
+
+Si te desplazas en el documento, verás el menú para el comando `ls`:
+
+```bash 
+* Menu:
+                           
+* Which files are listed::                     
+* What information is listed::                 
+* Sorting the output::                          
+* Details about version sort::                   
+* General output formatting::                    
+* Formatting file timestamps::                    
+* Formatting the file names::                                                   
+                                         
+   ---------- Footnotes ----------
+          
+ (1) If you use a non-POSIX locale (e.g., by setting `LC_ALL' to 
+`en_US'), then `ls' may produce output that is sorted differently than
+you're accustomed to.  In that case, set the `LC_ALL' environment     
+variable to `C'.                                                                
+--zz-Info: (coreutils.info.gz)ls invocation, 58 lines --Top-------------
+```
+
+Los elementos bajo el menú son hipervínculos que pueden llevarte a los nodos que describen más del comando `ls`. Por ejemplo, si colocas tu cursor en la línea «** Sorting the output::*» (o «clasificando la salida» en español) y presionas la tecla **Entrar**, pasarás al nodo que describe la clasificación de la salida del comando `ls`:
+
+```bash
+File: coreutils.info,  Node: Sorting the output,  Next: Details about version s\ort,  Prev: What information is listed,  Up: ls invocation                      
+10.1.3 Sorting the output                                             
+-------------------------                                                      
+These options change the order in which `ls' sorts the information it  
+outputs.  By default, sorting is done by character code (e.g., ASCII   
+order).                                                                         
+                                                                      
+`-c'                                                                  
+`--time=ctime'                                                        
+`--time=status'                                                        
+     If the long listing format (e.g., `-l', `-o') is being used, print 
+     the status change time (the `ctime' in the inode) instead of the  
+     modification time.  When explicitly sorting by time (`--sort=time'
+     or `-t') or when not using a long listing format, sort according  
+     to the status change time.                                                 
+                                                                    
+`-f'                                                                  
+     Primarily, like `-U'--do not sort; list the files in whatever     
+     order they are stored in the directory.  But also enable `-a' (lis
+--zz-Info: (coreutils.info.gz)Sorting the output, 68 lines --Top--------
+```
+Ten en cuenta que entrando al nodo de clasificación, prácticamente entras a un subnodo del nodo del que originalmente partiste. Para regresar a tu nodo anterior, puedes utilizar la tecla **u**. Mientras que **u** te llevará un nivel arriba hasta el inicio del nodo, también puedes utilizar la tecla l para volver exactamente a la ubicación anterior en la que te encontrabas antes de entrar al nodo de clasificación.
+
+## 5.3.3 Explorar la Documentación info
+
+En lugar de utilizar la documentación info para buscar la información sobre un comando específico o función, puedes considerar la posibilidad de explorar las capacidades de Linux mediante la lectura a través de la documentación info. Si ejecutas el comando `info` sin ningún argumento, pasarás a un nivel superior de la documentación. Desde allí puedes explorar muchas características:
+
+```bash
+File: dir,      Node: Top       This is the top of the INFO tree                
+  This (the Directory node) gives a menu of major topics.              
+  Typing "q" exits, "?" lists all Info commands, "d" returns here,    
+  "h" gives a primer for first-timers,                                
+  "mEmacslt<Return>" visits the Emacs manual, etc.                               
+  In Emacs, you can click mouse button 2 on a menu item or cross referen  ce to select it.                                                                 
+* Menu:                                                                        
+
+Basics                                                                 
+* Common options: (coreutils)Common options.                           
+* Coreutils: (coreutils).       Core GNU (file, text, shell) utilities.
+* Date input formats: (coreutils)Date input formats.                   
+* File permissions: (coreutils)File permissions.                      
+                           Access modes.                          
+* Finding files: (find).   Operating on files matching certain criteria.   
+                                                                       
+C++ libraries                                                        
+* autosprintf: (autosprintf).  Support for printf format strings in C+
+-----Info: (dir)Top, 211 lines --Top------------------------------------
+Welcome to Info version 5.2. Type h for help, m for menu item.
+```
+
+## 5.4 Otras Fuentes de Ayuda
+
+En muchos casos verás que las páginas man o documentación info te proporcionarán las respuestas que necesitas. Sin embargo, en algunos casos, puede que necesites buscar en otras ubicaciones.

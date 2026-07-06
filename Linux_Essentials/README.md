@@ -2277,3 +2277,132 @@ Welcome to Info version 5.2. Type h for help, m for menu item.
 ## 5.4 Otras Fuentes de Ayuda
 
 En muchos casos verás que las páginas man o documentación info te proporcionarán las respuestas que necesitas. Sin embargo, en algunos casos, puede que necesites buscar en otras ubicaciones.
+
+## 5.4.1 Utilizar la opción --help
+
+Muchos comandos te proporcionan información básica, muy similar a la sección *SYNOPSIS* que aparece en las páginas man, al aplicar la opción `--help` (o «ayuda» en español) al comando. Esto es útil para aprender el uso básico de un comando:
+
+```bash
+sysadmin@localhost:~$  ps --help
+********* simple selection *********  ********* selection by list *********   
+-A all processes                      -C by command name                      
+-N negate selection                   -G by real group ID (supports names)    
+-a all w/ tty except session leaders  -U by real user ID (supports names)     
+-d all except session leaders         -g by session OR by effective group name
+-e all processes                      -p by process ID                        
+T  all processes on this terminal     -s processes in the sessions given     
+a  all w/ tty, including other users  -t by tty                               
+g  OBSOLETE -- DO NOT USE             -u by effective user ID (supports names)
+r  only running processes             U  processes for specified users        
+x  processes w/o controlling ttys     t  by tty                               
+*********** output format **********  *********** long options ***********    
+-o,o user-defined  -f full            --Group --User --pid --cols --ppid      
+-j,j job control   s  signal          --group --user --sid --rows --info      
+-O,O preloaded -o  v  virtual memory  --cumulative --format --deselect        
+-l,l long          u  user-oriented   --sort --tty --forest --version         
+-F   extra full    X  registers       --heading --no-headi
+                    ********* misc options *********                          
+-V,V  show version      L  list format codes  f  ASCII art forest             
+-m,m,-L,-T,H  threads   S  children in sum    -y change -l format             
+-M,Z  security data     c  true command name  -c scheduling class             
+-w,w  wide output       n  numeric WCHAN,UID  -H process hierarchy            
+sysadmin@localhost:~$ 
+```
+
+## 5.4.2 Documentación Adicional del Sistema
+
+En la mayoría de los sistemas, existe un directorio donde se encuentra la documentación adicional. A menudo se trata de una ubicación donde los proveedores que crean software adicional (de terceros) almacenan sus archivos de documentación.
+
+Por lo general, se trata de una ubicación donde los administradores del sistema irán a aprender cómo configurar servicios de software más complejos. Sin embargo, los usuarios regulares a veces también encuentran esta documentación útil.
+
+Estos archivos de documentación se suelen llamar archivos "readme" (o «leeme» en español), ya que los archivos tienen nombres como *README* o *readme.txt*. La ubicación de estos archivos puede variar según la distribución que estés utilizando. Ubicaciones típicas incluyen */usr/share/doc* y */usr/doc*.
+
+## 5.5 Búsqueda de los Comandos y la Documentación
+
+Recuerda que el comando `whatis` (o `man -f`) te dirá en qué sección se almacena la página man. Si utilizas este comando con suficiente frecuencia, probablemente te topes con una salida inusual, como la siguiente:
+
+```bash
+sysadmin@localhost:~$ whatis ls                                              
+ls (1)               - list directory contents 
+ls (lp)              - list directory contents                                 
+sysadmin@localhost:~$
+```
+
+Según esta salida, hay dos comandos que listan el contenido del directorio. La respuesta simple a la pregunta por qué hay dos comandos `ls` es que UNIX tuvo dos variantes principales, lo que dio lugar a que algunos comandos fueran desarrollados «en paralelo». Por lo tanto, algunos comandos se comportan diferentemente en diversas variantes de UNIX. Muchas distribuciones modernas de Linux incluyen comandos de ambas variantes de UNIX.
+
+Esto, sin embargo, conlleva un pequeño problema: Cuando corres el comando `ls`, ¿Cuál de los comandos se ejecuta? Las próximas secciones se centrarán en responder esta pregunta, así como proporcionarte las herramientas para encontrar donde residen estos archivos en el sistema.
+
+## 5.5.1 ¿Dónde están ubicados estos comandos?
+
+Para buscar la ubicación de un comando o de las páginas man para un comando, utiliza el comando `whereis` (o «dónde está» en español). Este comando busca los comandos, archivos de código fuente y las páginas man en las ubicaciones específicas donde estos archivos se almacenan normalmente:
+
+```bash
+sysadmin@localhost:~$ whereis ls                                              
+ls: /bin/ls /usr/share/man/man1/ls.1.gz                                       
+sysadmin@localhost:~$
+```
+
+Las páginas man se suelen distinguir fácilmente entre los comandos ya que normalmente están comprimidos con un comando llamado `gzip`, dando por resultado un nombre de archivo que termina en *.gz*.
+
+Lo interesante es que verás que hay dos paginas man, pero sólo un comando (*/bin/ls*). Esto es porque el comando `ls` puede utilizarse con las opciones/funciones que se describen por *cualquiera* de las páginas man. Así que, cuando estás aprendiendo lo que puedes hacer con el comando `ls`, puedes explorar ambas páginas man. Afortunadamente, esto más bien es una excepción ya que la mayoría de los comandos sólo tienen una página man.
+
+## 5.5.2 Encontrar Cualquier Archivo o Directorio
+
+El comando `whereis` está diseñado para encontrar de manera específica las páginas man y los comandos. Si bien esto es útil, hay veces en las que quieras encontrar un archivo o directorio, no sólo archivos de comandos o páginas mas.
+
+Para encontrar cualquier archivo o directorio, puede utilizar el comando locate (o «localizar» en español). Este comando buscará en una base de datos de todos los archivos y directorios que estaban en el sistema cuando se creó la base de datos. Por lo general, el comando que genera tal base de datos se ejecuta por la noche.
+
+```bash
+sysadmin@localhost:~$ locate gshadow                                   
+/etc/gshadow                                                           
+/etc/gshadow-                                                          
+/usr/include/gshadow.h                                                
+/usr/share/man/cs/man5/gshadow.5.gz                                   
+/usr/share/man/da/man5/gshadow.5.gz                                    
+/usr/share/man/de/man5/gshadow.5.gz                                    
+/usr/share/man/fr/man5/gshadow.5.gz                                    
+/usr/share/man/it/man5/gshadow.5.gz                                    
+/usr/share/man/man5/gshadow.5.gz                                       
+/usr/share/man/ru/man5/gshadow.5.gz                                   
+/usr/share/man/sv/man5/gshadow.5.gz                                    
+/usr/share/man/zh_CN/man5/gshadow.5.gz                                 
+sysadmin@localhost:~$
+```
+
+Los archivos que creaste hoy normalmente no los vas a poder buscar con el comando `locate`. Si tienes acceso al sistema como usuario *root* (con la cuenta del administrador de sistema), puede actualizar manualmente la base de datos `locate` ejecutando el comando `updatedb`. Los usuarios regulares no pueden actualizar el archivo de base de datos.
+
+También ten en cuenta que cuando utilizas el comando `locate` como un usuario normal, tu salida puede ser limitada debido a los permisos. En general, si no tienes acceso a un archivo o directorio en el sistema de ficheros debido a los permisos, el comando `locate` no devolverá esos nombres. Esta es una característica de seguridad diseñada para evitar que los usuarios «exploren» el sistema de ficheros utilizando el comando `locate`. El usuario *root* puede buscar cualquier archivo en la base de datos con el comando `locate`.
+
+## 5.5.3 Contar el Número de Archivos
+
+La salida del comando `locate` puede ser bastante grande. Cuando buscas un nombre de archivo, como `passwd`, el comando *locate* producirá cada archivo que contiene la cadena *passwd*, no sólo los archivos `passwd`.
+
+En muchos casos, puede que quieras empezar listando cuántos archivos coincidirán. Lo puedes hacer mediante la opción `-c` del comando `locate`:
+
+```bash
+sysadmin@localhost:~$ locate -c passwd                                 
+97                                                                     
+sysadmin@localhost:~$
+```
+
+## 5.5.4 Limitando la Salida
+
+Puedes limitar la salida producida por el comando `locate` mediante la opción `-b`. Esta opción sólo incluye los listados que contienen el término de búsqueda en *basename* del archivo. El basename es la parte del nombre de archivo que no incluye los nombres de directorio.
+
+```bash
+sysadmin@localhost:~$ locate -c -b passwd                              
+83 
+sysadmin@localhost:~$
+```
+Como puedes ver en la salida anterior, todavía habrá muchos resultados cuando utilices la opción `-b`. Para limitar la salida aún más, coloca un carácter *\* delante del término de búsqueda. Este carácter limita la salida a los nombres de archivo que coincidan exactamente con el término:
+
+```bash
+sysadmin@localhost:~$ locate -b "\passwd"                              
+/etc/passwd      
+/etc/cron.daily/passwd    
+/etc/pam.d/passwd                                                      
+/usr/bin/passwd        
+/usr/share/doc/passwd   
+/usr/share/lintian/overrides/passwd  
+sysadmin@localhost:~$
+```

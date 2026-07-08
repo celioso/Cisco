@@ -2418,4 +2418,22 @@ En este laboratorio llevarás a cabo las siguientes tareas:
  1. Utilizar varios sistemas de ayuda para obtener ayuda para los comandos.
  2. Aprender a localizar los comandos.
 
- www
+## 5.2 Obtención de ayuda
+
+En esta tarea explorarás cómo obtener ayuda. Saber qué hay que hacer cuando te encuentres atascado o cuando no puedas recordar como funciona un comando te va resultar muy útil.
+
+Además de las búsquedas en Internet, el sistema operativo Linux proporciona una variedad de técnicas para aprender más acerca de un comando o una función determinada. Conocer estas diferentes técnicas te permitirá encontrar más fácilmente y rápidamente la respuesta que necesitas.
+
+## 5.2.1 Paso 1
+
+Ejecuta comandos en el shell bash escribiendo el comando y luego presionando la tecla Entrar. Por ejemplo, introduce el siguiente comando para mostrar la fecha de hoy:
+
+`date`
+
+El resultado debería ser similar a la siguiente:
+
+```bash
+sysadmin@localhost:~$ date
+Tue Jan 19 17:27:20 UTC 2016
+sysadmin@localhost:~$
+```

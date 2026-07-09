@@ -2437,3 +2437,56 @@ sysadmin@localhost:~$ date
 Tue Jan 19 17:27:20 UTC 2016
 sysadmin@localhost:~$
 ```
+
+## 5.2.2 Paso 2
+
+Para obtener más información acerca de los comandos, accede a la página manual para el comando con el comando `man`. Por ejemplo, ejecuta el siguiente comando para obtener más información sobre el comando `date`:
+
+`man date`
+
+`sysadmin@localhost:~$ man date`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+DATE(1)                          User Commands                              DATE(1)  
+
+NAME
+date - print or set the system date and time
+                                                                              
+SINOPSIS
+date [OPTION]... [+FORMAT]
+date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
+                                                                              
+DESCRIPTION
+       Display the current time in the given FORMAT, or set the system date.  
+
+-d, --date=STRING
+display time described by STRING, not `now'
+-f, --file=DATEFILE
+like --date once for each line of DATEFILE
+
+-r, --reference=FILE
+display the last modification time of FILE
+
+-R, --rfc-2822
+output  date  and time in RFC 2822 format.  Example: Mon, 07 Aug
+ Manual page date(1) line 1 (press h for help or q to quit)
+ ```
+
+**Nota**: Los documentos que se muestran con el comando `man` se denominan "Páginas Man".
+
+Si el comando man puede encontrar la página del manual para el argumento proporcionado, luego se mostrará la página del manual mediante un comando de llamado `less`. La siguiente tabla describe las teclas útiles que se pueden utilizar con el comando `less` para controlar la salida de la pantalla:
+
+| Tecla | Propósito |
+|---|---|
+| **H** o **h** | Mostrar la ayuda |
+| **Q** o **q** | Salir de la ayuda o la página del manual |
+| **Barra espaciadora** o **F** o **Página abajo** | Mover una pantalla hacia delante |
+| **b** o **Página arriba** | Mover una pantalla hacia atrás |
+| **Entrar** o **flecha hacia abajo** | Bajar una línea |
+| Flecha hacia arriba | Mover una línea hacia arriba |
+| **/** seguido por el texto buscado | Empieza a buscar hacia adelante |
+| **?** seguido por el texto buscado | Empieza a buscar hacia atrás |
+| **n** | Ir al siguiente texto que coincida con la búsqueda |
+| **N** | Mover al texto coincidente anterior |

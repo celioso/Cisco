@@ -2490,3 +2490,87 @@ Si el comando man puede encontrar la página del manual para el argumento propor
 | **?** seguido por el texto buscado | Empieza a buscar hacia atrás |
 | **n** | Ir al siguiente texto que coincida con la búsqueda |
 | **N** | Mover al texto coincidente anterior |
+
+## 5.2.3 Paso 3
+
+Escriba la letra h para ver una lista de los comandos de movimiento. Después de leer los comandos de movimiento, escribe la letra q para volver al documento.
+
+```bash
+SUMMARY OF LESS COMMANDS
+                                               
+    Commands marked with * may be preceded by a number, N.     
+Notes in parentheses indicate the behavior if N is given.
+    A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.      
+                                                                  
+h  H                 Display this help.
+q  :q  Q  :Q  ZZ     Exit.
+ -----------------------------------------------------------------------
+                                                                    
+MOVING
+
+e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).
+y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).
+f  ^F  ^V  SPACE  *  Forward  one window (or N lines).
+b  ^B  ESC-v      *  Backward one window (or N lines).
+z                 *  Forward  one window (and set window to N).  
+w                 *  Backward one window (and set window to N).      
+ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.
+d  ^D             *  Forward  one half-window (and set half-window to N)
+u  ^U             *  Backward one half-window (and set half-window to N)
+ESC-)  RightArrow *  Left  one half screen width (or N positions).     
+HELP -- Press RETURN for more, or q when done
+```
+Ten en cuenta que las páginas del manual podrían ser un poco misteriosas para ti ahora, pero a medida que vayas aprendiendo más sobre Linux, verás que son un recurso muy valioso.
+
+## 5.2.4 Paso 4
+
+Las búsquedas no distinguen entre mayúsculas y minúsculas y no se "envuelven" alrededor de la parte inferior a la superior, o viceversa. Inicia una búsqueda hacia adelante de la palabra "file" escribiendo:
+
+`/file`
+
+Ten en cuenta que lo que estás escribiendo aparecerá en la parte inferior izquierda de la pantalla.
+
+```bash
+       -r, --reference=FILE
+              display the last modification time of FILE
+
+       -R, --rfc-2822
+                output  date  and time in RFC 2822 format.  Example: Mon, 07 Aug
+/file
+```
+
+## 5.2.5 Paso 5
+
+Observa que el texto que coincida con el de la búsqueda será resaltado. Puedes avanzar a la siguiente coincidencia presionando n. Intenta también moverte hacia atrás a través de los las coincidencias presionando N:
+
+```bash
+-f, --file=DATEFILE
+like --date once for each line of DATEFILE
+                                                                                
+-r, --reference=FILE
+display the last modification time of FILE
+                                                                                
+-R, --rfc-2822
+output  date  and time in RFC 2822 format.  Example: Mon, 07 Aug
+2006 12:34:56 -0600
+                                                                                
+--rfc-3339=TIMESPEC
+output date and time in RFC 3339 format.  TIMESPEC=`date', `sec-
+onds',  or  `ns'  for  date and time to the indicated precision.
+Date and time  components  are  separated  by  a  single  space:
+2006-08-07 12:34:56-06:00
+                                                                                
+-s, --set=STRING
+set time described by STRING
+                                                                                
+-u, --utc, --universal
+print or set Coordinated Universal Time
+                                                                                
+--help display this help and exit
+Manual page date(1) line 18/204 24% (press h for help or q to quit)
+```
+
+## 5.2.6 Paso 6
+
+Utiliza el los comandos de movimiento descritos anteriormente (como el uso de la **barra espaciadora** para avanzar una pantalla) para leer la página del manual para el comando `date`. Cuando hayas terminado la lectura, introduce **q** para salir de la página del manual.
+

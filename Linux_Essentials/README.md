@@ -2870,3 +2870,15 @@ El comando `whereis sólo busca los comandos y las páginas man, no solamente cu
 
 Recuerda que hay más de una página man `passwd` en el sistema. Es por esto ves varios nombres del archivo y varias páginas man (los archivos que terminan en *.gz* son páginas man) cuando ejecutas el comando anterior.
 
+## 6.1 Introducción
+
+Cuando trabajes en un sistema operativo Linux, necesitarás saber cómo manipular los archivos y los directorios. Algunas distribuciones de Linux tienen aplicaciones basadas en GUI que permiten gestionar los archivos, pero es importante saber cómo realizar estas operaciones a través de la línea de comandos.
+
+La línea de comandos dispone de una amplia colección de comandos que permiten administrar los archivos. En este capítulo aprenderás cómo listar los archivos en un directorio, así como, cómo copiar, mover y eliminar los archivos.
+
+Los conceptos básicos enseñados en este capítulo se ampliarán en los capítulos posteriores al ir cubriendo más comandos de manipulación de archivos, tales como los comandos para ver archivos, comprimir archivos y establecer permisos de archivo.
+
+![Who else uses Linux in the their products & services?](images/6-LPI-Graphics.png)
+
+**«¿Quién más usa Linux en sus productos y servicios?»
+**

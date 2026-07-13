@@ -2696,3 +2696,177 @@ o   optional user command interpreter
                                                                                 
 Manual page passwd(5) line 1 (press h for help or q to quit)
 ```
+
+## 5.2.11 Paso 11
+
+En lugar de usar `man -f` para mostrar todas las secciones de la página manual para el nombre, también puedes utilizar el comando `whatis`:
+
+`whatis passwd`
+```bash
+sysadmin@localhost:~$ whatis passwd
+passwd (5)           - the password file
+passwd (1)           - change user password
+passwd (1ssl)        - compute password hashes
+sysadmin@localhost:~$
+```
+**Nota**: No hay diferencia entre el comando `man -f` y el comando **whatis**.
+
+## 5.2.12 Paso 12
+
+Casi todas las funciones del sistema (comandos, archivos de sistema, etc.) tienen páginas man. Algunas de estas características también tienen una característica más avanzada llamada páginas info. Por ejemplo, ejecuta el siguiente comando:
+
+`info date`
+```bash
+File: coreutils.info,  Node: date invocation,  Next: arch invocation,  Up: Syst\
+em context
+                                                                              
+21.1 `date': Print or set system date and time
+==============================================
+                                                                              
+Synopses:
+                                                                              
+     date [OPTION]... [+FORMAT]
+     date [-u|--utc|--universal] [ MMDDhhmm[[CC]YY][.ss] ]
+                                                                              
+   Invoking `date' with no FORMAT argument is equivalent to invoking it       
+with a default format that depends on the `LC_TIME' locale category.
+In the default C locale, this format is `'+%a %b %e %H:%M:%S %Z %Y'',         
+so the output looks like `Thu Mar  3 13:47:51 PST 2005'.
+                                                                              
+   Normally, `date' uses the time zone rules indicated by the `TZ'
+environment variable, or the system default rules if `TZ' is not set.
+*Note Specifying the Time Zone with `TZ': (libc)TZ Variable.
+                                                                              
+   If given an argument that starts with a `+', `date' prints the
+current date and time (or the date and time specified by the `--date'
+--zz-Info: (coreutils.info.gz)date invocation, 41 lines --Top-------------------
+Welcome to Info version 4.13. Type h for help, m for menu item.
+```
+
+Para muchos usuarios novatos de Linux las páginas `info son más fáciles de leer. A menudo se escriben más bien como "lecciones" mientras que las páginas `man` se escriben simplemente como documentación.
+
+## 5.2.13 Paso 13
+
+Mientras vas observando la página `info` del paso anterior, escribe la letra **h** para ver una lista de los comandos de movimiento. Ten en cuenta que son diferentes de los comandos de movimiento utilizados en las páginas man. Después de leer los comandos de movimiento, escribe la letra **l** (L minúscula) para volver a la visualización del documento.
+
+## 5.2.14 Paso 14
+
+Utiliza los comandos de movimiento para leer la página de información para el comando `date`. Cuando hayas terminado, coloca tu cursor en cualquier lugar de la línea *Examples of date:: y presiona la tecla **Entrar**. Verás un nuevo documento que muestra los ejemplos de `date`.
+
+## 5.2.15 Paso 15
+
+Introduce la tecla **l** para volver a la pantalla anterior. Cuando haya terminado la lectura, introduce **q** para salir de la página de información.
+
+## 5.2.16 Paso 16
+
+Otra forma de obtener ayuda es mediante el uso de la opción `--help` de un comando. La mayoría de los comandos te permiten pasar un argumento de `--help` para visualizar el uso del comando básico:
+
+`date --help`
+
+```bash
+sysadmin@localhost:~$ date --help
+Usage: date [OPTION]... [+FORMAT]
+or:  date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
+Display the current time in the given FORMAT, or set the system date.         
+                                                                              
+  -d, --date=STRING         display time described by STRING, not `now'       
+  -f, --file=DATEFILE       like --date once for each line of DATEFILE        
+  -r, --reference=FILE      display the last modification time of FILE        
+-R, --rfc-2822            output date and time in RFC 2822 format.
+Example: Mon, 07 Aug 2006 12:34:56 -0600
+--rfc-3339=TIMESPEC   output date and time in RFC 3339 format.
+TIMESPEC=`date', `seconds', or `ns' for
+date and time to the indicated precision.
+Date and time components are separated by
+a single space: 2006-08-07 12:34:56-06:00
+-s, --set=STRING          set time described by STRING
+-u, --utc, --universal    print or set Coordinated Universal Time
+--help     display this help and exit
+      --version  output version information and exit
+```
+
+## 5.2.17 Paso 17
+
+Algunas características del sistema también tienen documentos de ayuda más detallados ubicados en la estructura del directorio */usr/share/doc*. Ejecuta el siguiente comando para ver el contenido de este documento:
+
+```bash
+ls /usr/share/doc
+sysadmin@localhost:~$ ls /usr/share/doc
+adduser              libdrm2               libx11-data
+apt                  libedit2              libxau6
+ascii                libelf1               libxcb1
+base-files           libffi6               libxdmcp6
+base-passwd          libgcc1               libxext6
+bash                 libgcrypt11           libxml2
+bind9                libgdbm3              libxmuu1
+bind9-host           libgeoip1             locales
+bind9utils           libgettextpo0         login
+bsdmainutils         libglib2.0-0          logrotate
+bsdutils             libgnutls26           lsb-base
+busybox-initramfs    libgomp1              makedev
+bzip2                libgpg-error0         man-db
+ca-certificates      libgpm2               mawk
+coreutils            libgssapi-krb5-2      mc
+cpio                 libgssapi3-heimdal    mc-data
+cron                 libhcrypto4-heimdal   mime-support
+curl                 libheimbase1-heimdal  mlocate
+dash                 libheimntlm0-heimdal  module-init-tools
+```
+
+Cabe destacar que en casi todos los casos, las páginas man y páginas de información te proporcionarán la información que necesites. Sin embargo, si necesitas una información más en profundidad (algo que los administradores de sistemas a veces necesitan), entonces puedes encontrar esta información en los archivos que se encuentran en el directorio */usr/share/doc*.
+
+## 5.3 Búsqueda de archivos
+
+En esta tarea, vamos a explorar cómo buscar un archivo en el sistema. Esto resulta útil en situaciones en las que no se puede encontrar un archivo en el sistema, ya sea uno que hayas creado o uno que estuviera creado por otra persona.
+
+## 5.3.1 Paso 1
+
+Una manera fácil de buscar un archivo es utilizar el comando `locate`. Por ejemplo, se puede encontrar la ubicación del archivo *crontab* ejecutando el siguiente comando:
+
+`locate crontab`
+
+```bash
+sysadmin@localhost:~$ locate crontab
+/etc/crontab
+/usr/bin/crontab
+/usr/share/doc/cron/examples/crontab2english.pl
+/usr/share/man/man1/crontab.1.gz
+/usr/share/man/man5/crontab.5.gz
+sysadmin@localhost:~$
+```
+
+## 5.3.2 Paso 2
+
+Ten en cuenta que la salida del ejemplo anterior incluye los archivos que tienen *crontab* como parte de su nombre. Para buscar los archivos que simplemente se nombran *crontab*, utiliza el siguiente comando:
+
+`locate -b "\crontab"`
+
+```bash
+sysadmin@localhost:~$ locate -b "\crontab"
+/etc/crontab
+/usr/bin/crontab
+sysadmin@localhost:~$
+```
+
+Nota: El comando locate` hace uso de una base de datos que tradicionalmente se actualiza una vez por día (normalmente a medianoche). Esta base de datos contiene una lista de todos los archivos que estaban en el sistema cuando la base de datos fue actualizada por última vez.
+
+Como resultado, los archivos que creaste hoy normalmente no los vas a poder buscar con el comando `locate`. Si tienes acceso al sistema como usuario root (con la cuenta del administrador de sistema), puedes actualizar manualmente este archivo ejecutando el comando `updatedb`. Los usuarios regulares no pueden actualizar el archivo de base de datos.
+
+Otra posible solución a la búsqueda de archivos "nuevos" es hacer uso del comando `find`. Este comando busca en el sistema de archivos en vivo en lugar de una base de datos estática. El comando `find` no es parte de los objetivos de Linux Essentials para esta práctica de laboratorio, por lo que sólo se menciona aquí. Ejecuta `man find` si quieres explorar este comando por tu cuenta o espera hasta que llegues al laboratorio que explora el comando `find`.
+
+## 5.3.3 Paso 3
+
+Es posible que sólo quieras encontrar donde se encuentra un comando (o sus páginas man). Esto se puede lograr con el comando `whereis`:
+
+`whereis passwd`
+
+```bash
+sysadmin@localhost:~$ whereis passwd
+passwd: /usr/bin/passwd /etc/passwd /usr/share/man/man1/passwd.1.gz /usr/share/man/man1/passwd.1ssl.gz /usr/share/man/man5/passwd.5.gz
+sysadmin@localhost:~$
+```
+
+El comando `whereis sólo busca los comandos y las páginas man, no solamente cualquier archivo.
+
+Recuerda que hay más de una página man `passwd` en el sistema. Es por esto ves varios nombres del archivo y varias páginas man (los archivos que terminan en *.gz* son páginas man) cuando ejecutas el comando anterior.
+

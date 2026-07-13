@@ -2574,3 +2574,125 @@ Manual page date(1) line 18/204 24% (press h for help or q to quit)
 
 Utiliza el los comandos de movimiento descritos anteriormente (como el uso de la **barra espaciadora** para avanzar una pantalla) para leer la página del manual para el comando `date`. Cuando hayas terminado la lectura, introduce **q** para salir de la página del manual.
 
+## 5.2.7 Paso 7
+
+En algunos casos es posible que no recuerdes el nombre exacto del comando. En estos casos puedes utilizar la opción `-k` del comando `man` y proporcionar un argumento de palabra clave. Por ejemplo, ejecuta el siguiente comando para mostrar un resumen de todas las páginas del manual que tienen la palabra clave "password" ("contraseña" en español) en la descripción:
+
+`man -k password`
+```bash
+sysadmin@localhost:~$ man -k password
+chage (1)            - change user password expiry information
+chgpasswd (8)        - update group passwords in batch mode
+chpasswd (8)         - update passwords in batch mode
+cpgr (8)             - copy with locking the given file to the password or gr...
+cppw (8)             - copy with locking the given file to the password or gr...
+expiry (1)           - check and enforce password expiration policy
+login.defs (5)       - shadow password suite configuration
+pam_pwhistory (8)    - PAM module to remember last passwords
+pam_unix (8)         - Module for traditional password authentication         
+passwd (1)           - change user password
+passwd (1ssl)        - compute password hashes
+passwd (5)           - the password file
+pwck (8)             - verify integrity of password files
+pwconv (8)           - convert to and from shadow passwords and groups        
+shadow (5)           - shadowed password file
+shadowconfig (8)     - toggle shadow passwords on and off
+unix_chkpwd (8)      - Helper binary that verifies the password of the curren...
+unix_update (8)      - Helper binary that updates the password of a given user
+vipw (8)             - edit the password, group, shadow-password or shadow-gr...
+sysadmin@localhost:~$
+```
+
+La opción `-k` del comando `man` producirá a menudo una gran cantidad de salida. Aprenderás una técnica en un laboratorio más tarde para limitar bien esta salida o permitir que te puedas desplazar fácilmente a través de los datos. Por ahora, sólo tienes utiliza la barra de desplazamiento en el lado derecho de la ventana de la terminal para moverte en la pantalla hacia arriba y hacia abajo según sea necesario.
+
+## 5.2.8 Paso 8
+
+Ten en cuenta que el comando `apropos` es otra manera de ver los resúmenes de las páginas del manual con una palabra clave. Escribe el siguiente comando:
+
+`apropos password`
+```bash
+sysadmin@localhost:~$ apropos password
+chage (1)            - change user password expiry information
+chgpasswd (8)        - update group passwords in batch mode
+chpasswd (8)         - update passwords in batch mode
+cpgr (8)             - copy with locking the given file to the password or gr...
+cppw (8)             - copy with locking the given file to the password or gr...
+expiry (1)           - check and enforce password expiration policy
+login.defs (5)       - shadow password suite configuration
+pam_pwhistory (8)    - PAM module to remember last passwords
+pam_unix (8)         - Module for traditional password authentication         
+passwd (1)           - change user password
+passwd (1ssl)        - compute password hashes
+passwd (5)           - the password file
+pwck (8)             - verify integrity of password files
+pwconv (8)           - convert to and from shadow passwords and groups        
+shadow (5)           - shadowed password file
+shadowconfig (8)     - toggle shadow passwords on and off
+unix_chkpwd (8)      - Helper binary that verifies the password of the curren...
+unix_update (8)      - Helper binary that updates the password of a given user
+vipw (8)             - edit the password, group, shadow-password or shadow-gr...
+sysadmin@localhost:~$
+```
+**Nota**: No hay diferencia entre el comando `man-k` y el comando `apropos`.
+
+## 5.2.9 Paso 9
+
+A menudo hay múltiples páginas de manual con el mismo nombre. Por ejemplo, el comando anterior mostró tres páginas para *passwd*. Ejecuta el siguiente comando para acceder a las páginas del manual para la palabra *passwd*:
+
+`man -f passwd`
+```bash
+sysadmin@localhost:~$ man -f passwd
+passwd (5)           - the password file
+passwd (1)           - change user password
+passwd (1ssl)        - compute password hashes
+sysadmin@localhost:~$
+```
+
+El hecho de que haya diferentes páginas del manual para el mismo "nombre" es confuso para muchos usuarios novatos de Linux. Las páginas manual no son sólo para los comandos de Linux, sino también para los archivos del sistema y otras "características" del sistema operativo. Además, en algunos casos habrá dos comandos con el mismo nombre, como en el ejemplo proporcionado anteriormente.
+
+Las diferentes páginas man se distinguen por "secciones". Por defecto, hay nueve secciones de las páginas man:
+
+  1. Programas ejecutables o comandos del shell
+  2. Llamadas del sistema (funciones proporcionados por el kernel)
+  3. Llamadas de la librería (funciones dentro de las librerías de los programas)
+  4. Archivos especiales (generalmente se encuentran en */dev*)
+  5. Formatos de archivo y convenciones, por ejemplo */etc/passwd*
+  6. Juegos
+  7. Otros (incluyendo paquetes macro y convenciones), por ejemplo, *man(7)*>, *groff(7)*
+  8. Comandos de administración de sistema (generalmente sólo para el root)
+  9. Rutinas del kernel [No estándar]
+      
+Al escribir un comando como `man passwd`, se busca la primera sección y, si se encuentra una coincidencia, se muestra la página de man. El comando `man -f passwd` que ejecutaste anteriormente muestra que hay una página man sección 1 para passwd: *passwd (1)*. Como resultado, es la que se muestra de forma predeterminada.
+
+## 5.2.10 Paso 10
+
+Para visualizar una sección diferente de la página man, proporciona el número de la sección como el primer argumento del comando `man`. Por ejemplo, ejecuta el siguiente comando:
+
+`man 5 passwd`
+
+```bash
+PASSWD(5)                File Formats and Conversions                PASSWD(5)  
+                                                                              
+NAME
+       passwd - the password file
+                                                                              
+DESCRIPTION
+       /etc/passwd contains one line for each user account, with seven fields 
+delimited by colons (":"). These fields are:
+                                                                              
+o   login name
+                                                                              
+o   optional encrypted password
+                                                                              
+o   numerical user ID
+                                                                              
+o   numerical group ID
+                                                                              
+o   user name or comment field
+                                                                              
+o   user home directory
+                                                                              
+o   optional user command interpreter
+                                                                                
+Manual page passwd(5) line 1 (press h for help or q to quit)
+```

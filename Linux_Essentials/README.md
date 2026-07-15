@@ -2887,18 +2887,69 @@ Los conceptos básicos enseñados en este capítulo se ampliarán en los capítu
 
 Los archivos se utilizan para almacenar datos tales como texto, gráficos y programas. Los directorios (También conocidos como «carpetas») se utilizan para proporcionar una estructura de organización jerárquica. Esta estructura es algo diferente a la que puedes estar acostumbrado si previamente trabajaste en los sistemas de Microsoft Windows.
 
-En un sistema Windows, el nivel superior de la estructura de directorios se llama Este Equipo. Cada dispositivo físico (disco duro, unidad de DVD, unidad USB, unidad de red, etc.) aparece en Este Equipo, cada uno asignado a una letra de unidad como C: o D:. Una representación visual de esta estructura:
+En un sistema Windows, el *nivel superior* de la estructura de directorios se llama *Este Equipo*. Cada dispositivo físico (disco duro, unidad de DVD, unidad USB, unidad de red, etc.) aparece en Este Equipo, cada uno asignado a una letra de unidad como C: o D:. Una representación visual de esta estructura:
 
 Las estructuras de directorio que se muestran a continuación sirven solamente como ejemplos. Estos directorios pueden no estar presentes dentro del entorno de la máquina virtual de este curso.
 
-Igual que Windows, la estructura de directorios de Linux tiene un nivel superior, sin embargo no se llama Este Equipo, sino directorio raíz y su símbolo es el carácter / . También, en Linux no hay unidades; cada dispositivo físico es accesible bajo un directorio, no una letra de unidad. Una representación visual de una estructura de directorios típica de Linux:
+![my computer](images/6.3_1.png)
 
+Igual que Windows, la estructura de directorios de Linux tiene un nivel superior, sin embargo no se llama Este Equipo, sino directorio raíz y su símbolo es el carácter */*. También, en Linux no hay unidades; cada dispositivo físico es accesible bajo un directorio, no una letra de unidad. Una representación visual de una estructura de directorios típica de Linux:
+
+![/](images/6.3_2.png)
 
 La mayoría de los usuarios de Linux denominan esta estructura de directorios el sistema de archivos.
-Para ver el sistema de archivos raíz, introduce ls /:
 
+Para ver el sistema de archivos raíz, introduce `ls /`:
+
+```bash
 sysadmin@localhost:~$ ls /                                            
 bin   dev  home  lib    media  opt   root  sbin     selinux  sys  usr  
 boot  etc  init  lib64  mnt    proc  run   sbin???  srv   tmp  var
-Observa que hay muchos directorios descriptivos incluyendo /boot, que contiene los archivos para arrancar la computadora.
+```
 
+Observa que hay muchos directorios descriptivos incluyendo */boot*, que contiene los archivos para arrancar la computadora.
+
+## 6.2.1 El Directorio Path
+
+Usando el gráfico en la sección anterior como un punto de referencia, verás que hay un directorio llamado *sound* bajo el directorio llamado etc, que se encuentra bajo el directorio */*. Una manera más fácil de decir esto es refiriéndose a *la ruta*.
+
+**Para considerar:**
+
+El directorio */etc* originalmente significaba "etcetera" en la documentación temprana de Bell Labs y solía contener archivos que no pertenecían a ninguna ubicación. En las distribuciones modernas de Linux, el directorio */etc* por lo general contiene los archivos de configuración estática como lo define por el Estándar de Jerarquía de Archivos (o «FHS», del inglés «Files Hierarchy Standard»).
+
+Una ruta de acceso te permite especificar la ubicación exacta de un directorio. Para el directorio *sound* la ruta de acceso sería */etc/sound*. El primer carácter */* representa el directorio *root* (o «raíz» en español), mientras que cada siguiente carácter */* se utiliza para separar los nombres de directorio.
+
+Este tipo de ruta se llama la *ruta absoluta* (o «aboslute path» en inglés). Con una ruta absoluta, siempre proporcionas direcciones a un directorio (o un archivo) a partir de la parte superior de la estructura de directorios, el directorio *root*. Más adelante en este capítulo cubriremos un tipo diferente de la ruta llamada la ***ruta relativa*** (o «relative path» en inglés).
+
+**Nota**: Las estructuras de directorio que se muestran a continuación sirven solamente como ejemplos. Estos directorios pueden no estar presentes dentro del entorno de la máquina virtual de este curso.
+La siguiente gráfica muestra tres rutas absolutas adicionales:
+
+![gráfica muestra tres rutas absolutas adicionales](images/6.3.1_1.png)
+
+6.2.2 El Directorio Home
+El término home directory (o «directorio de inicio» en español) a menudo causa confusión a los usuarios principiantes de Linux. Para empezar, en la mayoría de las distribuciones de Linux hay un directorio llamado home bajo el directorio root: /home.
+
+Bajo de este directorio /home hay un directorio para cada usuario del sistema. El nombre del directorio será el mismo que el nombre del usuario, por lo que un usuario llamado «bob» tendría un directorio home llamado /home/bob.
+
+Tu directorio home es un directorio muy importante. Para empezar, cuando abres un shell automáticamente te ubicarás en tu directorio home, en donde harás la mayor parte de tu trabajo.
+
+Además, el directorio home es uno de los pocos directorios donde tienes el control total para crear y eliminar los archivos adicionales. La mayor parte de otros directorios en un sistema de archivos de Linux están protegidos con file permissions (o «permisos de archivos» en español), un tema que se tratará a detalle en un capítulo posterior.
+
+En la mayoría de las distribuciones de Linux, los únicos usuarios que pueden acceder a los archivos en tu directorio home eres tú y el administrador del sistema (el usuario root). Esto se puede cambiar utilizando los permisos de archivo.
+
+Tu directorio tiene incluso un símbolo especial que puedes usar para representarlo: ~. Si tu directorio home es /home/sysadmin, puedes simplemente introducir ~ en la línea de comandos en lugar de /home/sysadmin. También puedes referirte al directorio home de otro usuario usando la notación ~usuario, donde usuario es el nombre de la cuenta de usuario cuyo directorio home quieres consultar. Por ejemplo, ~bob sería igual a /home/bob. Aquí, vamos a cambiar al directorio home del usuario:
+
+sysadmin@localhost:~$ cd ~                                             
+sysadmin@localhost:~$ ls                                               
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
+Videos      
+sysadmin@localhost:~$
+Ten en cuenta que una lista revela los subdirectorios contenidos en el directorio home. Cambiar directorios requiere atención al detalle:
+
+sysadmin@localhost:~$ cd downloads                                     
+-bash: cd: downloads: No such file or directory                        
+sysadmin@localhost:~$
+¿Por qué el anterior comando resultó en un error? Eso es porque los entornos de Linux son sensibles a mayúsculas y minúsculas. Cambiarnos al directorio Downloads requiere que la ortografía sea correcta - incluyendo la letra D mayúscula:
+
+sysadmin@localhost:~$ cd Downloads                                     
+sysadmin@localhost:~/Downloads$

@@ -2926,10 +2926,11 @@ La siguiente gráfica muestra tres rutas absolutas adicionales:
 
 ![gráfica muestra tres rutas absolutas adicionales](images/6.3.1_1.png)
 
-6.2.2 El Directorio Home
-El término home directory (o «directorio de inicio» en español) a menudo causa confusión a los usuarios principiantes de Linux. Para empezar, en la mayoría de las distribuciones de Linux hay un directorio llamado home bajo el directorio root: /home.
+## 6.2.2 El Directorio Home
 
-Bajo de este directorio /home hay un directorio para cada usuario del sistema. El nombre del directorio será el mismo que el nombre del usuario, por lo que un usuario llamado «bob» tendría un directorio home llamado /home/bob.
+El término ***home directory*** (o «directorio de inicio» en español) a menudo causa confusión a los usuarios principiantes de Linux. Para empezar, en la mayoría de las distribuciones de Linux hay un directorio llamado home bajo el directorio *root: /home*.
+
+Bajo de este directorio */home* hay un directorio para cada usuario del sistema. El nombre del directorio será el mismo que el nombre del usuario, por lo que un usuario llamado «bob» tendría un directorio home llamado */home/bob*.
 
 Tu directorio home es un directorio muy importante. Para empezar, cuando abres un shell automáticamente te ubicarás en tu directorio home, en donde harás la mayor parte de tu trabajo.
 
@@ -2937,19 +2938,47 @@ Además, el directorio home es uno de los pocos directorios donde tienes el cont
 
 En la mayoría de las distribuciones de Linux, los únicos usuarios que pueden acceder a los archivos en tu directorio home eres tú y el administrador del sistema (el usuario root). Esto se puede cambiar utilizando los permisos de archivo.
 
-Tu directorio tiene incluso un símbolo especial que puedes usar para representarlo: ~. Si tu directorio home es /home/sysadmin, puedes simplemente introducir ~ en la línea de comandos en lugar de /home/sysadmin. También puedes referirte al directorio home de otro usuario usando la notación ~usuario, donde usuario es el nombre de la cuenta de usuario cuyo directorio home quieres consultar. Por ejemplo, ~bob sería igual a /home/bob. Aquí, vamos a cambiar al directorio home del usuario:
+Tu directorio tiene incluso un símbolo especial que puedes usar para representarlo: *~*. Si tu directorio home es /home/sysadmin, puedes simplemente introducir *~* en la línea de comandos en lugar de */home/sysadmin*. También puedes referirte al directorio home de otro usuario usando la notación *~usuario*, donde *usuario* es el nombre de la cuenta de usuario cuyo directorio home quieres consultar. Por ejemplo, *~bob* sería igual a */home/bob*. Aquí, vamos a cambiar al directorio home del usuario:
 
+```bash
 sysadmin@localhost:~$ cd ~                                             
 sysadmin@localhost:~$ ls                                               
 Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
 Videos      
 sysadmin@localhost:~$
+```
+
 Ten en cuenta que una lista revela los subdirectorios contenidos en el directorio home. Cambiar directorios requiere atención al detalle:
 
+```bash
 sysadmin@localhost:~$ cd downloads                                     
 -bash: cd: downloads: No such file or directory                        
 sysadmin@localhost:~$
-¿Por qué el anterior comando resultó en un error? Eso es porque los entornos de Linux son sensibles a mayúsculas y minúsculas. Cambiarnos al directorio Downloads requiere que la ortografía sea correcta - incluyendo la letra D mayúscula:
+```
 
+¿Por qué el anterior comando resultó en un error? Eso es porque los entornos de Linux son sensibles a mayúsculas y minúsculas. Cambiarnos al directorio Downloads requiere que la ortografía sea correcta *-* incluyendo la letra *D* mayúscula:
+
+```bash
 sysadmin@localhost:~$ cd Downloads                                     
 sysadmin@localhost:~/Downloads$
+```
+
+## 6.2.3 Directorio Actual
+
+Tu *directorio actual* es el directorio donde estás trabajando actualmente en una terminal. Cuando primero abres una terminal, el directorio actual debe ser tu directorio home, pero esto puede cambiar mientras vas explorando el sistema de archivos y cambias a otros directorios.
+
+Mientras estás en un entorno de línea de comandos, puedes determinar el directorio actual mediante el comando `pwd`:
+
+```bash
+sysadmin@localhost:~$ pwd                                             
+/home/sysadmin                                                         
+sysadmin@localhost:~$
+```
+
+Adicionalmente, la mayoría de los sistemas tiene el prompt que visualiza el directorio actual del usuario por defecto:
+
+`[sysadmin@localhost ~]$`
+
+En el gráfico anterior, el carácter *~* indica el directorio actual. Como se mencionó anteriormente, el carácter *~* representa el directorio home.
+
+Normalmente el sistema sólo muestra el nombre del directorio actual, no la ruta completa del directorio raíz hacia abajo. En otras palabras, si estuvieras en el directorio */usr/share/doc*, tu prompt probablemente te proporcionará solamente el nombre doc el directorio actual. Si quieres la ruta completa, utiliza el comando pwd.

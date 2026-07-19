@@ -2902,8 +2902,8 @@ La mayoría de los usuarios de Linux denominan esta estructura de directorios el
 Para ver el sistema de archivos raíz, introduce `ls /`:
 
 ```bash
-sysadmin@localhost:~$ ls /                                            
-bin   dev  home  lib    media  opt   root  sbin     selinux  sys  usr  
+sysadmin@localhost:~$ ls /
+bin   dev  home  lib    media  opt   root  sbin     selinux  sys  usr
 boot  etc  init  lib64  mnt    proc  run   sbin???  srv   tmp  var
 ```
 
@@ -2941,25 +2941,25 @@ En la mayoría de las distribuciones de Linux, los únicos usuarios que pueden a
 Tu directorio tiene incluso un símbolo especial que puedes usar para representarlo: *~*. Si tu directorio home es /home/sysadmin, puedes simplemente introducir *~* en la línea de comandos en lugar de */home/sysadmin*. También puedes referirte al directorio home de otro usuario usando la notación *~usuario*, donde *usuario* es el nombre de la cuenta de usuario cuyo directorio home quieres consultar. Por ejemplo, *~bob* sería igual a */home/bob*. Aquí, vamos a cambiar al directorio home del usuario:
 
 ```bash
-sysadmin@localhost:~$ cd ~                                             
-sysadmin@localhost:~$ ls                                               
-Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
-Videos      
+sysadmin@localhost:~$ cd ~
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates
+Videos
 sysadmin@localhost:~$
 ```
 
 Ten en cuenta que una lista revela los subdirectorios contenidos en el directorio home. Cambiar directorios requiere atención al detalle:
 
 ```bash
-sysadmin@localhost:~$ cd downloads                                     
--bash: cd: downloads: No such file or directory                        
+sysadmin@localhost:~$ cd downloads
+-bash: cd: downloads: No such file or directory
 sysadmin@localhost:~$
 ```
 
 ¿Por qué el anterior comando resultó en un error? Eso es porque los entornos de Linux son sensibles a mayúsculas y minúsculas. Cambiarnos al directorio Downloads requiere que la ortografía sea correcta *-* incluyendo la letra *D* mayúscula:
 
 ```bash
-sysadmin@localhost:~$ cd Downloads                                     
+sysadmin@localhost:~$ cd Downloads
 sysadmin@localhost:~/Downloads$
 ```
 
@@ -2970,8 +2970,8 @@ Tu *directorio actual* es el directorio donde estás trabajando actualmente en u
 Mientras estás en un entorno de línea de comandos, puedes determinar el directorio actual mediante el comando `pwd`:
 
 ```bash
-sysadmin@localhost:~$ pwd                                             
-/home/sysadmin                                                         
+sysadmin@localhost:~$ pwd 
+/home/sysadmin                      
 sysadmin@localhost:~$
 ```
 
@@ -2982,3 +2982,91 @@ Adicionalmente, la mayoría de los sistemas tiene el prompt que visualiza el dir
 En el gráfico anterior, el carácter *~* indica el directorio actual. Como se mencionó anteriormente, el carácter *~* representa el directorio home.
 
 Normalmente el sistema sólo muestra el nombre del directorio actual, no la ruta completa del directorio raíz hacia abajo. En otras palabras, si estuvieras en el directorio */usr/share/doc*, tu prompt probablemente te proporcionará solamente el nombre doc el directorio actual. Si quieres la ruta completa, utiliza el comando pwd.
+
+## 6.2.4 Cambio de Directorios
+
+Si te quieres cambiar a un directorio diferente, utiliza el comando `cd` (cambiar directorio). Por ejemplo, el siguiente comando cambiará el directorio actual a un directorio llamado */etc/sound/events*:
+
+```bash
+sysadmin@localhost:~$ cd /etc/sound/events
+sysadmin@localhost:/etc/sound/events$
+```
+
+Ten en cuenta que no vas a obtener salida si el comando `cd` tiene éxito. Este caso es uno de los de "ninguna noticia es buena noticia". Si tratas de cambiar a un directorio que no existe, recibirás un mensaje de error:
+
+```bash
+sysadmin@localhost:/etc/sound/events$ cd /etc/junk
+-bash: cd: /etc/junk: No such file or directory
+sysadmin@localhost:/etc/sound/events$
+```
+
+Si quieres volver a tu directorio home, puedes introducir el comando cd sin argumentos o usar el comando `cd` con el carácter ~ como argumento:
+
+```bash
+sysadmin@localhost:/etc/sound/events$ cd
+sysadmin@localhost:~$ pwd             
+/home/sysadmin
+sysadmin@localhost:~$ cd /etc        
+sysadmin@localhost:/etc$ cd ~       
+sysadmin@localhost:~$ pwd           
+/home/sysadmin
+sysadmin@localhost:~$
+```
+
+## 6.2.5 Nombres de Ruta Absoluta versus Relativa
+
+Hay que recordar que una ruta de acceso es esencialmente una descripción de la ubicación de un archivo o un directorio en el sistema de archivos. Una ruta de acceso también se puede entender como las direcciones que indican al sistema donde se encuentra un archivo o un directorio. Por ejemplo, el comando `cd /etc/perl/Net` significa "cambiar al directorio *Net*, que encontrarás bajo el directorio *perl*, que encontrarás bajo el directorio *etc*, que encontrarás bajo el directorio */*".
+
+Cuando des un nombre de ruta que comienza en el directorio raíz, se llamará ruta absoluta. En muchos casos, proporcionar una ruta de acceso absoluta tiene sentido. Por ejemplo, si estás en tu directorio home y quieres ir al directorio */etc/perl/Net*, entonces proporcionar una ruta de acceso absoluta al comando `cd` tiene sentido:
+
+```bash
+sysadmin@localhost:~$ cd /etc/perl/Net
+sysadmin@localhost:/etc/perl/Net$
+```
+
+Sin embargo, ¿Qué pasa si estás en el directorio */etc/perl* y quieres ir al directorio */etc/perl/Net*? Sería tedioso introducir la ruta completa para llegar a un directorio que es sólo un nivel más abajo de tu ubicación actual. En una situación como ésta, vas a utilizar una **ruta relativa**:
+
+```bash
+sysadmin@localhost:/etc/perl$ cd Net
+sysadmin@localhost:/etc/perl/Net$
+```
+
+Una ruta de acceso relativa proporciona direcciones usando tu **ubicación actual** como un punto de referencia. Recuerda que esto es diferente de las rutas absolutas, que siempre requieren que utilices el **directorio raíz** como punto de referencia.
+
+Existe una técnica útil de ruta de acceso relativa que se puede utilizar para subir un nivel en la estructura de directorios: el directorio .. . Sin importar en qué directorio estás, el comando .. siempre representa un directorio arriba que el directorio actual (con la excepción de cuando estás en el directorio /):
+
+```bash
+sysadmin@localhost:/etc/perl/Net$ pwd
+/etc/perl/Net               
+sysadmin@localhost:/etc/perl/Net$ cd ..
+sysadmin@localhost:/etc/perl$ pwd
+/etc/perl                      
+sysadmin@localhost:/etc/perl$
+```
+A veces usar las rutas de acceso relativas es una mejor opción que rutas de acceso absolutas, sin embargo esto no siempre es el caso. ¿Qué pasa si estás en el directorio */etc/perl/Net* y quieres ir al directorio */usr/share/doc*? Utilizando una ruta absoluta, se ejecutaría el comando `cd /usr/share/doc`. Utilizando una ruta relativa, se ejecutaría el comando `cd ../../../usr/share/doc`:
+
+```bash
+sysadmin@localhost:/etc/perl/Net$ cd
+sysadmin@localhost:~$ cd /etc/perl/Net
+sysadmin@localhost:/etc/perl/Net$ cd ../../../usr/share/doc
+sysadmin@localhost:/usr/share/doc$ pwd 
+/usr/share/doc                
+sysadmin@localhost:/usr/share/doc$
+```
+
+Nota: Las rutas relativas y absolutas no sólo sirven para el comando `cd`. Siempre cuando especificas un archivo o un directorio, puedes utilizar las rutas de acceso relativas o absolutas.
+
+Mientras que el doble punto (..) se utiliza para referirse al directorio arriba del directorio actual, el punto solo (.) se usa para referirse al directorio actual. No tendría sentido para un administrador moverse al directorio actual introduciendo `cd .` (aunque en realidad funciona). Es más útil referirse a un elemento en el directorio actual usando la notación `./`. Por ejemplo:
+
+```bash
+sysadmin@localhost:~$ pwd
+/home/sysadmin
+sysadmin@localhost:~$ cd ./Downloads/
+sysadmin@localhost:~/Downloads$ pwd
+/home/sysadmin/Downloads
+sysadmin@localhost:~/Downloads$ cd ..
+sysadmin@localhost:~$ pwd
+/home/sysadmin
+sysadmin@localhost:~$
+```
+Nota: Este uso del punto solo (.), como punto de referencia, no se debe confundir con su uso al principio de un nombre de archivo. Leer más sobre los archivos ocultos en la sección 6.4.2.

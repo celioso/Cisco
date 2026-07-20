@@ -3220,3 +3220,258 @@ sysadmin@localhost:~$
 ```
 
 Importante: Debes utilizar la opción `-h` junto con la opción `-l`.
+
+## 6.3.4 Lista de Directorios
+
+Cuando se utiliza el comando `ls -d`, se refiere al directorio actual y no al contenido dentro de él. Sin otras opciones, es algo sin sentido, aunque es importante tener en cuenta que al directorio actual siempre se refiere con un solo punto (.):
+
+```bash
+sysadmin@localhost:~$ ls -d    
+.
+```
+
+Para utilizar el comando `ls -d` de una manera significativa tienes que añadir la opción `-l`. En este caso, ten en cuenta que el primer comando muestra los detalles de los contenidos en el directorio */home/sysadmi*n, mientras que el segundo lista el directorio */home/sysadmin*.
+
+```bash
+sysadmin@localhost:~$ ls -l
+total 0          
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Desktop
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Documents
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Downloads
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Music
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Pictures
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Public
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Templates
+drwxr-xr-x 1 sysadmin sysadmin   0 Apr 15  2015 Videos
+drwxr-xr-x 1 sysadmin sysadmin 420 Apr 15  2015 test
+sysadmin@localhost:~$ ls -ld
+drwxr-xr-x 1 sysadmin sysadmin 224 Nov  7 17:07 .
+sysadmin@localhost:~$
+```
+Observa el punto solo al final de la segunda lista larga. Esto indica que el directorio actual está en la lista y no el contenido.
+
+## 6.3.5 Listado Recursivo
+
+Habrá momentos cuando quieras visualizar todos los archivos en un directorio, así como todos los archivos en todos los subdirectorios bajo un directorio. Esto se llama *listado recursivo*.
+
+Para realizar un listado recursivo, utiliza la opción `-R` para el comando `ls`:
+
+**Nota**: La salida que se muestra a continuación variará de los resultados que verás si ejecutas el comando en el entorno de la máquina virtual de este curso.
+
+```bash
+sysadmin@localhost:~$ ls -R /etc/ppp
+/etc/ppp:                      
+chap-secrets   ip-down.ipv6to4    ip-up.ipv6to4    ipv6-up    pap-secrets
+ip-down        ip-up              ipv6-down        options    peers
+
+/etc/ppp/peers:
+sysadmin@localhost:~$
+```
+Ten en cuenta que en el ejemplo anterior, los archivos en el directorio */etc/ppp* se listaron primero. Después de eso, se listan los archivos en el directorio */etc/ppp/peers* (no hubo ningún archivo en este caso, pero si hubiera encontrado cualquier archivo en este directorio, se habría visualizado).
+
+Ten cuidado con esta opción; por ejemplo, ejecutando el comando `ls -R /` se listarían todos los archivos del sistema de archivos, incluyendo todos los archivos de cualquier dispositivo USB y DVD en el sistema. Limita el uso de la opción `-R` para estructuras de directorio más pequeñas.
+
+## 6.3.6 Ordenar un Listado
+
+De forma predeterminada, el comando `ls` ordena los archivos alfabéticamente por nombre de archivo. A veces, puede ser útil ordenar los archivos utilizando diferentes criterios.
+
+Para ordenar los archivos por tamaño, podemos utilizar la opción `-S`. Observa la diferencia en la salida de los dos siguientes comandos:
+
+```bash
+sysadmin@localhost:~$ ls /etc/ssh                               
+moduli           ssh_host_dsa_key.pub    ssh_host_rsa_key     sshd_confi
+ssh_config        ssh_host_ecdsa_key      ssh_host_rsa_key.pub
+ssh_host_dsa_key  ssh_host_ecdsa_key.pub  ssh_import_id
+sysadmin@localhost:~$ ls -S /etc/ssh
+moduli            ssh_host_dsa_key      ssh_host_ecdsa_key
+sshd_config       ssh_host_dsa_key.pub  ssh_host_ecdsa_key.pub
+ssh_host_rsa_key  ssh_host_rsa_key.pub
+ssh_config        ssh_import_id               
+sysadmin@localhost:~$
+```
+Aparecen los mismos archivos y directorios, pero en un orden diferente. Mientras que la opción `-S` trabaja por sí misma, realmente no puedes decir que la salida está ordenada por tamaño, por lo que es más útil cuando se utiliza con la opción `-l`. El siguiente comando listará los archivos del mayor al menor y mostrará el tamaño real del archivo.
+
+```bash
+sysadmin@localhost:~$ ls -lS /etc/ssh
+total 160                    
+-rw-r--r-- 1 root root 125749 Apr 29  2014 moduli
+-rw-r--r-- 1 root root   2489 Jan 29  2015 sshd_config
+-rw------- 1 root root   1675 Jan 29  2015 ssh_host_rsa_key
+-rw-r--r-- 1 root root   1669 Apr 29  2014 ssh_config
+-rw------- 1 root root    668 Jan 29  2015 ssh_host_dsa_key
+-rw-r--r-- 1 root root    607 Jan 29  2015 ssh_host_dsa_key.pub
+-rw-r--r-- 1 root root    399 Jan 29  2015 ssh_host_rsa_key.pub
+-rw-r--r-- 1 root root    302 Jan 10  2011 ssh_import_id
+-rw------- 1 root root    227 Jan 29  2015 ssh_host_ecdsa_key
+-rw-r--r-- 1 root root    179 Jan 29  2015 ssh_host_ecdsa_key.pub
+sysadmin@localhost:~$
+```
+
+También puede ser útil usar la opción `-h` para mostrar los tamaños de los archivos de una manera legible:
+
+```bash
+sysadmin@localhost:~$ ls -lSh /etc/ssh
+total 160K            
+-rw-r--r-- 1 root root 123K Apr 29  2014 moduli
+-rw-r--r-- 1 root root 2.5K Jan 29  2015 sshd_config
+-rw------- 1 root root 1.7K Jan 29  2015 ssh_host_rsa_key
+-rw-r--r-- 1 root root 1.7K Apr 29  2014 ssh_config
+-rw------- 1 root root  668 Jan 29  2015 ssh_host_dsa_key
+-rw-r--r-- 1 root root  607 Jan 29  2015 ssh_host_dsa_key.pub
+-rw-r--r-- 1 root root  399 Jan 29  2015 ssh_host_rsa_key.pub
+-rw-r--r-- 1 root root  302 Jan 10  2011 ssh_import_id           
+-rw------- 1 root root  227 Jan 29  2015 ssh_host_ecdsa_key
+-rw-r--r-- 1 root root  179 Jan 29  2015 ssh_host_ecdsa_key.pub
+sysadmin@localhost:~$
+```
+También es posible ordenar los archivos según el momento en que se modificaron. Puedes hacer esto mediante la opción `-t`.
+
+La opción -t listará los archivos modificados más recientemente en primer lugar. Esta opción puede utilizarse sola, pero otra vez, es generalmente más útil cuando se combina con la opción `-l`:
+
+```bash
+sysadmin@localhost:~$ ls -tl /etc/ssh
+total 160                 
+-rw------- 1 root root    668 Jan 29  2015 ssh_host_dsa_key
+-rw-r--r-- 1 root root    607 Jan 29  2015 ssh_host_dsa_key.pub
+-rw------- 1 root root    227 Jan 29  2015 ssh_host_ecdsa_key
+-rw-r--r-- 1 root root    179 Jan 29  2015 ssh_host_ecdsa_key.pub
+-rw------- 1 root root   1675 Jan 29  2015 ssh_host_rsa_key
+-rw-r--r-- 1 root root    399 Jan 29  2015 ssh_host_rsa_key.pub
+-rw-r--r-- 1 root root   2489 Jan 29  2015 sshd_config
+-rw-r--r-- 1 root root 125749 Apr 29  2014 moduli
+-rw-r--r-- 1 root root   1669 Apr 29  2014 ssh_config
+-rw-r--r-- 1 root root    302 Jan 10  2011 ssh_import_id
+sysadmin@localhost:~$
+```
+
+Es importante recordar que la fecha de modificación de los directorios representa la última vez que un archivo se agrega o se elimina del directorio.
+
+Si los archivos en un directorio se modificaron hace muchos días o meses, puede ser más difícil de decir exactamente cuándo fueron modificados, ya que para los archivos más antiguos sólamente se proporciona la fecha. Para una información más detallada de la hora de modificación puedes utilizar la opción `--full time` que visualiza la fecha y la hora completas (incluyendo horas, segundos, minutos...):
+
+```bash
+sysadmin@localhost:~$ ls -t --full-time /etc/ssh
+total 160              
+-rw------- 1 root root    668 2015-01-29 03:17:33.000000000 +0000 ssh_host_dsa_key
+-rw-r--r-- 1 root root    607 2015-01-29 03:17:33.000000000 +0000 ssh_host_dsa_key.pub                           
+-rw------- 1 root root    227 2015-01-29 03:17:33.000000000 +0000 ssh_host_ecdsa_key
+-rw-r--r-- 1 root root    179 2015-01-29 03:17:33.000000000 +0000 ssh_host_ecdsa_key.pub        
+-rw------- 1 root root   1675 2015-01-29 03:17:33.000000000 +0000 ssh_host_rsa_key
+-rw-r--r-- 1 root root    399 2015-01-29 03:17:33.000000000 +0000 ssh_host_rsa_key.pub              
+-rw-r--r-- 1 root root   2489 2015-01-29 03:17:33.000000000 +0000 sshd_config
+-rw-r--r-- 1 root root 125749 2014-04-29 23:58:51.000000000 +0000 moduli-rw-r--r-- 1 root root   1669 2014-04-29 23:58:51.000000000 +0000 ssh_config
+-rw-r--r-- 1 root root    302 2011-01-10 18:48:29.000000000 +0000 ssh_import_id
+sysadmin@localhost:~$
+```
+
+La opción `--full-time` asumirá automáticamente la opción `-l`.
+
+Es posible realizar una ordenación inversa con las opciones `-S` o `-t` mediante la opción -r. El siguiente comando ordena los archivos por tamaño, de menor a mayor:
+
+```bash
+sysadmin@localhost:~$ ls -lrS /etc/ssh
+total 160                        
+-rw-r--r-- 1 root root    179 Jan 29  2015 ssh_host_ecdsa_key.pub
+-rw------- 1 root root    227 Jan 29  2015 ssh_host_ecdsa_key
+-rw-r--r-- 1 root root    302 Jan 10  2011 ssh_import_id
+-rw-r--r-- 1 root root    399 Jan 29  2015 ssh_host_rsa_key.pub
+-rw-r--r-- 1 root root    607 Jan 29  2015 ssh_host_dsa_key.pub
+-rw------- 1 root root    668 Jan 29  2015 ssh_host_dsa_key
+-rw-r--r-- 1 root root   1669 Apr 29  2014 ssh_config
+-rw------- 1 root root   1675 Jan 29  2015 ssh_host_rsa_key
+-rw-r--r-- 1 root root   2489 Jan 29  2015 sshd_config
+-rw-r--r-- 1 root root 125749 Apr 29  2014 moduli
+sysadmin@localhost:~$
+```
+
+El siguiente comando listará los archivos por fecha de modificación, de la más antigua a la más reciente:
+
+```bash
+sysadmin@localhost:~$ ls -lrt /etc/ssh
+total 160                       
+-rw-r--r-- 1 root root    302 Jan 10  2011 ssh_import_id
+-rw-r--r-- 1 root root   1669 Apr 29  2014 ssh_config
+-rw-r--r-- 1 root root 125749 Apr 29  2014 moduli
+-rw-r--r-- 1 root root   2489 Jan 29  2015 sshd_config
+-rw-r--r-- 1 root root    399 Jan 29  2015 ssh_host_rsa_key.pub
+-rw------- 1 root root   1675 Jan 29  2015 ssh_host_rsa_key
+-rw-r--r-- 1 root root    179 Jan 29  2015 ssh_host_ecdsa_key.pub 
+-rw------- 1 root root    227 Jan 29  2015 ssh_host_ecdsa_key
+-rw-r--r-- 1 root root    607 Jan 29  2015 ssh_host_dsa_key.pub
+-rw------- 1 root root    668 Jan 29  2015 ssh_host_dsa_key
+sysadmin@localhost:~$
+```
+
+## 6.3.7 Listado con Globs
+
+En un capítulo anterior, vimos el uso de los globs para los archivos para buscar coincidencias de los nombres de archivo utilizando los caracteres comodín. Por ejemplo, hemos visto que puedes listar todos los archivos en el directorio */etc* que comienzan con la letra *e* utilizando el siguiente comando:
+
+```bash
+sysadmin@localhost:~$ echo /etc/e*  
+/etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports
+sysadmin@localhost:~$
+```
+Ahora que sabes que el comando `ls` se utiliza normalmente para listar los archivos en un directorio, el uso del comando `echo` puede parecer una elección extraña. Sin embargo, hay algo sobre el comando `ls` que pudo haber causado confusión mientras hablamos sobre los globs. Esta «función» también puede causar problemas cuando intentas listar los archivos utilizando los patrones glob.
+
+Ten en cuenta que es el shell, no los comandos `echo` o `ls`, el que expande el patrón glob a los nombres de archivo correspondientes. En otras palabras, cuando introduces el comando `echo /etc/e*`, lo que el shell hizo **antes** de ejecutar el comando `echo` fue reemplazar el *e** por todos los archivos y directorios dentro del directorio */etc* que coinciden con el patrón.
+
+Por lo tanto, si ejecutaras el comando `ls /etc/e*`, lo que el shell realmente haría, sería lo siguiente:
+
+`ls /etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports`
+
+Cuando el comando `ls` ve varios argumentos, realiza una operación de listado en cada elemento por separado. En otras palabras, el comando `ls /etc/encript.cfg /etc/environment` es esencialmente igual a `ls /etc/encript.cfg; ls /etc/environment`.
+
+Ahora considera lo que sucede cuando se ejecuta el comando `ls` en un archivo, tal como *encript.cfg*:
+
+```bash
+sysadmin@localhost:~$ ls /etc/enscript.cfg
+/etc/enscript.cfg
+sysadmin@localhost:~$
+```
+
+Como puedes ver, ejecutando el comando `ls` en un solo archivo se imprime el nombre del archivo. Generalmente esto es útil si quieres ver los detalles acerca de un archivo mediante la opción `-l` del comando `ls`:
+
+```bash
+sysadmin@localhost:~$ ls -l /etc/enscript.cfg
+-r--r--r--. 1 root root 4843 Nov 11 2010 /etc/enscript.cfg
+sysadmin@localhost:~$
+```
+
+Sin embargo, ¿Qué ocurre si el comando `ls` recibe un nombre de directorio como un argumento? En este caso, la salida del comando es diferente a que si el argumento es un nombre de archivo:
+
+```bash
+sysadmin@localhost:~$ ls /etc/event.d
+ck-log-system-restart  ck-log-system-start  ck-log-system-stop
+sysadmin@localhost:~$
+```
+
+Si proporcionas un nombre de directorio como argumento del comando `ls`, el comando mostrará el contenido del directorio (los nombres de los archivos en el directorio), y no sólo proporcionará el nombre del directorio. Los nombres de los archivos, que se ven en el ejemplo anterior, son los nombres de los archivos en el directorio */etc/event.d*.
+
+¿Por qué ésto es un problema al utilizar los globs? Considera el siguiente resultado:
+
+```bash
+sysadmin@localhost:~$ ls /etc/e*
+/etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports
+/etc/event.d:
+ck-log-system-restart  ck-log-system-start  ck-log-system-stop
+sysadmin@localhost:~$
+```
+
+Como puedes ver, cuando el comando `ls` ve un nombre de archivo como argumento, sólo muestra el nombre del archivo. Sin embargo, para cualquier directorio, mostrará el contenido del directorio, y no sólo el nombre del directorio.
+
+Esto se vuelve aún más confuso en una situación como la siguiente:
+
+```bash
+sysadmin@localhost:~$ ls /etc/ev*
+ck-log-system-restart  ck-log-system-start  ck-log-system-stop
+sysadmin@localhost:~$
+```
+
+En el ejemplo anterior, parece que el comando `ls` es simplemente incorrecto. Pero lo que realmente sucedió es que lo único que coincide con el glob *etc/ev ** es el directorio */etc/event.d*. Por lo tanto, el comando `ls` muestra sólo los archivos en ese directorio.
+
+Hay una solución simple a este problema: al utilizar los argumentos glob con el comando `ls`, utiliza siempre la opción `-d`. Cuando utilizas la opción `-d`, el comando `ls` no muestra el contenido de un directorio, sino más bien el nombre del directorio:
+
+````bash
+sysadmin@localhost:~$ ls -d /etc/e*
+/etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports
+sysadmin@localhost:~$
+```

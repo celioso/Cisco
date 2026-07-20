@@ -2353,19 +2353,19 @@ El comando `whereis` está diseñado para encontrar de manera específica las p�
 Para encontrar cualquier archivo o directorio, puede utilizar el comando locate (o «localizar» en español). Este comando buscará en una base de datos de todos los archivos y directorios que estaban en el sistema cuando se creó la base de datos. Por lo general, el comando que genera tal base de datos se ejecuta por la noche.
 
 ```bash
-sysadmin@localhost:~$ locate gshadow                                   
-/etc/gshadow                                                           
-/etc/gshadow-                                                          
-/usr/include/gshadow.h                                                
-/usr/share/man/cs/man5/gshadow.5.gz                                   
-/usr/share/man/da/man5/gshadow.5.gz                                    
-/usr/share/man/de/man5/gshadow.5.gz                                    
-/usr/share/man/fr/man5/gshadow.5.gz                                    
-/usr/share/man/it/man5/gshadow.5.gz                                    
-/usr/share/man/man5/gshadow.5.gz                                       
-/usr/share/man/ru/man5/gshadow.5.gz                                   
-/usr/share/man/sv/man5/gshadow.5.gz                                    
-/usr/share/man/zh_CN/man5/gshadow.5.gz                                 
+sysadmin@localhost:~$ locate gshadow 
+/etc/gshadow
+/etc/gshadow- 
+/usr/include/gshadow.h 
+/usr/share/man/cs/man5/gshadow.5.gz
+/usr/share/man/da/man5/gshadow.5.gz
+/usr/share/man/de/man5/gshadow.5.gz
+/usr/share/man/fr/man5/gshadow.5.gz
+/usr/share/man/it/man5/gshadow.5.gz
+/usr/share/man/man5/gshadow.5.gz 
+/usr/share/man/ru/man5/gshadow.5.gz 
+/usr/share/man/sv/man5/gshadow.5.gz
+/usr/share/man/zh_CN/man5/gshadow.5.gz
 sysadmin@localhost:~$
 ```
 
@@ -2398,12 +2398,12 @@ Como puedes ver en la salida anterior, todavía habrá muchos resultados cuando 
 
 ```bash
 sysadmin@localhost:~$ locate -b "\passwd"
-/etc/passwd      
-/etc/cron.daily/passwd    
-/etc/pam.d/passwd                                
-/usr/bin/passwd        
-/usr/share/doc/passwd  
-/usr/share/lintian/overrides/passwd 
+/etc/passwd 
+/etc/cron.daily/passwd
+/etc/pam.d/passwd    
+/usr/bin/passwd
+/usr/share/doc/passwd
+/usr/share/lintian/overrides/passwd
 sysadmin@localhost:~$
 ```
 
@@ -2453,7 +2453,7 @@ DATE(1)                          User Commands                              DATE
 
 NAME
 date - print or set the system date and time
-                                                                              
+
 SINOPSIS
 date [OPTION]... [+FORMAT]
 date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
@@ -2500,8 +2500,7 @@ SUMMARY OF LESS COMMANDS
                                                
     Commands marked with * may be preceded by a number, N.     
 Notes in parentheses indicate the behavior if N is given.
-    A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.      
-                                                                  
+    A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.
 h  H                 Display this help.
 q  :q  Q  :Q  ZZ     Exit.
  -----------------------------------------------------------------------
@@ -2546,26 +2545,26 @@ Observa que el texto que coincida con el de la búsqueda será resaltado. Puedes
 ```bash
 -f, --file=DATEFILE
 like --date once for each line of DATEFILE
-                                                                                
+
 -r, --reference=FILE
 display the last modification time of FILE
-                                                                                
+
 -R, --rfc-2822
 output  date  and time in RFC 2822 format.  Example: Mon, 07 Aug
 2006 12:34:56 -0600
-                                                                                
+
 --rfc-3339=TIMESPEC
 output date and time in RFC 3339 format.  TIMESPEC=`date', `sec-
 onds',  or  `ns'  for  date and time to the indicated precision.
 Date and time  components  are  separated  by  a  single  space:
 2006-08-07 12:34:56-06:00
-                                                                                
+
 -s, --set=STRING
 set time described by STRING
-                                                                                
+
 -u, --utc, --universal
 print or set Coordinated Universal Time
-                                                                                
+
 --help display this help and exit
 Manual page date(1) line 18/204 24% (press h for help or q to quit)
 ```
@@ -2672,28 +2671,28 @@ Para visualizar una sección diferente de la página man, proporciona el número
 
 ```bash
 PASSWD(5)                File Formats and Conversions                PASSWD(5)  
-                                                                              
+
 NAME
        passwd - the password file
-                                                                              
+
 DESCRIPTION
        /etc/passwd contains one line for each user account, with seven fields 
 delimited by colons (":"). These fields are:
-                                                                              
+
 o   login name
-                                                                              
+
 o   optional encrypted password
-                                                                              
+
 o   numerical user ID
-                                                                              
+
 o   numerical group ID
-                                                                              
+
 o   user name or comment field
-                                                                              
+
 o   user home directory
-                                                                              
+
 o   optional user command interpreter
-                                                                                
+
 Manual page passwd(5) line 1 (press h for help or q to quit)
 ```
 
@@ -2722,21 +2721,21 @@ em context
                                                                               
 21.1 `date': Print or set system date and time
 ==============================================
-                                                                              
+
 Synopses:
-                                                                              
+
      date [OPTION]... [+FORMAT]
      date [-u|--utc|--universal] [ MMDDhhmm[[CC]YY][.ss] ]
-                                                                              
+
    Invoking `date' with no FORMAT argument is equivalent to invoking it       
 with a default format that depends on the `LC_TIME' locale category.
 In the default C locale, this format is `'+%a %b %e %H:%M:%S %Z %Y'',         
 so the output looks like `Thu Mar  3 13:47:51 PST 2005'.
-                                                                              
+
    Normally, `date' uses the time zone rules indicated by the `TZ'
 environment variable, or the system default rules if `TZ' is not set.
 *Note Specifying the Time Zone with `TZ': (libc)TZ Variable.
-                                                                              
+
    If given an argument that starts with a `+', `date' prints the
 current date and time (or the date and time specified by the `--date'
 --zz-Info: (coreutils.info.gz)date invocation, 41 lines --Top-------------------
@@ -2768,7 +2767,7 @@ sysadmin@localhost:~$ date --help
 Usage: date [OPTION]... [+FORMAT]
 or:  date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
 Display the current time in the given FORMAT, or set the system date.         
-                                                                              
+
   -d, --date=STRING         display time described by STRING, not `now'       
   -f, --file=DATEFILE       like --date once for each line of DATEFILE        
   -r, --reference=FILE      display the last modification time of FILE        
@@ -3470,8 +3469,365 @@ En el ejemplo anterior, parece que el comando `ls` es simplemente incorrecto. Pe
 
 Hay una solución simple a este problema: al utilizar los argumentos glob con el comando `ls`, utiliza siempre la opción `-d`. Cuando utilizas la opción `-d`, el comando `ls` no muestra el contenido de un directorio, sino más bien el nombre del directorio:
 
-````bash
+```bash
 sysadmin@localhost:~$ ls -d /etc/e*
 /etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports
 sysadmin@localhost:~$
 ```
+
+## 6.3.7 Listado con Globs
+
+En un capítulo anterior, vimos el uso de los globs para los archivos para buscar coincidencias de los nombres de archivo utilizando los caracteres comodín. Por ejemplo, hemos visto que puedes listar todos los archivos en el directorio /etc que comienzan con la letra e utilizando el siguiente comando:
+
+```bash
+sysadmin@localhost:~$ echo /etc/e*
+/etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports
+sysadmin@localhost:~$
+```
+
+Ahora que sabes que el comando `ls` se utiliza normalmente para listar los archivos en un directorio, el uso del comando `echo` puede parecer una elección extraña. Sin embargo, hay algo sobre el comando `ls` que pudo haber causado confusión mientras hablamos sobre los globs. Esta «función» también puede causar problemas cuando intentas listar los archivos utilizando los patrones glob.
+
+Ten en cuenta que es el shell, no los comandos `echo` o `ls`, el que expande el patrón glob a los nombres de archivo correspondientes. En otras palabras, cuando introduces el comando `echo /etc/e*`, lo que el shell hizo antes de ejecutar el comando `echo` fue reemplazar el *e** por todos los archivos y directorios dentro del directorio */etc* que coinciden con el patrón.
+
+Por lo tanto, si ejecutaras el comando `ls /etc/e*`, lo que el shell realmente haría, sería lo siguiente:
+
+`ls /etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports`
+
+Cuando el comando `ls` ve varios argumentos, realiza una operación de listado en cada elemento por separado. En otras palabras, el comando `ls /etc/encript.cfg /etc/environment` es esencialmente igual a `ls /etc/encript.cfg; ls /etc/environment`.
+
+Ahora considera lo que sucede cuando se ejecuta el comando `ls` en un archivo, tal como *encript.cfg*:
+
+```bash
+sysadmin@localhost:~$ ls /etc/enscript.cfg
+/etc/enscript.cfg        
+sysadmin@localhost:~$
+```
+
+Como puedes ver, ejecutando el comando `ls` en un solo archivo se imprime el nombre del archivo. Generalmente esto es útil si quieres ver los detalles acerca de un archivo mediante la opción `-l` del comando `ls`:
+
+```bash
+sysadmin@localhost:~$ ls -l /etc/enscript.cfg
+-r--r--r--. 1 root root 4843 Nov 11 2010 /etc/enscript.cfg      
+sysadmin@localhost:~$
+```
+
+Sin embargo, ¿Qué ocurre si el comando `ls` recibe un nombre de directorio como un argumento? En este caso, la salida del comando es diferente a que si el argumento es un nombre de archivo:
+
+```bash
+sysadmin@localhost:~$ ls /etc/event.d
+ck-log-system-restart  ck-log-system-start  ck-log-system-stop
+sysadmin@localhost:~$
+```
+
+Si proporcionas un nombre de directorio como argumento del comando `ls`, el comando mostrará el contenido del directorio (los nombres de los archivos en el directorio), y no sólo proporcionará el nombre del directorio. Los nombres de los archivos, que se ven en el ejemplo anterior, son los nombres de los archivos en el directorio */etc/event.d*.
+
+¿Por qué ésto es un problema al utilizar los globs? Considera el siguiente resultado:
+
+```bash
+sysadmin@localhost:~$ ls /etc/e*
+/etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports
+/etc/event.d:
+ck-log-system-restart  ck-log-system-start  ck-log-system-stop
+sysadmin@localhost:~$
+```
+
+Como puedes ver, cuando el comando `ls` ve un nombre de archivo como argumento, sólo muestra el nombre del archivo. Sin embargo, para cualquier directorio, mostrará el contenido del directorio, y no sólo el nombre del directorio.
+
+Esto se vuelve aún más confuso en una situación como la siguiente:
+
+```bash
+sysadmin@localhost:~$ ls /etc/ev*
+ck-log-system-restart  ck-log-system-start  ck-log-system-stop
+sysadmin@localhost:~$
+```
+
+En el ejemplo anterior, parece que el comando `ls` es simplemente incorrecto. Pero lo que realmente sucedió es que lo único que coincide con el glob *etc/ev ** es el directorio */etc/event.d*. Por lo tanto, el comando `ls` muestra sólo los archivos en ese directorio.
+
+Hay una solución simple a este problema: al utilizar los argumentos glob con el comando `ls`, utiliza siempre la opción `-d`. Cuando utilizas la opción `-d`, el comando ls no muestra el contenido de un directorio, sino más bien el nombre del directorio:
+
+```bash
+sysadmin@localhost:~$ ls -d /etc/e*
+/etc/encript.cfg /etc/environment /etc/ethers /etc/event.d /etc/exports
+sysadmin@localhost:~$
+```
+
+## 6.4 Copiar los Archivos
+
+El comando `cp` se utiliza para copiar los archivos. Requiere especificar un origen y un destino. La estructura del comando es la siguiente:
+
+`cp [fuente] [destino]`
+
+La *fuente* («source» en inglés) es el archivo que quieres copiar. El *destino* («destination» en inglés) es la ubicación en donde quieres poner la copia. Cuando el comando es exitoso, el comando `cp` no tendrá ninguna salida (ninguna noticia es buena noticia). El siguiente comando copiará el archivo */etc/hosts* a tu directorio home:
+
+```bash
+sysadmin@localhost:~$ cp /etc/hosts ~
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  hosts
+Documents  Music      Public    Videos
+sysadmin@localhost:~$
+```
+
+**Recuerda**: El carácter `~` representa el directorio home.
+
+## 6.4.1 El Modo Verbose
+
+La opción `-v` hará que el comando `cp` produzca la salida en caso de ser exitoso. La opción `-v` se refiere al comando verbose:
+
+```bash
+sysadmin@localhost:~$ cp -v /etc/hosts ~
+`/etc/hosts' -> `/home/sysadmin/hosts'
+sysadmin@localhost:~$
+```
+Cuando el destino es un directorio, el nuevo archivo resultante tendrá el mismo nombre que el archivo original. Si quieres que el nuevo archivo tenga un nombre diferente, debes proporcionar el nuevo nombre como parte del destino:
+
+```bash
+sysadmin@localhost:~$ cp /etc/hosts ~/hosts.copy
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  hosts
+Documents  Music      Public    Videos     hosts.copy
+sysadmin@localhost:~$
+```
+
+## 6.4.2 Evitar Sobrescribir los Datos
+
+El comando `cp` puede ser destructivo para los datos si el archivo de destino ya existe. En el caso donde el archivo de destino existe, el comando `cp` sobreescribe el contenido del archivo existente con el contenido del archivo fuente. Para ilustrar este problema, primero se crea un nuevo archivo en el directorio home *sysadmin* copiando un archivo existente:
+
+```bash
+sysadmin@localhost:~$ cp /etc/skel/.bash_logout ~/example.txt 
+sysadmin@localhost:~$
+```
+
+Visualiza la salida del comando `ls` para ver el archivo y visualiza el contenido del archivo utilizando el comando more:
+
+```bash
+sysadmin@localhost:~$ cp /etc/skel/.bash_logout ~/example.txt
+sysadmin@localhost:~$ ls -l example.txt
+-rw-rw-r--. 1 sysadmin sysadmin 18 Sep 21 15:56 example.txt
+sysadmin@localhost:~$ more example.txt
+# ~/.bash_logout: executed by bash(1) when login shell exits.
+
+sysadmin@localhost:~$ cp -i /etc/hosts ~/example.txt
+cp: overwrite `/home/sysadmin/example.txt'? n
+sysadmin@localhost:~$ ls -l example.txt
+-rw-rw-r--. 1 sysadmin sysadmin 18 Sep 21 15:56 example.txt
+sysadmin@localhost:~$ more example.txt
+# ~/.bash_logout: executed by bash(1) when login shell exits.
+
+sysadmin@localhost:~$
+```
+
+En el siguiente ejemplo verás que el comando `cp` destruye el contenido original del archivo *ejemplo.txt*. Observa que una vez finalizado el comando `cp`, el tamaño del archivo es diferente (158 bytes en lugar de 18) del original y los contenido también son diferentes:
+
+```bash
+sysadmin@localhost:~$ cp /etc/hosts ~/example.txt
+sysadmin@localhost:~$ ls -l example.txt
+-rw-rw-r--. 1 sysadmin sysadmin 158 Sep 21 14:11 example.txt
+sysadmin@localhost:~$ cat example.txt
+127.0.0.1  localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1        localhost localhost.localdomain localhost6 localhost6.localdomain6
+sysadmin@localhost:~$
+```
+
+Hay dos opciones que pueden utilizarse para asegurarnos contra sobreescrituras accidentales de los archivos. Con la opción `-i` (interactivo), el comando `cp` emitirá un prompt antes de sobrescribir un archivo. En el siguiente ejemplo demostrará esta opción, primero restaurando el contenido del archivo original:
+
+```bash
+sysadmin@localhost:~$ cp /etc/skel/.bash_logout ~/example.txt
+sysadmin@localhost:~$ ls -l example.txt
+-rw-r--r-- 1 sysadmin sysadmin 18 Sep 21 15:56 example.txt
+sysadmin@localhost:~$ more example.txt
+# ~/.bash_logout: executed by bash(1) when login shell exits.
+
+sysadmin@localhost:~$ cp -i /etc/hosts ~/example.txt
+cp: overwrite `/home/sysadmin/example.txt'? n
+sysadmin@localhost:~$ ls -l example.txt
+-rw-r--r-- 1 sysadmin sysadmin 18 Sep  21 15:56 example.txt
+sysadmin@localhost:~$ more example.txt
+# ~/.bash_logout: executed by bash(1) when login shell exits.
+
+sysadmin@localhost:~$
+```
+
+Observa que puesto que el valor de *n* (no) se dió al emitir un prompt de sobrescritura del archivo, no se hicieron cambios en el archivo. Si se da un valor de *y* (sí), entonces resultará en un proceso de copiado.
+
+La opción `-i` requiere respuesta *y* o *n* para cada copia que podría sobrescribir el contenido de un archivo existente. Esto puede ser tedioso cuando se sobrescribe un grupo, como se muestra en el siguiente ejemplo:
+
+```bash
+sysadmin@localhost:~$ cp -i /etc/skel/.* ~
+cp: omitting directory `/etc/skel/.'
+cp: omitting directory `/etc/skel/..'
+cp: overwrite `/home/sysadmin/.bash_logout'? n
+cp: overwrite `/home/sysadmin/.bashrc'? n
+cp: overwrite `/home/sysadmin/.profile'? n
+cp: overwrite `/home/sysadmin/.selected_editor'? n
+sysadmin@localhost:~$
+```
+Como puedes ver en el ejemplo anterior, el comando `cp` intentó sobrescribir los cuatro archivos existentes, obligando al usuario a responder a tres prompts. Si esta situación ocurriera para 100 archivos, puede resultar muy molesto rápidamente.
+
+Si quieres contestar automáticamente *n* para cada prompt, utiliza la opción `-n`. En esencia, significa «sin sobreescribir».
+
+## 6.4.3 Copiar los Directorios
+
+En un ejemplo anterior se dieron mensajes de error cuando el comando `cp` intentó copiar los directorios:
+
+```bash
+sysadmin@localhost:~$ cp -i /etc/skel/.* ~
+cp: omitting directory `/etc/skel/.'
+cp: omitting directory `/etc/skel/..'
+cp: overwrite `/home/sysadmin/.bash_logout'? n
+cp: overwrite `/home/sysadmin/.bashrc'? n
+cp: overwrite `/home/sysadmin/.profile'? n
+cp: overwrite `/home/sysadmin/.selected_editor'? n
+sysadmin@localhost:~$
+```
+Donde la salida dice *...omitting directory...* (o «omitiendo directorio» en español), el comando `cp` está diciendo que no puede copiar este artículo porque el comando no copia los directorios por defecto. Sin embargo, la opción `-r` del comando `cp` copiará ambos, los archivos y los directorios.
+
+Ten cuidado con esta opción: se copiará la estructura completa del directorio. ¡Esto podría resultar en copiar muchos archivos y directorios!
+
+## 6.5 Mover los Archivos
+
+Para mover un archivo, utiliza el comando `mv`. La sintaxis del comando `mv` es muy parecida al comando `cp`:
+
+`mv [fuente] [destino]`
+
+En el ejemplo siguiente, el archivo *hosts* que se generó anteriormente se mueve desde el directorio actual al directorio *Videos*:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  example.txt  hosts.copy
+Documents  Music      Public    Videos     hosts
+sysadmin@localhost:~$ mv hosts Videos
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  example.txt
+Documents  Music      Public    Videos     hosts.copy
+sysadmin@localhost:~$ ls Videos  
+hosts
+sysadmin@localhost:~$
+```
+Cuando se mueve un archivo, el archivo se elimina de la ubicación original y se coloca en una ubicación nueva. Esto puede ser algo complicado en Linux porque los usuarios necesitan permisos específicos para quitar archivos de un directorio. Si no tienes los permisos correctos, recibirás un mensaje de error «*Permission denied*» (o «Permiso denegado» en español):
+
+```bash
+sysadmin@localhost:~$ mv /etc/hosts .
+mv: cannot move `/etc/hosts' to `./hosts': Permission denied
+sysadmin@localhost:~$
+```
+
+En un capítulo posterior se ofrece una descripción detallada de los permisos.
+
+## 6.6 Mover los Archivos Mientras se Cambia el Nombre
+
+Si el destino del comando `mv` es un directorio, el archivo se moverá al directorio especificado. El nombre del archivo cambiará sólo si también se especifica un nombre de archivo destino.
+
+Si no se especifica un directorio destino, el archivo será renombrado con el nombre de archivo destino y permanece en el directorio origen.
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  example.txt
+Documents  Music      Public    Videos
+sysadmin@localhost:~$ mv example.txt Videos/newexample.txt
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates
+Documents  Music      Public    Videos
+sysadmin@localhost:~$ ls Videos
+hosts  newexample.txt
+sysadmin@localhost:~$
+```
+
+## 6.6.1 Renombrar los Archivos
+
+El comando `mv` no sólo se utiliza para mover un archivo, sino también cambiar el nombre de un archivo. Por ejemplo, los siguientes comandos cambiarán el nombre del archivo *newexample.txt* a *myexample.txt*:
+
+```bash
+sysadmin@localhost:~$ cd Videos
+sysadmin@localhost:~/Videos$ ls
+hosts  newexample.txt
+sysadmin@localhost:~/Videos$ mv newexample.txt myexample.txt
+sysadmin@localhost:~/Videos$ ls
+hosts  myexample.txt
+sysadmin@localhost:~/Videos$
+```
+
+Piensa en el ejemplo anterior del `mv` que significa «mover el archivo *newexample.txt* desde el directorio actual de regreso al directorio actual y denominar el nuevo archivo como *myexample.txt*».
+
+## 6.6.2 Opciones Adicionales del mv
+
+Igual al comando `cp`, el comando mv proporciona las siguientes opciones:
+
+| Opción | Significado |
+|---|---|
+| -i | Movimiento interactivo: pregunta si un archivo debe sobrescribirse. |
+| -n | No sobrescribir el contenido de los archivos de destino |
+| -v | Verbose: muestra el movimiento resultante |
+
+**Importante**: Aquí no hay ninguna opción `-r`, ya que el comando `mv` moverá los directorios de forma predeterminada.
+
+6.7 Crear Archivos
+Hay varias maneras de crear un nuevo archivo, incluyendo el uso de un programa diseñado para editar un archivo (un editor de texto). En un capítulo posterior, se cubrirán los editores de texto.
+
+También existe una manera de simplemente crear un archivo que puede rellenarse con datos en un momento posterior. Esto es útil puesto que por algunas características del sistema operativo, la existencia de un archivo podría alterar la forma de funcionamiento de un comando o de un servicio. También es útil crear un archivo como un «indicador» («placeholder» en inglés) para recordarte que debes crear el contenido del archivo en un momento posterior.
+
+Para crear un archivo vacío, utiliza el comando *touch* (o «tocar» en español) como se muestra a continuación:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
+Videos
+sysadmin@localhost:~$ touch sample
+sysadmin@localhost:~$ ls -l sample
+-rw-rw-r-- 1 sysadmin sysadmin 0 Nov  9 16:48 sample
+sysadmin@localhost:~$
+```
+
+Fíjate que el tamaño del archivo nuevo es 0 bytes. Como ya se mencionó anteriormente, el comando `touch` no añade ningún dato en al archivo nuevo.
+
+## 6.8 Eliminar los Archivos
+
+Para borrar un archivo, utiliza el comando de `rm`:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  sample
+Documents  Music      Public    Videos
+sysadmin@localhost:~$ rm sample
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
+Videos
+sysadmin@localhost:~$
+```
+Ten en cuenta que el archivo fue borrado sin hacer preguntas. Esto podría causar problemas al borrar varios archivos usando los caracteres glob, por ejemplo: `rm *.txt`. Ya que estos archivos son borrados sin proporcionar una pregunta, un usuario podría llegar a borrar archivos que no quería eliminar.
+
+Además, los archivos se eliminan permanentemente. No hay ningún comando para recuperar un archivo y no hay «papelera de reciclaje» («trash can» en inglés) desde la que puedas recuperar los archivos eliminados. Como precaución, los usuarios deben utilizar la opción `-i` al eliminar varios archivos:
+
+```bash
+sysadmin@localhost:~$ touch sample.txt example.txt test.txt
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  example.txt  test.txt
+Documents  Music      Public    Videos     sample.txt
+sysadmin@localhost:~$ rm -i *.txt
+rm: remove regular empty file `example.txt'? y
+rm: remove regular empty file `sample.txt'? n
+rm: remove regular empty file `test.txt'? y
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  sample.txt
+Documents  Music      Public    Videos
+sysadmin@localhost:~$
+```
+
+6.9 Eliminar los Directorios
+Puedes borrar los directorios con el comando rm. Sin embargo, si utilizas el comando rm por defecto (sin opciones), éste no eliminará un directorio:
+
+sysadmin@localhost:~$ rm Videos                                        
+rm: cannot remove `Videos': Is a directory                            
+sysadmin@localhost:~$
+Si quieres eliminar un directorio, utiliza la opción -r con el comando rm:
+
+sysadmin@localhost:~$ ls                                               
+Desktop    Downloads  Pictures  Templates  sample.txt                  
+Documents  Music      Public    Videos                                 
+sysadmin@localhost:~$ rm -r Videos                                     
+sysadmin@localhost:~$ ls                                               
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates 
+sample.txt 
+sysadmin@localhost:~$
+Importante: Cuando un usuario elimina un directorio, todos los archivos y subdirectorios se eliminan sin proporcionar pregunta interactiva. Lo mejor es utilizar la opción -i con el comando rm.
+También puedes borrar un directorio con el comando rmdir, pero sólo si el directorio está vacío.
+

@@ -3070,3 +3070,153 @@ sysadmin@localhost:~$ pwd
 sysadmin@localhost:~$
 ```
 Nota: Este uso del punto solo (.), como punto de referencia, no se debe confundir con su uso al principio de un nombre de archivo. Leer más sobre los archivos ocultos en la sección 6.4.2.
+
+## 6.3 Listado de los Archivos en un Directorio
+
+Ahora que te puedes mover de un directorio a otro, querrás visualizar el contenido de estos directorios. El comando `ls` (`ls` es la abreviatura para listar) puede utilizarse para mostrar el contenido de un directorio, así como toda la información sobre los archivos que están dentro de un directorio.
+
+Por sí mismo, el comando `ls` listará los archivos en el directorio actual:
+
+```bash
+sysadmin@localhost:~$ ls     
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
+Videos      
+sysadmin@localhost:~$
+```
+
+## 6.3.1 Lista de Colores
+
+Hay muchos tipos de archivos en Linux. Según vayas aprendiendo más sobre Linux, descubrirás muchos de estos tipos. A continuación tenemos un breve resumen de algunos de los tipos de archivo más comunes:
+
+| Tipo | Descripción |
+|---|---|
+| plain file (o «archivo simple» en español) | Un archivo que no es un tipo de archivo especial; también se llama un archivo normal |
+| directory (o «directorio» en español) | Un directorio de archivos (contiene otros archivos) |
+| executable (o «ejecutable» en español) | Un archivo que se puede ejecutar como un programa |
+| symbolic link | Un archivo que apunta a otro archivo (o «enlace simbólico» en español) |
+
+En muchas distribuciones de Linux, las cuentas de usuario regulares son modificadas de tal manera que el comando `ls` muestre los nombres de archivo, codificados por colores según el tipo de archivo. Por ejemplo, los directorios pueden aparecer en azul, archivos ejecutables pueden verse en verde, y enlaces simbólicos pueden ser visualizados en cian (azul claro).
+
+Esto no es un comportamiento normal para el comando `ls`, sino algo que sucede cuando se utiliza la opción `--color` para el comando `ls`. La razón por la que el comando `ls` parece realizar automáticamente estos colores, es que hay un alias para el comando ls para que se ejecute con la opción `--color`:
+
+```bash
+sysadmin@localhost:~$ alias     
+alias egrep='egrep --color=auto'             
+alias fgrep='fgrep --color=auto'         
+alias grep='grep --color=auto'        
+alias l='ls -CF'                                                    
+alias la='ls -A'              
+alias ll='ls -alF'
+alias ls='ls --color=auto'
+sysadmin@localhost:~$
+```
+
+Como puedes ver en la salida anterior, cuando se ejecuta el comando `ls`, en realidad se ejecuta el comando `ls --color=auto`.
+
+En algunos casos, puede que no quieras ver todos los colores (a veces te pueden distraer un poco). Para evitar el uso de los alias, coloca un carácter de barra invertida *\* antes de tu comando:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
+Videos       
+sysadmin@localhost:~$ \ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
+Videos       
+sysadmin@localhost:~$
+```
+
+## 6.3.2 Lista de los Archivos Ocultos
+
+Cuando utilizas el comando `ls` para mostrar el contenido de un directorio, no todos los archivos se muestran automáticamente. El comando `ls` no muestra los *archivos ocultos* de manera predeterminada. Un archivo oculto es cualquier archivo (o directorio) que comienza con un punto `.`.
+
+Para mostrar todos los archivos, incluyendo los archivos ocultos, utiliza la opción `-a` para el comando `ls`:
+
+```bash
+sysadmin@localhost:~$ ls -a                                            
+.             .bashrc   .selected_editor  Downloads  Public           
+..            .cache    Desktop           Music      Templates         
+.bash_logout  .profile  Documents         Pictures   Videos
+```
+
+¿Por qué los archivos están ocultos en primer lugar? La mayoría de los archivos ocultos son ***archivos de personalización***, diseñados para personalizar la forma en la que Linux, el shell o los programas funcionan. Por ejemplo, el archivo `.bashrc` en tu directorio home personaliza las características del shell, tales como la creación o modificación de las variables y los alias.
+
+Estos archivos de personalización no son con los que regularmente trabajas. Hay muchos de ellos, como puedes ver, y visualizarlos hará más difícil encontrar los archivos con los que regularmente trabajas. Así que, el hecho de que están ocultos es para tu beneficio.
+
+## 6.3.3 Listado con Visualización Larga
+
+Existe información sobre cada archivo, llamada metadata (o «metadatos» en español), y visualizarla a veces resulta útil. Esto puede incluir datos de quién es el dueño de un archivo, el tamaño de un archivo y la última vez que se modificó el contenido de un archivo. Puedes visualizar esta información mediante el uso de la opción `-l` para el comando `ls`:
+
+```bash
+sysadmin@localhost:~$ ls -l
+total 0                
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Desktop
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Documents
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Downloads
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Music
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Pictures
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Public
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Templates
+drwxr-xr-x 1 sysadmin sysadmin 0 Jan 29  2015 Videos
+sysadmin@localhost:~$
+```
+
+En la salida anterior, cada línea describe metadatos sobre un solo archivo. A continuación se describe cada uno de los campos de datos que verás en la salida del comando `ls -l`:
+
+![Tipo de archivo](images/6.4.3_2.png)
+
+«**Tipo de archivo**. El primer carácter de cada línea de salida indica el tipo de archivo. Tipos de archivo comunes incluyen: d= directorio, -= archivo simple, l= enlace simbólico»
+
+![Permisos](images/6.4.3_3.png)
+
+«**Permisos**. Los próximos diez caracteres demostrarán los permisos del archivo. Los permisos se utilizan para determinar quién tiene acceso al archivo. Esto será cubierto a detalle en un capítulo posterior.»
+
+![Conteo de enlaces físicos.](images/6.4.3_4.png)
+
+«**Conteo de enlaces físicos**. El conteo de enlaces físicos de un archivo se usa para demostrar cuantos enlaces físicos hacia este archivo existen. Los enlaces son más que nada un tema de administrador por lo que no son cubiertos en este curso.»
+
+
+![Usuario propietario](images/6.4.3_5.png)
+
+«**Usuario propietario**. Cada archivo es propiedad de una cuenta de usuario. Esto es importante porque el propietario tiene los derechos para establecer permisos en un archivo y el propietario tiene sus propios permisos en el archivo. Los permisos se cubrirán a detalle en un capítulo posterior.»
+
+![Grupo propietario](images/6.4.3_6.png)
+
+«**Grupo propietario**. Cada archivo es propiedad de un grupo. Esto es importante porque cualquier miembro de este grupo tendrá acceso especial al archivo basado en los permisos de grupo del archivo. Los permisos se cubrirán a detalle en un capítulo posterior.»
+
+![Tamaño de archivo](images/6.4.3_7.png)
+
+«**Tamaño de archivo**. Este campo describe el tamaño de un archivo en bytes. Nota: En el caso de los directorios, este valor no describe el tamaño total del directorio, más bien, cuántos bytes están reservados para mantenerse al corriente con los nombres de archivo en el directorio (en otras palabras, ignora este campo en los directorios).»
+
+![Hora de modificación](images/linux_643_redo.png)
+
+«**Hora de modificación**. Este campo indica la última hora en la que el contenido del archivo fue modificado. En el caso de los directorios, indica la última vez que se agregó o eliminó un archivo dentro del directorio.»
+
+![Nombre](images/6.4.3_9.png)
+
+«**Nombre**. El último campo es el nombre del archivo o directorio.»
+
+## 6.3.3.1 Tamaños Legibles
+
+Cuando visualizas los tamaños de los archivos con la opción `-l` del comando `ls` obtienes los tamaños de los archivo en bytes. Para archivos de texto, un byte es 1 carácter.
+
+Para archivos más pequeños, los tamaños en byte están bien. Sin embargo, para los archivos más grandes es difícil comprender qué tan grande es el archivo. Por ejemplo, considera la salida del siguiente comando:
+
+```bash
+sysadmin@localhost:~$ ls -l /usr/bin/omshell                                 
+-rwxr-xr-c 1 root root 1561400 Oct 9 2012 /usr/bin/omshell              
+sysadmin@localhost:~$
+```
+
+Como puedes ver, es difícil de determinar el tamaño del archivo en bytes. ¿Un archivo 1561400 es grande o pequeño? Parece bastante grande, pero es difícil de determinar su tamaño utilizando los bytes.
+
+Piénsalo de esta manera: si alguien diera la distancia entre Boston y Nueva York utilizando centímetros, ese valor esencialmente no tendría sentido porque una distancia como ésta la piensas en términos de kilómetros.
+
+Sería mejor si el tamaño del archivo fuese presentado en un tamaño más fácilmente legible, tal como megabytes o gigabytes. Para lograr esto, añade la opción `-h` al comando `ls`:
+
+```bash
+sysadmin@localhost:~$ ls -lh /usr/bin/omshell                                 
+-rwxr-xr-c 1 root root 1.5M Oct 9 2012 /usr/bin/omshell              
+sysadmin@localhost:~$
+```
+
+Importante: Debes utilizar la opción `-h` junto con la opción `-l`.

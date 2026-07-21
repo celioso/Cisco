@@ -3812,22 +3812,653 @@ Documents  Music      Public    Videos
 sysadmin@localhost:~$
 ```
 
-6.9 Eliminar los Directorios
-Puedes borrar los directorios con el comando rm. Sin embargo, si utilizas el comando rm por defecto (sin opciones), éste no eliminará un directorio:
+## 6.9 Eliminar los Directorios
 
-sysadmin@localhost:~$ rm Videos                                        
-rm: cannot remove `Videos': Is a directory                            
+Puedes borrar los directorios con el comando `rm`. Sin embargo, si utilizas el comando `rm` por defecto (sin opciones), éste no eliminará un directorio:
+
+```bash
+sysadmin@localhost:~$ rm Videos
+rm: cannot remove `Videos': Is a directory
 sysadmin@localhost:~$
-Si quieres eliminar un directorio, utiliza la opción -r con el comando rm:
+```
 
-sysadmin@localhost:~$ ls                                               
-Desktop    Downloads  Pictures  Templates  sample.txt                  
-Documents  Music      Public    Videos                                 
-sysadmin@localhost:~$ rm -r Videos                                     
-sysadmin@localhost:~$ ls                                               
+Si quieres eliminar un directorio, utiliza la opción `-r` con el comando `rm`:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  sample.txt
+Documents  Music      Public    Videos
+sysadmin@localhost:~$ rm -r Videos
+sysadmin@localhost:~$ ls
 Desktop  Documents  Downloads  Music  Pictures  Public  Templates 
 sample.txt 
 sysadmin@localhost:~$
-Importante: Cuando un usuario elimina un directorio, todos los archivos y subdirectorios se eliminan sin proporcionar pregunta interactiva. Lo mejor es utilizar la opción -i con el comando rm.
-También puedes borrar un directorio con el comando rmdir, pero sólo si el directorio está vacío.
+```
 
+**Importante**: Cuando un usuario elimina un directorio, todos los archivos y subdirectorios se eliminan sin proporcionar pregunta interactiva. Lo mejor es utilizar la opción `-i` con el comando `rm`.
+
+También puedes borrar un directorio con el comando `rmdir`, pero sólo si el directorio está vacío.
+
+## 6.10 Crear Directorios
+
+Para crear un directorio, utiliza el comando `mkdir`:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  
+sample.txt
+sysadmin@localhost:~$ mkdir test
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates   test
+Documents  Music      Public    sample.txt
+sysadmin@localhost:~$
+```
+
+# Práctica 06
+
+## 6.1 Introducción
+
+Este es Lab 6: El listado de los Archivos y Directorios. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán a navegar en y gestionar los archivos y los directorios.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+    1. Listar los Archivos y los Directorios
+    2. Copiar, mover y eliminar los archivos y los directorios
+
+## 6.2 Los Archivos y los Directorios
+
+En esta tarea explorarás los conceptos de los archivos y directorios.
+
+En un sistema operativo Linux, los datos se almacenan en los *archivos* y los archivos se almacenan en los d*irectorios*. Puede que estés acostumbrado al *término carpetas* para referirte a los directorios.
+
+En realidad, los directorios son archivos también; los datos que contienen son los nombres de los archivos que han sido introducidos en ellos, junto con el número de inode (un número identificador único asignado a cada archivo) para saber dónde existen los datos de ese archivo en el disco.
+
+Como un usuario de Linux, tendrás que saber cómo manipular estos archivos y directorios, incluyendo cómo listar los archivos en un directorio, copiar, borrar y mover los archivos.
+
+ **Advertencia**: Los nombres de los archivos y directorios en Linux distinguen entre mayúsculas y minúsculas. Esto significa que un archivo nombrado *ABC* no es lo mismo que un archivo llamado *abc*.
+
+## 6.2.1 Paso 1
+
+Escribe el siguiente comando para imprimir el directorio *de trabajo*:
+
+`pwd`
+
+```bash
+sysadmin@localhost:~$ pwd
+/home/sysadmin
+sysadmin@localhost:~$
+```
+El *directorio de trabajo* es el directorio "en" el que la ventana de la terminal se encuentra actualmente. Esto también se llama el directorio actual. Esto será importante para cuando estés ejecutando los comandos futuros, ya que se comportan de manera diferente dependiendo en cuál directorio te encuentras.
+
+La salida del comando `pwd` (*/home/sysadmin* en el ejemplo anterior) se llama path(«ruta» en español). La primera barra representa el directorio raíz, el nivel superior de la estructura de directorios.
+
+En la salida anterior, *home* es un directorio bajo el directorio raíz y *sysadmin* es un directorio bajo el directorio *home*.
+
+Cuando abres una ventana de la terminal por primera vez, estas ubicado en tu directorio home. A este directorio tienes acceso completo y otros usuarios normalmente no tienen ese acceso por defecto. Para ver la ruta de acceso al directorio home, puedes ejecutar el siguiente comando para ver el valor de la variable *HOME*:
+
+`echo $HOME`
+
+```bash
+sysadmin@localhost:~$ echo $HOME
+/home/sysadmin
+sysadmin@localhost:~$
+```
+
+## 6.2.2 Paso 2
+
+Puedes utilizar el comando `cd` con el *path* a un directorio para cambiar el directorio actual. Escribe el siguiente comando para que el directorio raíz sea tu directorio de trabajo actual y verificarlo con el comando `pwd`:
+
+```bash
+cd /
+pwd
+```
+```bash
+sysadmin@localhost:~$ cd /
+sysadmin@localhost:/$ pwd
+/
+sysadmin@localhost:/$
+```
+
+## 6.2.3 Paso 3
+
+Para regresar a tu directorio home, el comando cd se puede ejecutar sin una ruta. Regresa a tu directorio home y verifica escribiendo los siguientes comandos:
+
+```bash
+cd
+pwd
+```
+
+```bash
+sysadmin@localhost:/$ cd
+sysadmin@localhost:~$ pwd
+/home/sysadmin
+sysadmin@localhost:~$
+```
+
+Observa el cambio en el *prompt*. El tilde `~` representa el directorio home. Esta parte del prompt te dirá en qué directorio te encuentras actualmente.
+
+## 6.2.4 Paso 4
+
+El comando `cd` puede ser introducido con una ruta de acceso a un directorio especificado como un *argumento*. Ejecuta el comando `cd` con el directorio */home* como argumento escribiendo lo siguiente:
+
+```bash
+cd /home
+pwd
+```
+```bash
+sysadmin@localhost:~$ cd /home
+sysadmin@localhost:/home$ pwd
+/home
+sysadmin@localhost:/home$
+```
+Cuando la ruta que se proporciona como un argumento al comando `cd` inicia con la barra diagonal `/`, se conoce como una «ruta absoluta». Las rutas absolutas son siempre las rutas completas desde el directorio raíz hasta un sub-directorio o archivo.
+
+## 6.2.6 Paso 6
+
+Utiliza el siguiente comando `echo` para visualizar algunos otros ejemplos del uso del tilde como parte de la ruta:
+`echo  ~ ~sysadmin ~root ~mail ~nobody`
+
+```bash
+sysadmin@localhost:~$ echo ~ ~sysadmin ~root ~mail ~nobody
+/home/sysadmin /home/sysadmin /root /var/mail /nonexistent
+sysadmin@localhost:~$
+```
+
+## 6.2.7 Paso 7
+
+Intenta cambiar al directorio home del usuario root escribiendo el siguiente comando:
+
+`cd ~root`
+
+```bash
+sysadmin@localhost:~$ cd ~root
+-bash: cd: /root: Permission denied
+sysadmin@localhost:~$
+```
+
+Observa el mensaje de error; éste indica que el shell ha intentado ejecutar `cd` con */root* como un argumento y fracasó debido al permiso denegado. Aprenderás más acerca de los archivos y permisos de directorio en otro laboratorio más adelante.
+
+## 6.2.8 Paso 8
+
+Usando una ruta absoluta, pasa al directorio /usr/bin y visualiza el directorio de trabajo mediante el uso de los siguientes comandos:
+
+```bash
+cd /usr/bin
+pwd
+```
+```bash
+sysadmin@localhost:~$ cd /usr/bin
+sysadmin@localhost:/usr/bin$ pwd
+/usr/bin
+sysadmin@localhost:/usr/bin$
+```
+
+## 6.2.9 Paso 9
+
+Utiliza una ruta absoluta para cambiar al directorio */usr* y visualiza el directorio de trabajo utilizando de los siguientes comandos:
+
+```bash
+cd /usr
+pwd
+```
+```bash
+sysadmin@localhost:/usr/bin$ cd /usr
+sysadmin@localhost:/usr$ pwd
+/usr
+sysadmin@localhost:/usr$
+```
+
+## 6.2.10 Paso 10
+
+Utiliza una ruta absoluta para cambiar al directorio */usr/share/doc* y visualiza el directorio de trabajo utilizando de los siguientes comandos:
+
+```bash
+cd /usr/share/doc
+pwd
+```
+```bash
+sysadmin@localhost:/usr$ cd /usr/share/doc
+sysadmin@localhost:/usr/share/doc$ pwd
+/usr/share/doc
+sysadmin@localhost:/usr/share/doc$
+```
+
+**Nombres de Ruta Absoluta versus Rutas Relativas**
+
+Supón que estás en el directorio */usr/share/doc*  y quieres ir al directorio */usr/share/doc/bash*. Escribir el comando `cd /usr/share/doc/bash` es una tarea bastante laboriosa. En estos casos puedes utilizar los nombres de rutas relativas.
+
+Con las rutas relativas proporcionas las «direcciones» hacia las cuáles te quieres ir desde tu directorio actual. Los siguientes ejemplos ilustrarán el uso de las rutas relativas.
+
+## 6.2.11 Paso 11
+
+Utiliza una ruta relativa para cambiar al directorio */usr/share/doc/bash* y visualiza el directorio de trabajo utilizando de los siguientes comandos:
+
+```bash
+cd bash
+pwd
+```
+```bash
+sysadmin@localhost:/usr/share/doc$ cd bash
+sysadmin@localhost:/usr/share/doc/bash$ pwd
+/usr/share/doc/bash
+sysadmin@localhost:/usr/share/doc/bash$
+```
+**Nota**: Si no hubiera un directorio bash en el directorio actual, el comando anterior fallaría.
+
+## 6.2.12 Paso 12
+
+Utiliza una ruta relativa para cambiar al directorio por encima del directorio actual:
+
+```bash
+cd ..
+pwd
+```
+```bash
+sysadmin@localhost:/usr/share/doc/bash$ cd ..
+sysadmin@localhost:/usr/share/doc$ pwd
+/usr/share/doc
+sysadmin@localhost:/usr/share/doc$
+```
+Los .. representan un nivel por encima de la ubicación de tu directorio actual.
+
+## 6.2.13 Paso 13
+
+Utiliza una ruta relativa para cambiar a un nivel hacia arriba desde el directorio actual y luego hacia abajo al directorio *dict*:
+
+```bash
+cd ../dict
+pwd
+```
+```bash
+sysadmin@localhost:/usr/share/doc$ cd ../dict
+sysadmin@localhost:/usr/share/dict$ pwd
+/usr/share/dict
+sysadmin@localhost:/usr/share/dict$
+```
+
+## 6.3 El listado de los Archivos y Directorios
+
+En esta tarea explorarás cómo listar los archivos y directorios.
+
+## 6.3.1 Paso 1
+
+Para listar los contenidos del directorio actual, utiliza el comando `ls`:
+
+```bash
+cd
+ls
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/usr/share/dict$ cd
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos     
+sysadmin@localhost:~$
+```
+
+En la salida del comando `ls` anterior, los nombres de los archivo se colocaron en un color azul claro. Esta es una característica que muchas distribuciones de Linux proporcionan de forma automática a través de una característica llamada  *alias* (más sobre esta característica en un laboratorio posterior).
+
+El color indica el tipo de elemento. En la siguiente tabla se describen algunos de los colores más comunes:
+
+| Color | Tipo de Archivo |
+|---|---|
+| Negro o blanco | Archivo regular |
+| Azul | Archivo de directorio |
+| Cian | Archivo de enlace simbólico (un archivo que apunta a otro archivo) |
+| Verde | Archivo ejecutable (un programa) |
+
+## 6.3.2 Paso 2
+
+No todos los archivos se muestran por defecto. Hay archivos, llamados archivos ocultos, que no se muestran de forma predeterminada. Para mostrar todos los archivos, incluyendo los archivos ocultos, utiliza la opción `-a` para el comando `ls`:
+
+`ls -a`
+
+```bash
+sysadmin@localhost:~$ ls -a
+.             .bashrc   .selected_editor  Downloads  Public
+..            .cache    Desktop           Music      Templates
+.bash_logout  .profile  Documents         Pictures   Videos
+sysadmin@localhost:~$
+```
+
+Los archivos ocultos comienzan con un punto (un carácter de punto). Normalmente, estos archivos y directorios a menudo están ocultos porque no son archivos que normalmente quieres ver.
+
+Por ejemplo, el archivo *.bashrc*  que se muestra en el ejemplo anterior contiene la información de configuración para el `bash` shell. Es un archivo que normalmente no necesitas ver.
+
+En todos los directorios existen dos «dot files» ( «archivos de punto» en español) importantes: . (representa el directorio actual) y .. (representa el directorio por encima del directorio actual).
+
+## 6.3.3 Paso 3
+
+Por sí mismo, el comando `ls` solamente proporcionó los nombres de los archivos y directorios dentro del directorio especificado (o actual). Ejecuta el siguiente comando para ver cómo la opción `-l` proporciona más información acerca de un archivo:
+
+`ls -l /etc/hosts`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls -l /etc/hosts
+-rw-r--r-- 1 root root 150 Jan 22 15:18 /etc/hosts
+sysadmin@localhost:~$
+```
+
+Por lo tanto, ¿qué significa todo esto acerca de la salida adicional? La siguiente tabla ofrece un desglose breve de lo que cada parte de la salida de `ls -l` significa:
+|||
+|--|--|
+| - | El primer carácter, un - en el ejemplo anterior, indica el tipo de "archivo". El carácter - se usa para un archivo simple, mientras que una d se utiliza para un directorio. |
+| rw-r--r-- | Representa los permisos del archivo. Los permisos se analizan en un laboratorio posterior. |
+| 1 | Representa lo que se denomina un recuento de vínculo físico (explicado más adelante). |
+| root | El usuario propietario del archivo. |
+| root | El grupo propietario del archivo. |
+| 150 | El tamaño del archivo en bytes. |
+| Jan 22 15:18 | La fecha/hora en que la el archivo fue modificado por última vez. |
+
+## 6.3.4 Paso 4
+
+A veces no sólo quiere ver el contenido de un directorio, sino también el contenido de los subdirectorios. Para este fin puedes utilizar la opción `-R`:
+
+`ls -R /etc/udev`
+
+```bash
+sysadmin@localhost:~$ ls -R /etc/udev
+/etc/udev:
+rules.d  udev.conf
+
+/etc/udev/rules.d:
+70-persistent-cd.rules  README
+sysadmin@localhost:~$
+```
+
+La opción `-R` significa «recursivo». Se mostrarán todos los archivos del directorio */etc/udev*, así como todos los archivos en cada subdirectorio, en este caso el subdirectorio *rules.d*.
+
+Ten cuidado con la opción `-R`. ¡Algunos directorios son muy, muy grandes!
+
+## 6.3.5 Paso 5
+
+Puedes utilizar globbing en archivos (comodines) para limitar los archivos o directorios que veas. Por ejemplo, el carácter *  puede igualar "cero o más caracteres" en un nombre de archivo. Ejecuta el siguiente comando para mostrar sólo los archivos que comienzan con la letra *s* en el directorio */etc*:
+
+`ls -d /etc/s*`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls -d /etc/s*
+/etc/securetty  /etc/sgml     /etc/shells  /etc/ssl        /etc/sysctl.conf
+/etc/security   /etc/shadow   /etc/skel    /etc/sudoers    /etc/sysctl.d
+/etc/services   /etc/shadow-  /etc/ssh     /etc/sudoers.d  /etc/systemd
+sysadmin@localhost:~$
+```
+Ten en cuenta que la opción `-d` evita que los archivos de los subdirectorios se muestren. Siempre se debe utilizar con el comando `ls` cuando utilizas el globbing en archivos.
+
+## 6.3.6 Paso 6
+
+El carácter *?* se puede utilizar para coincidir exactamente con 1 carácter en un nombre de archivo. Ejecuta el siguiente comando para mostrar todos los archivos del directorio */etc* que tienen exactamente cuatro caracteres:
+
+`ls -d /etc/????`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls -d /etc/????
+/etc/bind  /etc/init  /etc/motd  /etc/perl  /etc/skel
+/etc/dpkg  /etc/ldap  /etc/mtab  /etc/sgml  /etc/udev
+sysadmin@localhost:~$
+```
+
+## 6.3.7 Paso 7
+
+Utilizando los corchetes *[ ]* puedes especificar un solo carácter para coincidir a partir de un conjunto de caracteres. Ejecuta el siguiente comando para mostrar todos los archivos en el directorio */etc*  que comienzan con las letras *a, b, c o d*:
+
+`ls –d /etc/[abcd]*`
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls -d /etc/[abcd]*
+/etc/adduser.conf            /etc/blkid.conf            /etc/cron.weekly
+/etc/adjtime                 /etc/blkid.tab             /etc/crontab
+/etc/alternatives            /etc/ca-certificates       /etc/dbus-1
+/etc/apparmor.d              /etc/ca-certificates.conf  /etc/debconf.conf
+/etc/apt                     /etc/calendar              /etc/debian_version
+/etc/bash.bashrc             /etc/cron.d                /etc/default
+/etc/bash_completion.d       /etc/cron.daily            /etc/deluser.conf
+/etc/bind                    /etc/cron.hourly           /etc/depmod.d
+/etc/bindresvport.blacklist  /etc/cron.monthly          /etc/dpkg
+sysadmin@localhost:~$
+```
+
+## 6.4 Copiar, Mover y Renombrar los Archivos y Directorios
+
+En esta tarea, vas a copiar, mover y eliminar los archivos y directorios.
+
+## 6.4.1 Paso 1
+
+Haz una copia del archivo /etc/hosts  y colócalo en el directorio actual. Ahora lista los contenidos del directorio actual antes y después de realizar la copia:
+
+```bash
+ls
+cp /etc/hosts hosts
+ls
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+sysadmin@localhost:~$ cp /etc/hosts hosts
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  hosts
+Documents  Music      Public    Videos
+sysadmin@localhost:~$
+```
+
+Observa cómo el segundo comando `ls` visualiza una copia del archivo *hosts*.
+
+## 6.4.2 Paso 2
+
+A continuación vas a eliminar el archivo, y luego copiarlo de nuevo, pero haz que el sistema te diga lo que se está haciendo. Lo puedes lograr usando la opción `-v` o `--verbose` . Introduce los siguientes comandos:
+
+```bash
+rm hosts
+ls
+cp –v /etc/hosts hosts
+ls
+```
+
+Ten en cuenta que el comando `rm` se utiliza para borrar un archivo. Más información sobre este comando se proporciona más adelante en este laboratorio.
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ rm hosts 
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+sysadmin@localhost:~$ cp -v /etc/hosts hosts
+`/etc/hosts' -> `hosts'
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  hosts
+Documents  Music      Public    Videos
+sysadmin@localhost:~$
+```
+
+Ten en cuenta el modificador `-v` muestra el origen y el destino al ejecutar el comando `cp`.
+
+## 6.4.3 Paso 3
+
+Introduce los siguientes comandos para copiar el archivo /etc/hosts utilizando el punto .  para indicar el directorio actual como destino:
+
+```bash
+rm hosts
+ls
+cp –v /etc/hosts .
+ls
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ rm hosts 
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos   
+sysadmin@localhost:~$ cp -v /etc/hosts .
+`/etc/hosts' -> `hosts'
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  hosts
+Documents  Music      Public    Videos
+sysadmin@localhost:~$
+```
+
+El punto .  es un carácter útil para decir "el directorio actual". Se puede utilizar con todos los comandos de Linux, no sólo el comando `cp`.
+
+## 6.4.4 Paso 4
+
+Introduce los siguientes comandos para copiar desde el directorio de origen y preservar los atributos del archivo utilizando la opción `-p`:
+
+```bash
+rm hosts
+ls
+cd /etc
+ls -l hosts
+cp –p hosts /home/sysadmin
+cd
+ls –l hosts
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ rm hosts
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+sysadmin@localhost:~$ cd /etc
+sysadmin@localhost:/etc$ ls -l hosts
+-rw-r--r-- 1 root root 150 Jan 22 15:18 hosts
+sysadmin@localhost:/etc$ cp -p hosts /home/sysadmin
+sysadmin@localhost:/etc$ cd
+sysadmin@localhost:~$ ls -l hosts
+-rw-r--r-- 1 sysadmin sysadmin 150 Jan 22 15:18 hosts
+sysadmin@localhost:~$
+```
+
+Observa que los modos de fecha y permisos quedaron preservados. Ten en cuenta que la fecha y hora en la salida anterior son las mismas tanto para el archivo original y como la copia (*Jan 22 15:18*) en el ejemplo proporcionado anteriormente. Tu resultado puede ser distinto.
+
+## 6.4.5 Paso 5
+
+Introduce los siguientes comandos para copiar utilizando un nombre de destino diferente:
+
+```bash
+rm  hosts				
+cp -p /etc/hosts ~			
+cp hosts newname			
+ls –l hosts newname
+rm hosts newname
+```
+```bash
+sysadmin@localhost:~$ rm hosts 
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+sysadmin@localhost:~$ cp -p /etc/hosts ~
+sysadmin@localhost:~$ cp hosts newname
+sysadmin@localhost:~$ ls -l hosts newname
+-rw-r--r-- 1 sysadmin sysadmin 150 Jan 22 15:18 hosts
+-rw-r--r-- 1 sysadmin sysadmin 150 Jan 22 16:29 newname
+sysadmin@localhost:~$ rm hosts newname
+sysadmin@localhost:~$
+```
+La primera copia con la opción `-p` conserva la fecha y la hora originales. Recuerda que el tilde ~ representa el directorio home (*/home/sysadmin*).
+
+
+La segunda copia especifica un nombre de archivo diferente (*newname*) como destino. Debido a que esta copia fue emitida sin la opción `-p`, el sistema utiliza la fecha y hora actuales para el destino, por lo tanto, no se conservó la hora y fecha original del archivo de origen */etc/hosts*.
+
+Por último, ten en cuenta que puedes eliminar más de un archivo a la vez, como se muestra en el último comando `rm`.
+
+## 6.4.6 Paso 6
+
+Para copiar todos los archivos en un directorio utiliza la opción `-R`. Para esta tarea, copiarás el directorio */etc/udev*  y mostrarás el contenido del directorio copiado:
+
+```bash
+mkdir Myetc
+cp –R /etc/udev Myetc
+ls –l Myetc
+ls –lR Myetc
+```
+```bash
+sysadmin@localhost:~$ mkdir Myetc
+sysadmin@localhost:~$ cp -R /etc/udev Myetc
+sysadmin@localhost:~$ ls -l Myetc
+total 0
+drwxr-xr-x 1 sysadmin sysadmin 32 Jan 22 16:35 udev
+sysadmin@localhost:~$ ls -lR Myetc
+Myetc:
+total 0
+drwxr-xr-x 1 sysadmin sysadmin 32 Jan 22 16:35 udev
+
+Myetc/udev:
+total 4
+drwxr-xr-x 1 sysadmin sysadmin  56 Jan 22 16:35 rules.d
+-rw-r--r-- 1 sysadmin sysadmin 218 Jan 22 16:35 udev.conf
+
+Myetc/udev/rules.d:
+total 8
+-rw-r--r-- 1 sysadmin sysadmin  306 Jan 22 16:35 70-persistent-cd.rules
+-rw-r--r-- 1 sysadmin sysadmin 1157 Jan 22 16:35 README
+sysadmin@localhost:~$
+```
+
+## 6.4.7 Paso 7
+
+Para eliminar un directorio utiliza la opción -r con el comando rm:
+
+```bash
+ls
+rm -r Myetc
+ls
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Myetc     Public     Videos
+Documents  Music      Pictures  Templates
+sysadmin@localhost:~$ rm -r Myetc
+sysadmin@localhost:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+sysadmin@localhost:~$
+```
+Ten en cuenta que el comando `rmdir` también se puede utilizar para eliminar los directorios, pero sólo si el directorio está vacío (si no contiene archivos).
+
+También ten en cuenta la opción `-r`. Esta opción elimina los directorios y sus contenidos de forma recursiva.
+
+## 6.4.8 Paso 8
+
+Mover un archivo es análogo a un «cortar y pegar». El archivo se «corta» (retira) de la ubicación original y «pega» al destino especificado. Mueve un archivo en el directorio local mediante la ejecución de los siguientes comandos:
+
+```bash
+touch premove
+ls
+mv premove postmove
+ls
+rm postmove
+```
+| Comando Linux | Descripción |
+|---|---|
+| `touch premove` | Crea un archivo vacío llamado premove |
+| `mv premove postmove` | Este comando "corta" el archivo premove y lo "pega" a un archivo llamado postmove |
+| `rm postmove` | Elimina el archivo postmove |
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ touch premove
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  premove
+Documents  Music      Public    Videos
+sysadmin@localhost:~$ mv premove postmove
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  postmove
+Documents  Music      Public    Videos
+sysadmin@localhost:~$
+```

@@ -4661,3 +4661,152 @@ logs/access_log
 El ejemplo anterior muestra el mismo archivo que antes, pero extrayendo solamente el archivo *logs/access_log*. La salida del comando (ya se solicitó el modo detallado con la bandera `v`) muestra que sólo un archivo se ha extraído.
 
 El `tar` tiene muchas más funciones, como la capacidad de utilizar los patrones al extraer los archivos, excluir ciertos archivos o mostrar los archivos extraídos en la pantalla en lugar de un disco. La documentación para el `tar` contiene información a profundidad.
+
+## 7.4 Archivos ZIP
+
+De hecho, la utilidad del empaquetamiento de archivos en el mundo de Microsoft es el archivo ZIP. No es tan frecuente en Linux pero también es compatible con los comandos `zip` y `unzip`. Con el `tar` y `gzip`/`gunzip` se pueden utilizar los mismos comandos y las mismas opciones para hacer la creación y extracción, pero éste no es el caso del `zip`. La misma opción tiene diferentes significados para los estos dos diferentes comandos.
+
+El modo predeterminado del `zip` es añadir documentos a un archivo y comprimir.
+
+```bash
+bob:tmp $ zip logs.zip logs/*
+  adding: logs/access_log (deflated 93%)
+  adding: logs/access_log.1 (deflated 62%)
+  adding: logs/access_log.2 (deflated 88%)
+  adding: logs/access_log.3 (deflated 73%)
+  adding: logs/access_log.4 (deflated 72%)
+```
+
+El primer argumento en el ejemplo anterior es el nombre del archivo sobre el cual se trabajará, en este caso es el *logs.zip*. Después de eso, hay que añadir una lista de archivos a ser agregados. La salida muestra los archivos y la relación de compresión. Debes notar que el `tar` requiere la opción `–f` para indicar que se está pasando un nombre de archivo, mientras que el `zip` y `unzip` requiere un nombre de archivo, por lo tanto no tienes que decir explícitamente que se está pasando un nombre de archivo.
+
+`Zip` no se efectuará de manera recursiva hacia los subdirectorios por defecto, lo que es un comportamiento diferente del `tar`. Es decir, simplemente añadiendo logs en vez de logs/* sólo añadirá un directorio vacío y no los archivos dentro de él. Si quieres que `zip` se comporte de manera parecida, debes utilizar el comando `–r` para indicar que se debe usar la recursividad:
+
+```bash
+bob:tmp $ zip -r logs.zip logs
+  adding: logs/ (stored 0%)
+  adding: logs/access_log.3 (deflated 73%)
+  adding: logs/access_log.1 (deflated 62%)
+  adding: logs/access_log.4 (deflated 72%)
+  adding: logs/access_log (deflated 93%)
+  adding: logs/access_log.2 (deflated 88%)
+```
+
+En el ejemplo anterior, se añaden todos los archivos bajo el directorio *logs* ya que utiliza la opción `–r`. La primera línea de la salida indica que un directorio se agregó al archivo, pero de lo contrario la salida es similar al ejemplo anterior.
+
+El listado de los archivos en el `zip` se realiza por el comando `unzip` y la opción `–l` (listar):
+
+```bash
+bob:tmp $ unzip -l logs.zip
+Archive:  logs.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+        0  10-14-2013 14:07   logs/
+     1136  10-14-2013 14:07   logs/access_log.3
+      362  10-14-2013 14:07   logs/access_log.1
+      784  10-14-2013 14:07   logs/access_log.4
+    90703  10-14-2013 14:07   logs/access_log
+   153813  10-14-2013 14:07   logs/access_log.2
+---------                     -------
+   246798                     6 files
+```
+
+Extraer los archivos es como crear el archivo, ya que la operación predeterminada es extraer:
+
+```bash
+bob:tmp $ unzip logs.zip
+Archive:  logs.zip
+   creating: logs/
+  inflating: logs/access_log.3
+  inflating: logs/access_log.1
+  inflating: logs/access_log.4
+  inflating: logs/access_log
+  inflating: logs/access_log.2
+```
+
+Aquí, extraemos todos los documentos del archivo empaquetado al directorio actual. Al igual que el `tar`, puedes pasar los nombres de archivos a la línea de comandos:
+
+```bash
+bob:tmp $ unzip logs.zip access_log
+Archive:  logs.zip
+caution: filename not matched:  access_log
+bob:tmp $ unzip logs.zip logs/access_log
+Archive:  logs.zip
+  inflating: logs/access_log
+bob:tmp $ unzip logs.zip logs/access_log.*
+Archive:  logs.zip
+  inflating: logs/access_log.3
+  inflating: logs/access_log.1
+  inflating: logs/access_log.4
+  inflating: logs/access_log.2
+```
+
+El ejemplo anterior muestra tres diferentes intentos para extraer un archivo. En primer lugar, se pasa sólo el nombre del archivo sin el componente del directorio. Al igual que con el `tar`, el archivo no coincide.
+
+El segundo intento pasa el componente del directorio junto con el nombre del archivo, que extrae solo ese archivo.
+
+La tercera versión utiliza un comodín, que extrae los 4 archivos que coinciden con el patrón, al igual que el `tar`.
+
+Las páginas man del `zip` y `unzip` describen las otras cosas que puedes hacer con estas herramientas, tales como reemplazar los archivos dentro del archivo empaquetado, utilizar los diferentes niveles de compresión o incluso el cifrado.
+
+# Práctica 7
+
+## 7.1 Introducción
+
+Este es Lab 7: Empaquetamiento y desempaquetamiento de los archivos. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán cómo trabajar con los archivos empaquetados.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+1. Crear los archivos empaquetados usando tar con y sin compresión
+2. Comprimir y descomprimir los archivos en un archivo empaquetado comprimido con gzip
+3. Comprimir y descomprimir los archivos en un archivo empaquetado en bzip2
+3. Utilizar zip y unzip para comprimir y descomprimir los archivos empaquetados
+
+## 7.2 Comandos de empaquetamiento
+
+En esta tarea, utilizaremos `gzip`, `bzip2`, `tar` y `zip`/`unzip` para empaquetar y restaurar los archivos. Estos comandos están diseñados para combinar varios archivos en un único archivo o comprimir un archivo grande en uno más pequeño. En algunos casos, los comandos tendrán ambas funciones.
+
+La tarea de empaquetamiento de los datos es importante por varias razones, incluyendo pero no limitado a lo siguiente:
+
+    a. Los archivos grandes pueden ser difíciles de transferir. Haciendo estos archivos más pequeños ayuda a hacer la transferencia más rápida.
+    b. La transferencia de múltiples archivos de un sistema a otro puede llegar a ser tedioso cuando hay muchos archivos. Su fusión en un único archivo para la transferencia hace que este proceso sea más fácil.
+    c. Los archivos pueden ocupar rápidamente una gran cantidad de espacio, especialmente en un medio extraíble como memorias USB más pequeñas. El empaquetamiento reduce este problema.
+
+Un área potencial de confusión que un usuario principiante de Linux puede experimentar se deriva de la siguiente pregunta: ¿Por qué hay tantos comandos diferentes de empaquetamiento? La respuesta es que estos comandos tienen diferentes características (por ejemplo, algunos de ellos permiten proteger el archivo empaquetado con una contraseña) y técnicas de compresión utilizadas.
+
+Lo más importante que debe saber por ahora es cómo funcionan estos diferentes comandos. Con el tiempo, aprenderás a seleccionar la herramienta de empaquetamiento correcta para cualquier situación.
+
+## 7.2.1 Paso 1
+
+Utiliza el siguiente comando `tar` para crear un archivo empaquetado del directorio */etc/udev*. Guardar la copia de seguridad en el directorio *~/mybackups*:
+
+```bash
+cd
+mkdir mybackups
+tar –cvf mybackups/udev.tar /etc/udev
+ls mybackups
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ cd
+sysadmin@localhost:~$ mkdir mybackups
+sysadmin@localhost:~$ tar -cvf mybackups/udev.tar /etc/udev
+tar: Removing leading `/' from member names
+/etc/udev/
+/etc/udev/rules.d/
+/etc/udev/rules.d/70-persistent-cd.rules
+/etc/udev/rules.d/README
+/etc/udev/udev.conf
+sysadmin@localhost:~$ ls mybackups/
+udev.tar
+sysadmin@localhost:~$
+```
+
+El comando `tar` se utiliza para combinar varios archivos en un solo archivo. Por defecto no comprime los datos.
+
+La opción `-c` le indica al comando `tar` que cree un archivo `tar`. La opción `-v` significa "verbose", que le indica al comando `tar` para muestre lo que está haciendo. La opción `-f` se utiliza para especificar el nombre del archivo `tar`.
+
+Para tu información: `tar` significa Tape ARchive (archivo de cinta). Este comando se utilizó originalmente para crear copias de seguridad de cintas, pero hoy en día es más comúnmente utilizado para crear los archivo empaquetados.
+
+**Importante**: No tienes que utilizar la extensión *.tar*  con nombre de archivo empaquetado, sin embargo, es muy útil para determinar el tipo de archivo. Se considera de «buen estilo» cuando envias un archivo a otra persona.

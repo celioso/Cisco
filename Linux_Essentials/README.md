@@ -4810,3 +4810,81 @@ La opción `-c` le indica al comando `tar` que cree un archivo `tar`. La opción
 Para tu información: `tar` significa Tape ARchive (archivo de cinta). Este comando se utilizó originalmente para crear copias de seguridad de cintas, pero hoy en día es más comúnmente utilizado para crear los archivo empaquetados.
 
 **Importante**: No tienes que utilizar la extensión *.tar*  con nombre de archivo empaquetado, sin embargo, es muy útil para determinar el tipo de archivo. Se considera de «buen estilo» cuando envias un archivo a otra persona.
+
+## 7.2.2 Paso 2
+
+Muestra el contenido del archivo `tar` (`t` = lista el contenido, `v` = verbose, `f` =nombre del archivo):
+
+`tar –tvf mybackups/udev.tar`
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ tar -tvf mybackups/udev.tar
+drwxr-xr-x root/root         0 2015-01-28 16:32 etc/udev/
+drwxr-xr-x root/root         0 2015-01-28 16:32 etc/udev/rules.d/
+-rw-r--r-- root/root       306 2015-01-28 16:32 etc/udev/rules.d/70-persistent-cd.rules
+-rw-r--r-- root/root      1157 2012-04-05 19:18 etc/udev/rules.d/README       
+-rw-r--r-- root/root       218 2012-04-05 19:18 etc/udev/udev.conf
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que los archivos fueron copiados de forma recursiva utilizando los nombres de ruta relativa . Esto es importante porque al extraer los archivos, que serán colocados en el directorio actual, no se reemplazan los archivos actuales.
+
+## 7.2.3 Paso 3
+
+Para crear un archivo `tar` comprimido, utiliza la opción `-z`:
+
+```bash
+tar –zcvf mybackups/udev.tar.gz /etc/udev
+ls –lh mybackups
+```
+
+```bash
+Tu resultado debe ser similar al siguiente:
+
+sysadmin@localhost:~$ tar -zcvf mybackups/udev.tar.gz /etc/udev
+tar: Removing leading `/' from member names
+/etc/udev/
+/etc/udev/rules.d/
+/etc/udev/rules.d/70-persistent-cd.rules
+/etc/udev/rules.d/README
+/etc/udev/udev.conf
+sysadmin@localhost:~$ ls -lh mybackups/
+total 16K
+-rw-rw-r-- 1 sysadmin sysadmin  10K Jan 25 04:00 udev.tarf
+-rw-rw-r-- 1 sysadmin sysadmin 1.2K Jan 25 04:34 udev.tar.gz
+sysadmin@localhost:~$
+```
+
+Observa la diferencia de tamaño; la primera copia de seguridad (10 Kbytes) es mayor que la segunda copia de seguridad (1.2 Kbytes).
+
+La opción `-z` hace uso de la utilidad `gzip` para realizar la compresión.
+
+## 7.2.5 Paso 5
+
+Para añadir un archivo a un archivo empaquetado existente, utiliza la opción `-r` con el comando `tar`. Ejecuta los siguientes comandos para realizar esta acción y comprobar la existencia del archivo nuevo en el archivo empaquetado `tar`:
+
+```bash
+tar -rvf udev.tar /etc/hosts
+tar –tvf udev.tar
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ tar -rvf udev.tar /etc/hosts
+tar: Removing leading `/' from member names
+/etc/hosts
+sysadmin@localhost:~/mybackups$ tar -tvf udev.tar
+drwxr-xr-x root/root         0 2015-01-28 16:32 etc/udev/
+drwxr-xr-x root/root         0 2015-01-28 16:32 etc/udev/rules.d/        
+-rw-r--r-- root/root       306 2015-01-28 16:32 etc/udev/rules.d/70-persistent-c
+d.rules
+-rw-r--r-- root/root      1157 2012-04-05 19:18 etc/udev/rules.d/README   
+-rw-r--r-- root/root       218 2012-04-05 19:18 etc/udev/udev.conf        
+sysadmin@localhost:~/mybackups$
+```
+
+
+

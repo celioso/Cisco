@@ -4886,5 +4886,192 @@ d.rules
 sysadmin@localhost:~/mybackups$
 ```
 
+## 7.2.6 Paso 6
+En los siguientes ejemplos, vas a utilizar los comandos `gzip` y `gunzip` para comprimir y descomprimir un archivo. Ejecuta los siguientes comandos para comprimir una copia del archivo words:
 
+```bashcp /usr/share/dict/words .
+ls -l words
+gzip words
+ls -l words.gz
+```
 
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ cp /usr/share/dict/words .
+sysadmin@localhost:~/mybackups$ ls -l words
+-rw-r--r-- 1 sysadmin sysadmin 938848 Jan 25 07:39 words
+sysadmin@localhost:~/mybackups$ gzip words
+sysadmin@localhost:~/mybackups$ ls -l words.gz
+-rw-r--r-- 1 sysadmin sysadmin 255996 Jan 25 07:39 words.gz
+sysadmin@localhost:~/mybackups$
+```
+
+Observa que el tamaño del archivo comprimido (*255996* bytes en el ejemplo anterior) es mucho menor que el tamaño del archivo original (*938848* bytes en el ejemplo anterior).
+
+**Muy importante**: Cuando utilizas el comando `gzip`, el archivo original se sustituye por el archivo comprimido. En el ejemplo anterior, el archivo words fue sustituido por +words.gz*.
+
+Al descomprimir el archivo, el archivo comprimido será reemplazado por el archivo original.
+
+## 7.2.7 Paso 7
+
+Ejecuta los siguientes comandos para descomprimir el archivo *words.gz*:
+
+```bash
+ls -l words.gz
+gunzip words.gz
+ls -l words
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ ls -l words.gz
+-rw-r--r-- 1 sysadmin sysadmin 255996 Jan 25 07:39 words.gz
+sysadmin@localhost:~/mybackups$ gunzip words.gz
+sysadmin@localhost:~/mybackups$ ls -l words
+-rw-r--r-- 1 sysadmin sysadmin 938848 Jan 25 07:39 words
+sysadmin@localhost:~/mybackups$
+```
+
+Linux proporciona un gran número de utilidades de compresión además de `gzip`/`gunzip`. Cada uno de ellos tiene pros y contras (compresión más rápida, mejores tasas de compresión, más flexible, más portátil, descompresión más rápida, etc.).
+
+Los comandos `gzip`/`gunzip` son muy populares en Linux, pero se debe tener en cuenta que los comandos `bzip2`/`bunzip2` también son muy populares en algunas distribuciones de Linux. Por suerte, la mayor parte de la funcionalidad (la forma de ejecutar los comandos) y las opciones son las mismas que en el caso de `gzip`/`gunzip`.
+
+## 7.2.8 Paso 8
+
+El uso de los comandos `bzip2` y `bunzip2 para comprimir y descomprimir un archivo es muy similar al de los comandos `gzip` y `gunzip. El archivo comprimido se crea con una extensión *.bz2*. La extensión se retira una vez descomprimido. Ejecuta los siguientes comandos para comprimir una copia del archivo *words*:
+
+```bash
+ls -l words
+bzip2 words
+ls -l words.bz2
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ ls -l words
+-rw-r--r-- 1 sysadmin sysadmin 938848 Jan 25 07:39 words
+sysadmin@localhost:~/mybackups$ bzip2 words
+sysadmin@localhost:~/mybackups$ ls -l words.bz2
+-rw-r--r-- 1 sysadmin sysadmin 335405 Jan 25 07:39 words.bz2
+sysadmin@localhost:~/mybackups$
+```
+
+Si se compara el resultado tamaño del archivo *.bz2*  resultante (*335405*) con el tamaño del archivo *.gz* (*255996*) en el paso no. 7, se puede observar que gzip hizo un mejor trabajo al comprimir ese archivo en particular.
+
+## 7.2.9 Paso 9
+
+Ejecuta los siguientes comandos para descomprimir el archivo *words.bz2*:
+
+```bash
+ls -l words.bz2
+bunzip2 words.bz2
+ls -l words
+```
+```bash
+sysadmin@localhost:~/mybackups$ ls -l words.bz2
+-rw-r--r-- 1 sysadmin sysadmin 335405 Jan 25 07:39 words.bz2
+sysadmin@localhost:~/mybackups$ bunzip2 words.bz2
+sysadmin@localhost:~/mybackups$ ls -l words
+-rw-r--r-- 1 sysadmin sysadmin 938848 Jan 25 07:39 words
+```
+
+Mientras que los archivos empaquetados `gzip` y `bzip se utilizan comúnmente en Linux, el tipo de empaquetamiento `zip es más comúnmente utilizado por otros sistemas operativos, como Windows. De hecho, la aplicación Explorador de Windows tiene un soporte integrado para extraer los archivos empaquetados `zip.
+
+Por lo tanto, si quieres compartir un archivo con los usuarios de Windows, por lo general se prefiere el uso de empaquetamiento `zip`. A diferencia de `gzip` y `bzip2`, cuando un archivo se comprime con el comando `zip, una  copia del archivo original es comprimido y el original permanece sin comprimir.
+
+## 7.2.10 Paso 10
+
+Utiliza el comando `zip` para comprimir el archivo words:
+
+```bash
+zip words.zip words
+ls -l words.zip
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ zip words.zip words
+adding: words (deflated 73%)
+sysadmin@localhost:~/mybackups$ ls -l words.zip
+-rw-rw-r-- 1 sysadmin sysadmin 256132 Jan 25 21:25 words.zip
+sysadmin@localhost:~/mybackups$
+```
+
+El primer argumento (*words.zip* en el ejemplo anterior) del comando `zip` es el nombre del archivo que quieres crear. El resto de los argumentos (words en el ejemplo anterior) son los archivos que quieres colocar en el archivo comprimido.
+
+**Importante**: No tienes que utilizar la extensión *.zip*  con nombre de archivo comprimido, sin embargo, es muy útil para determinar el tipo de archivo. También, se considera de «buen estilo» cuando envías un archivo a otra persona.
+
+## 7.2.11 Paso 11
+
+Comprime el directorio */etc/udev* y su contenido con el comando de compresión `zip`:
+
+```bash
+zip -r udev.zip /etc/udev
+ls -l udev.zip
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ zip -r udev.zip /etc/udev
+adding: etc/udev/ (stored 0%)
+adding: etc/udev/rules.d/ (stored 0%)
+adding: etc/udev/rules.d/70-persistent-cd.rules (deflated 29%)
+adding: etc/udev/rules.d/README (deflated 50%)
+adding: etc/udev/udev.conf (deflated 24%)
+sysadmin@localhost:~/mybackups$ ls -l udev.zip
+-rw-rw-r-- 1 sysadmin sysadmin 1840 Jan 25 21:33 udev.zip
+sysadmin@localhost:~/mybackups$
+```
+
+El comando `tar` que viste anteriormente en este laboratorio desciende automáticamente a través de los subdirectorios de un directorio especificado para ser empaquetado. Con los comandos `bzip2`, `gzip`, y `zip` es necesario especificar la opción `-r` para realizar la recursividad en los subdirectorios.
+
+## 7.2.12 Paso 12
+
+Para ver el contenido de un archivo `zip`, utiliza la opción `-l con el comando `unzip:
+
+`unzip -l udev.zip`
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ unzip -l udev.zip
+Archive:  udev.zip
+Length      Date    Time    Name
+---------  ---------- -----   ----
+0  2015-01-28 16:32   etc/udev/
+0  2015-01-28 16:32   etc/udev/rules.d/
+306  2015-01-28 16:32   etc/udev/rules.d/70-persistent-cd.rules
+1157  2012-04-05 19:18   etc/udev/rules.d/README
+218  2012-04-05 19:18   etc/udev/udev.conf
+---------                     -------
+1681                     5 files
+sysadmin@localhost:~/mybackups$
+```
+
+## 7.2.13 Paso 13
+
+Para extraer el archivo `zip`, utiliza el comando `unzip` sin ninguna opción. En este ejemplo, primero tenemos que eliminar los archivos que se crearon en el ejemplo `tar más arriba:
+
+```bash
+rm -r etc
+unzip udev.zip
+```
+
+Tu resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~/mybackups$ rm -r etc
+sysadmin@localhost:~/mybackups$ unzip udev.zip
+Archive:  udev.zip
+creating: etc/udev/
+creating: etc/udev/rules.d/
+inflating: etc/udev/rules.d/70-persistent-cd.rules
+inflating: etc/udev/rules.d/README
+inflating: etc/udev/udev.conf
+sysadmin@localhost:~/mybackups$
+```

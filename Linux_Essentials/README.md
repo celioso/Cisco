@@ -5330,3 +5330,252 @@ ls: cannot access /fake: No such file or directory
 sysadmin@localhost:~$
 ```
 En el comando de arriba, 2> indica que todos los mensajes de error deben enviarse al archivo error.txt.
+
+## 8.3.6 Redireccionando Múltiples Secuencias
+
+Es posible dirigir la salida STDOUT y STDERR de un comando a la vez. El siguiente comando produce ambas salidas STDOUT y STDERR porque existe uno de los directorios especificados y el otro no:
+
+```bash
+sysadmin@localhost:~$ ls /fake /etc/ppp
+ls: cannot access /fake: No such file or directory
+/etc/ppp:
+chap-secrets   ip-down   ip-down.ipv6to4    ip-up        ip-up.ipv6to4
+ipv6-down      ipv6-up   options            pap-secrets  peers
+```
+Si sólo se envía la salida STDOUT a un archivo, la STDERR todavía se imprimirá a la pantalla:
+
+```bash
+sysadmin@localhost:~$ ls /fake /etc/ppp > example.txt           
+ls: cannot access /fake: No such file or directory              
+sysadmin@localhost:~$ cat example.txt                           
+/etc/ppp:                                              
+chap-secrets         
+ip-down
+ip-down.ipv6to4      
+ip-up  
+ip-up.ipv6to4
+ipv6-down
+ipv6-up
+options
+pap-secrets
+peers                                                                     
+sysadmin@localhost:~$
+```
+
+Si sólo se envía la salida STDERR a un archivo, la STDOUT todavía se imprimirá a la pantalla:
+
+```bash
+sysadmin@localhost:~$ ls /fake /etc/ppp 2> error.txt            
+/etc/ppp:                                                       
+hap-secrets    ip-down   ip-down.ipv6to4    ip-up        ip-up.ipv6to4
+ipv6-down      ipv6-up   options            pap-secrets  peers 
+sysadmin@localhost:~$ cat error.txt                             
+ls: cannot access /fake: No such file or directory              
+sysadmin@localhost:~$
+```
+
+Las salidas STDOUT y STDERR pueden enviarse a un archivo mediante el uso de &> un conjunto de caracteres que significan «ambos 1> y 2>»:
+
+```bash
+sysadmin@localhost:~$ ls /fake /etc/ppp &> all.txt
+sysadmin@localhost:~$ cat all.txt
+ls: cannot access /fake: No such file or directory
+/etc/ppp:
+chap-secrets         
+ip-down
+ip-down.ipv6to4      
+ip-up  
+ip-up.ipv6to4
+ipv6-down
+ipv6-up
+options
+pap-secrets
+peers                                                            
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que cuando se utiliza &>, la salida aparece en el archivo con todos los mensajes STDERR en la parte superior y todos los mensaje STDOUT debajo de todos los mensajes de STDERR:
+
+```bash
+sysadmin@localhost:~$ ls /fake /etc/ppp /junk /etc/sound &> all.txt       
+sysadmin@localhost:~$ cat all.txt                               
+ls: cannot access /fake: No such file or directory              
+ls: cannot access /junk: No such file or directory              
+/etc/ppp:                                                       
+chap-secrets         
+ip-down
+ip-down.ipv6to4      
+ip-up  
+ip-up.ipv6to4
+ipv6-down
+ipv6-up
+options
+pap-secrets
+peers                 
+
+/etc/sound:
+events                                                                    
+sysadmin@localhost:~$
+```
+
+Si no quieres que las salidas STDERR y STDOUT vayan al mismo archivo, puede redirigirlas a diferentes archivos utilizando > and 2>. Por ejemplo:
+
+```bash
+sysadmin@localhost:~$ rm error.txt example.txt                  
+sysadmin@localhost:~$ ls                                        
+Desktop    Downloads  Pictures  Templates  all.txt              
+Documents  Music      Public    Videos               
+sysadmin@localhost:~$ ls /fake /etc/ppp > example.txt 2> error.txt        
+sysadmin@localhost:~$ ls                                        
+Desktop    Downloads  Pictures  Templates  all.txt    example.txt
+Documents  Music      Public    Videos     error.txt  
+sysadmin@localhost:~$ cat error.txt                             
+ls: cannot access /fake: No such file or directory              
+sysadmin@localhost:~$ cat example.txt                           
+/etc/ppp:                                                       
+chap-secrets         
+ip-down
+ip-down.ipv6to4      
+ip-up  
+ip-up.ipv6to4
+ipv6-down
+ipv6-up
+options
+pap-secrets
+peers                 
+sysadmin@localhost:~$
+```
+
+No importa el orden en el vienen las secuencias especificadas.
+
+## 8.3.7 Redirigir la entrada STDIN
+
+El concepto de redireccionar la STDIN es difícil, ya que es más difícil de entender el por qué querrías redirigir la STDIN. Con las salidas STDOUT y STDERR, la respuesta del por qué es bastante fácil: porque a veces quieres almacenar el resultado en un archivo para su uso futuro.
+
+La mayoría de los usuarios de Linux terminan redirigiendo rutinariamente la STDOUT, en ocasiones la STDERR y la STDIN... bien, muy raramente. Hay muy pocos comandos que requieren de que redirijas la STDIN porque en el caso de la mayoría de los comandos, si quieres pasar los datos desde un archivo a un comando, simplemente puedes especificar el nombre del archivo como un argumento del comando. Después, el comando buscará en el archivo.
+
+En el caso de algunos comandos, si no se especifica un nombre de archivo como argumento, volverán a usar la salida STDIN para obtener los datos. Por ejemplo, considera el siguiente comando `cat:
+
+```bast
+sysadmin@localhost:~$ cat                                       
+hello                                                           
+hello                                                           
+how are you?                                                    
+how are you?                                                    
+goodbye                                                         
+goodbye
+sysadmin@localhost:~$
+```
+
+En el ejemplo anterior, el comando `cat` no recibió el nombre de archivo como argumento. Por lo tanto, pidió los datos a mostrarlos en la pantalla desde la entrada STDIN. El usuario introduce *hello* y luego el comando `cat` muestra *hello* en la pantalla. Tal vez esto es útil para las personas solitarias, pero no es realmente un buen uso del comando `cat.
+
+Sin embargo, tal vez si la salida del comando `cat` se redirige a un archivo, entonces este método podría utilizarse para agregar datos a un archivo existente o colocar texto en un archivo nuevo:
+
+```bash
+sysadmin@localhost:~$ cat > new.txt                             
+Hello                                                           
+How are you?                                                    
+Goodbye                                                         
+sysadmin@localhost:~$ cat new.txt                               
+Hello                                                           
+How are you?                                                    
+Goodbye
+sysadmin@localhost:~$
+```
+
+Mientras que en el ejemplo anterior se muestra otra de las ventajas de redireccionar la STDOUT, no aborda el por qué o cómo puedes dirigir la STDIN. Para entender esto, consideremos primero un nuevo comando llamado `tr`. Este comando tomará un conjunto de caracteres y los plasmará en otro conjunto de caracteres.
+
+Por ejemplo, supongamos que quieres poner una línea de comandos en mayúsculas. Puede utilizar el comando `tr` de la siguiente manera:
+
+```bash
+sysadmin@localhost:~$ tr 'a-z' 'A-Z'                         
+watch how this works                                            
+WATCH HOW THIS WORKS                                            
+sysadmin@localhost:~$
+```
+
+El comando `tr` tomó la entrada STDIN desde el teclado (*watch how this works*) (a ver cómo funciona esto) y convierte todas las letras en minúsculas antes de enviar la salida STDOUT a la pantalla (*WATCH HOW THIS WORKS*).
+
+Parecería que el comando `tr` sirviera más para realizar la traducción en un archivo, no la entrada del teclado. Sin embargo, el comando `tr` no admite argumentos del nombre de archivo:
+
+```bash
+sysadmin@localhost:~$ more example.txt                                
+/etc/ppp:
+chap-secrets
+ip-down
+ip-down.ipv6to4
+ip-up
+ip-up.ipv6to4
+ipv6-down
+ipv6-up
+options
+pap-secrets
+peers                                          
+sysadmin@localhost:~$ tr 'a-z' 'A-Z' example.txt
+tr: extra operand `example.txt'
+Try `tr --help' for more information
+sysadmin@localhost:~$
+```
+
+Sin embargo, puedes decirle al shell que obtenga la STDIN de un archivo en vez de desde el teclado mediante el uso del carácter <:
+
+```bash
+sysadmin@localhost:~$ tr 'a-z' 'A-Z' < example.txt 
+/ETC/PPP:                   
+CHAP-SECRETS                                             
+IP-DOWN                                                               
+IP-DOWN.IPV6TO4                                                      
+IP-UP                                                                 
+IP-UP.IPV6TO4                                                         
+IPV6-DOWN                                                             
+IPV6-UP                                                               
+OPTIONS                                                               
+PAP-SECRETS                                                     
+sysadmin@localhost:~$
+```
+
+Esto es bastante raro porque la mayoría de los comandos aceptan a los nombres de archivo como argumentos. Sin embargo, para los que no, este método podría utilizarse para que el shell lea desde el archivo en lugar de confiar en el comando que tienen esta capacidad.
+
+Una última nota: En la mayoría de los casos probablemente quieras tomar la salida resultante y colocarla en otro archivo:
+
+```bash
+sysadmin@localhost:~$ tr 'a-z' 'A-Z' < example.txt > newexample.txt 
+sysadmin@localhost:~$ more newexample.txt
+/ETC/PPP:           
+CHAP-SECRETS                                             
+IP-DOWN                                                               
+IP-DOWN.IPV6TO4                                                      
+IP-UP                                                                 
+IP-UP.IPV6TO4                                                         
+IPV6-DOWN                                                             
+IPV6-UP                                                               
+OPTIONS                                                               
+PAP-SECRETS                                                          
+sysadmin@localhost:~$
+```
+
+## 8.4 Buscar Archivos Utilizando el Comando Find
+
+Uno de los retos al que se enfrentan los usuarios trabajando con el sistema de archivos, es tratar de recordar la ubicación donde se almacenan los archivos. Hay miles de archivos y cientos de directorios en un típico sistema de archivos Linux, así que recordar donde se encuentran estos archivos, puede plantear desafíos.
+
+Ten en cuenta que la mayoría de los archivos con los que trabajas, son los que tú creas. Como resultado, a menudo buscarás en tu propio directorio local para encontrar los archivos. Sin embargo, a veces puede que necesites buscar en otros lugares en el sistema de archivos para encontrar archivos creados por otros usuarios.
+
+El comando `find` es una herramienta muy poderosa que puedes utilizar para buscar archivos en el sistema de archivos. Este comando puede buscar archivos por nombre, incluso usando los caracteres comodín cuando no estás seguro del nombre exacto del archivo. Además, puedes buscar los archivos en función de los metadatos de archivos, tales como tipo de archivo, tamaño de archivo y propiedad de archivo.
+
+La sintaxis del comando `find es:
+
+`find [directorio de inicio] [opción de búsqueda] [criterio de búsqueda] [opción de resultado]`
+
+O en Inglés:
+
+`find [starting directory] [search option] [search criteria] [result option]`
+
+Descripción de todos estos componentes:
+
+| Component | Description |
+|---|---|
+| [directorio de inicio] | Aquí el usuario especifica dónde comenzar la búsqueda. El comando find buscará en este directorio y todos sus subdirectorios. Si no hay directorio de partida, el directorio actual se utiliza para el punto de partida |  
+| [opción de búsqueda] | Aquí el usuario especifica una opción para determinar qué tipo de metadatos hay que buscar; hay opciones para el nombre de archivo, tamaño de archivo y muchos otros atributos de archivo. | 
+| [criterio de búsqueda] | Es un argumento que complementa la opción de búsqueda. Por ejemplo, si el usuario utiliza la opción para buscar un nombre de archivo, el criterio de búsqueda sería el nombre del archivo. |
+| [opción de resultado] | Esta opción se utiliza para especificar qué acción se debe tomar al encontrar el archivo. Si no se proporciona ninguna opción, se imprimirá el nombre del archivo a STDOUT. |
+

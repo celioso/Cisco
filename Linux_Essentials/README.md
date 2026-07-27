@@ -5075,3 +5075,258 @@ inflating: etc/udev/rules.d/README
 inflating: etc/udev/udev.conf
 sysadmin@localhost:~/mybackups$
 ```
+
+8.1 Introducción
+Un gran número de los archivos en un típico sistema de archivos son *archivos de texto*. Los archivos de texto contienen sólo texto, sin características de formato que puedes ver en un archivo de procesamiento de texto.
+
+Ya que hay muchos de estos archivos en un sistema Linux típico, existe un gran número de comandos para ayudar a los usuarios manipular los archivos de texto. Hay comandos para ver y modificar estos archivos de varias maneras.
+
+Además, existen características disponibles para el shell para controlar la salida de los comandos, así que en lugar de tener la salida en la ventana de la terminal, la salida se puede *redirigir* a otro archivo u otro comando. Estas características de la redirección ofrecen a los usuarios un entorno más flexible y potente para trabajar.
+
+![Head in the clouds?](images/8-LPI-Graphics.png)
+
+Traducción texto en imagen. **¿La cabeza en las nubes?** Linux impulsa la nube. 76% de las organizaciones habilitadas en la nube utilizan servidores Linux para la nube. *2013 Reporte Linux de Adopción de Usuarios Finales Empresariales. La Fundación Linux*
+
+## 8.2 Las Barras Verticales en la Línea de Comandos
+
+Capítulos anteriores describen la manera de usar los comandos individuales para realizar las acciones en el sistema operativo, incluyendo cómo crear/mover/eliminar los archivos y moverse en todo el sistema. Por lo general, cuando un comando ofrece salida o genera un error, la salida se muestra en la pantalla; sin embargo, esto no tiene que ser el caso.
+
+El carácter *barra vertical* | (o «pipe» en inglés) puede utilizarse para enviar la salida de un comando a otro. En lugar de que se imprima en la pantalla, la salida de un comando se convierte en una entrada para el siguiente comando. Esto puede ser una herramienta poderosa, especialmente en la búsqueda de datos específicos; la implementación de la *barra vertical* (o «piping» en inglés) se utiliza a menudo para refinar los resultados de un comando inicial.
+
+Los comandos `head` (o «cabeza» en español) y `tail` (o «cola» en español) se utilizarán en muchos ejemplos a continuación para ilustrar el uso de las barras verticales. Estos comandos se pueden utilizar para mostrar solamente algunas de las primeras o las últimas líneas de un archivo (o, cuando se utiliza con una barra vertical, la salida de un comando anterior).
+
+Por defecto, los comandos `head` y `tail` mostrarán diez líneas. Por ejemplo, el siguiente comando muestra las diez primeras líneas del archivo */etc/sysctl.conf*:
+
+```bash
+sysadmin@localhost:~$ head /etc/sysctl.conf                            
+#                                                                     
+# /etc/sysctl.conf - Configuration file for setting system variables  
+# See /etc/sysctl.d/ for additional system variables                   
+# See sysctl.conf (5) for information.                                 
+#                                                                     
+
+#kernel.domainname = example.com                                                
+                                                               
+# Uncomment the following to stop low-level messages on console
+#kernel.printk = 3 4 1 3                                        
+sysadmin@localhost:~$
+```
+
+En el ejemplo siguiente, se mostrarán las últimas diez líneas del archivo:
+
+```bash
+sysadmin@localhost:~$ tail /etc/sysctl.conf                            
+# Do not send ICMP redirects (we are not a router)                    
+#net.ipv4.conf.all.send_redirects = 0                                  
+#                                                                      
+# Do not accept IP source route packets (we are not a router)         
+#net.ipv4.conf.all.accept_source_route = 0                             
+#net.ipv6.conf.all.accept_source_route = 0                             
+#                                                                      
+# Log Martian Packets                                                  
+#net.ipv4.conf.all.log_martians = 1                                    
+#                                                                      
+sysadmin@localhost:~$
+```
+
+El carácter de la barra vertical permite a los usuarios utilizar estos comandos no sólo en los archivos, sino también en la salida de otros comandos. Esto puede ser útil al listar un directorio grande, por ejemplo el directorio */etc*:
+
+```bash
+ca-certificates         insserv              nanorc          services   
+ca-certificates.conf    insserv.conf         network         sgml      
+calendar                insserv.conf.d       networks        shadow    
+cron.d                  iproute2             nologin         shadow-   
+cron.daily              issue                nsswitch.conf   shells    
+cron.hourly             issue.net            opt             skel     
+cron.monthly            kernel               os-release      ssh       
+cron.weekly             ld.so.cache          pam.conf        ssl      
+crontab                 ld.so.conf           pam.d           sudoers   
+dbus-1                  ld.so.conf.d         passwd          sudoers.d 
+debconf.conf            ldap                 passwd-         sysctl.conf
+debian_version          legal                perl            sysctl.d  
+default                 locale.alias         pinforc         systemd   
+deluser.conf            localtime            ppp             terminfo  
+depmod.d                logcheck             profile         timezone  
+dpkg                    login.defs           profile.d       ucf.conf  
+environment             logrotate.conf       protocols       udev      
+fstab                   logrotate.d          python2.7       ufw       
+fstab.d                 lsb-base             rc.local        update-motd.d
+gai.conf                lsb-base-logging.sh  rc0.d           updatedb.conf 
+groff                   lsb-release          rc1.d           vim       
+group                   magic                rc2.d           wgetrc    
+group-                  magic.mime           rc3.d           xml      
+sysadmin@localhost:~$
+```
+
+Si te fijas en la salida del comando anterior, notarás que ese primer nombre del archivo es *ca-certificates*. Pero hay otros archivos listados "arriba" que sólo pueden verse si el usuario utiliza la barra de desplazamiento. ¿Qué pasa si sólo quieres listas algunos de los primeros archivos del directorio */etc*?
+
+En lugar de mostrar la salida del comando anterior, poner la barra vertical junto al comando `head` muestra sólo las primeras diez líneas:
+
+```bash
+sysadmin@localhost:~$ ls /etc | head                                   
+adduser.conf                                                           
+adjtime                                                               
+alternatives                                                         
+apparmor.d                                                             
+apt                                                                    
+bash.bashrc                                                           
+bash_completion.d                                                     
+bind                                                                  
+bindresvport.blacklist                                                 
+blkid.conf                                                             
+sysadmin@localhost:~$
+```
+
+La salida del comando `ls` se pasa al comando `head` por el shell en vez de ser impreso a la pantalla. El comando head toma esta salida (del `ls`) como "datos de entrada" y luego se imprime la salida del `head` a la pantalla.
+
+Múltiples barras verticales pueden utilizarse consecutivamente para unir varios comandos. Si se unen tres comandos con la barra vertical, la salida del primer comando se pasa al segundo comando. La salida del segundo comando se pasa al tercer comando. La salida del tercer comando se imprime en la pantalla.
+
+Es importante elegir cuidadosamente el orden en que los comandos están unidos con la barra vertical, ya que el tercer comando sólo verá como entrada, la salida del segundo comando. Los siguientes ejemplos ilustran esta situación usando el comando `nl`. En el primer ejemplo, el comando de `nl` se utiliza para numerar las líneas de la salida de un comando anterior:
+
+```bash
+sysadmin@localhost:~$ ls -l /etc/ppp | nl                                   1  total 44
+     2  -rw------- 1 root root   78 Aug 22  2010 chap-secrets         
+     3  -rwxr-xr-x 1 root root  386 Apr 27  2012 ip-down
+     4  -rwxr-xr-x 1 root root 3262 Apr 27  2012 ip-down.ipv6to4      
+     5  -rwxr-xr-x 1 root root  430 Apr 27  2012 ip-up  
+     6  -rwxr-xr-x 1 root root 6517 Apr 27  2012 ip-up.ipv6to4
+     7  -rwxr-xr-x 1 root root 1687 Apr 27  2012 ipv6-down
+     8  -rwxr-xr-x 1 root root 3196 Apr 27  2012 ipv6-up
+     9  -rw-r--r-- 1 root root    5 Aug 22  2010 options
+    10  -rw------- 1 root root   77 Aug 22  2010 pap-secrets
+    11  drwxr-xr-x 2 root root 4096 Jun 22  2012 peers                 
+sysadmin@localhost:~$
+```
+
+En el ejemplo siguiente, observa que el comando ls es ejecutado primero y su salida se envía al comando `nl`, enumerando todas las líneas de la salida del comando `ls`. A continuación, se ejecuta el comando `tail`, mostrando las últimas cinco líneas de la salida del comando `nl`:
+
+```bash
+sysadmin@localhost:~$ ls -l /etc/ppp | nl | tail -5                   
+     7  -rwxr-xr-x 1 root root 1687 Apr 27  2012 ipv6-down
+     8  -rwxr-xr-x 1 root root 3196 Apr 27  2012 ipv6-up
+     9  -rw-r--r-- 1 root root    5 Aug 22  2010 options
+    10  -rw------- 1 root root   77 Aug 22  2010 pap-secrets
+    11  drwxr-xr-x 2 root root 4096 Jun 22  2012 peers                
+sysadmin@localhost:~$
+```
+
+Compara la salida anterior con el siguiente ejemplo:
+
+```bash
+sysadmin@localhost:~$ ls -l /etc/ppp | tail -5 | nl                   
+    1  -rwxr-xr-x 1 root root 1687 Apr 27  2012 ipv6-down
+    2  -rwxr-xr-x 1 root root 3196 Apr 27  2012 ipv6-up
+    3  -rw-r--r-- 1 root root    5 Aug 22  2010 options
+    4  -rw------- 1 root root   77 Aug 22  2010 pap-secrets
+    5  drwxr-xr-x 2 root root 4096 Jun 22  2012 peers                 
+sysadmin@localhost:~$
+```
+
+Observa los diferentes números de línea. ¿Por qué sucede esto?
+
+En el segundo ejemplo, la salida del comando `ls` se envía primero al comando `tail` que "capta" sólo las últimas cinco líneas de la salida. El comando `tail` envía esas cinco líneas para al comando `nl`, que los enumera del 1 al 5.
+
+Las barras verticales pueden ser poderosas, pero es importante considerar cómo se unen los comandos con ellas para asegurar que se muestre la salida deseada.
+
+## 8.3 Redirección de E/S
+
+La Redirección de Entrada/Salida (E/S) permite que la información pase de la línea de comandos a las diferentes *secuencias*. Antes de hablar sobre la redirección, es importante entender las secuencias estándar.
+
+## 8.3.1 STDIN
+
+La entrada estándar STDIN es la información normalmente introducida por el usuario mediante el teclado. Cuando un comando envía un prompt al shell esperando datos, el shell proporciona al usuario la capacidad de introducir los comandos, que a su vez, se envían al comando como STDIN.
+
+## 8.3.2 STDOUT
+
+Salida estándar o STDOUT es la salida normal de los comandos. Cuando un comando funciona correctamente (sin errores), la salida que produce se llama STDOUT. De forma predeterminada, STDOUT se muestra en la ventana de la terminal (pantalla) donde se ejecuta el comando.
+
+## 8.3.3 STDERR
+
+Error estándar o STDERR son mensajes de error generados por los comandos. De forma predeterminada, STDERR se muestra en la ventana de la terminal (pantalla) donde se ejecuta el comando.
+
+La redirección de E/S permite al usuario redirigir STDIN para que los datos provengan de un archivo y la salida de STDOUT/STDERR vaya a un archivo. La redirección se logra mediante el uso de los caracteres de la flecha: < y >.
+
+## 8.3.4 Redirigir STDOUT
+
+STDOUT se puede dirigir a los archivos. Para empezar, observa la salida del siguiente comando que se mostrará en la pantalla:
+
+```bash
+sysadmin@localhost:~$ echo "Line 1"
+Line 1
+sysadmin@localhost:~$
+```
+
+Utilizando el carácter > , la salida puede ser redirigida a un archivo:
+
+```bash
+sysadmin@localhost:~$ echo "Line 1" > example.txt
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  example.txt  test           
+Documents  Music      Public    Videos     sample.txt
+sysadmin@localhost:~$ cat example.txt 
+Line 1 
+sysadmin@localhost:~$
+```
+
+Este comando no muestra ninguna salida, porque la STDOUT fue enviada al archivo *example.txt* en lugar de la pantalla. Puedes ver el nuevo archivo con la salida del comando `ls`. El archivo recién creado contiene la salida del comando `echo` cuando se ve el contenido del archivo con el comando `cat`.
+
+Es importante tener en cuenta que la flecha sola sobrescribe cualquier contenido de un archivo existente:
+
+```bash
+sysadmin@localhost:~$ cat example.txt
+Line 1
+sysadmin@localhost:~$ echo "New line 1" > example.txt
+sysadmin@localhost:~$ cat example.txt
+New line 1
+sysadmin@localhost:~$
+```
+
+El contenido original del archivo ha desaparecido y fue reemplazado por la salida del comando `echo` nuevo.
+
+También es posible preservar el contenido de un archivo existente anexando al mismo. Utiliza la «doble flecha» >> para anexar a un archivo en vez de sobreescribirlo:
+
+```bash
+sysadmin@localhost:~$ cat example.txt
+New line 1
+sysadmin@localhost:~$ echo "Another line" >> example.txt
+sysadmin@localhost:~$ cat example.txt
+New line 1
+Another line
+sysadmin@localhost:~$
+```
+
+En lugar de ser sobrescrito, la salida del comando del comando `echo` reciente se anexa a la parte inferior del archivo.
+
+## 8.3.5 Redirigir la STDERR
+
+Puedes redirigir el STDERR de una manera similar a la STDOUT. STDOUT es también conocida como secuencia o canal («stream» o «channel» en inglés) #1. Al STDERR se asigna la secuencia #2.
+
+Al utilizar las flechas para redirigir, se asumirá la secuencia #1 mientras no venga especificada otra secuencia. Por lo tanto, la secuencia #2 debe especificarse al redirigir el STDERR.
+
+Para demostrar la redirección del STDERR, primero observa el siguiente comando que producirá un error porque el directorio especificado no existe:
+
+```bash
+sysadmin@localhost:~$ ls /fake                                 
+ls: cannot access /fake: No such file or directory              
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que no hay nada en el ejemplo anterior lo que implica que la salida es STDERR. La salida es claramente un mensaje de error, pero ¿cómo podrías saber que se envía al STDERR? Una manera fácil de determinar esto es redirigir al STDOUT:
+
+```bash
+sysadmin@localhost:~$ ls /fake > output.txt                    
+ls: cannot access /fake: No such file or directory              
+sysadmin@localhost:~$
+```
+
+En el ejemplo anterior, el STDOUT fue redirigido al archivo *output.txt*. Por lo tanto, la salida que se muestra no puede ser STDOUT porque habría quedado en el archivo *output.txt*. Ya que todos los resultados del comando van a STDOUT o STDERR, la salida mostrada debe ser STDERR.
+
+El STDERR de un comando puede enviarse a un archivo:
+
+```bash
+sysadmin@localhost:~$ ls /fake 2> error.txt                     
+sysadmin@localhost:~$ cat error.txt                            
+ls: cannot access /fake: No such file or directory              
+sysadmin@localhost:~$
+```
+En el comando de arriba, 2> indica que todos los mensajes de error deben enviarse al archivo error.txt.

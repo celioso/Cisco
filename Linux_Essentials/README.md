@@ -5574,8 +5574,70 @@ Descripción de todos estos componentes:
 
 | Component | Description |
 |---|---|
-| [directorio de inicio] | Aquí el usuario especifica dónde comenzar la búsqueda. El comando find buscará en este directorio y todos sus subdirectorios. Si no hay directorio de partida, el directorio actual se utiliza para el punto de partida |  
+| [directorio de inicio] | Aquí el usuario especifica dónde comenzar la búsqueda. El comando `find` buscará en este directorio y todos sus subdirectorios. Si no hay directorio de partida, el directorio actual se utiliza para el punto de partida |  
 | [opción de búsqueda] | Aquí el usuario especifica una opción para determinar qué tipo de metadatos hay que buscar; hay opciones para el nombre de archivo, tamaño de archivo y muchos otros atributos de archivo. | 
 | [criterio de búsqueda] | Es un argumento que complementa la opción de búsqueda. Por ejemplo, si el usuario utiliza la opción para buscar un nombre de archivo, el criterio de búsqueda sería el nombre del archivo. |
 | [opción de resultado] | Esta opción se utiliza para especificar qué acción se debe tomar al encontrar el archivo. Si no se proporciona ninguna opción, se imprimirá el nombre del archivo a STDOUT. |
 
+## 8.4.1 Buscar por Nombre de Archivo
+
+Para buscar un archivo por nombre, utiliza la opción `-name` (o «nombre» en español) del comando `find (o «buscar» en español):
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts                           
+find: `/etc/dhcp': Permission denied
+find: `/etc/cups/ssl': Permission denied  
+find: `/etc/pki/CA/private': Permission denied  
+find: `/etc/pki/rsyslog': Permission denied
+find: `/etc/audisp': Permission denied 
+find: `/etc/named': Permission denied
+find: `/etc/lvm/cache': Permission denied 
+find: `/etc/lvm/backup': Permission denied
+find: `/etc/lvm/archive': Permission denied                           
+/etc/hosts
+find: `/etc/ntp/crypto': Permission denied
+find: `/etc/polkit-l/localauthority': Permission denied   
+find: `/etc/sudoers.d': Permission denied  
+find: `/etc/sssd': Permission denied 
+/etc/avahi/hosts
+find: `/etc/selinux/targeted/modules/active': Permission denied  
+find: `/etc/audit': Permission denied                                
+sysadmin@localhost:~$
+```
+
+Observa que se encontraron dos archivos: */etc/hosts* y */etc/avahi/hosts*. El resto de la salida eran los mensajes STDERR porque el usuario que ejecutó el comando no tiene permiso para acceder a ciertos subdirectorios.
+
+Recuerda que puedes redirigir el STDERR a un archivo por lo que no necesitarás ver estos mensajes de error en la pantalla:
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts 2> errors.txt             
+/etc/hosts 
+/etc/avahi.hosts                                                      
+sysadmin@localhost:~$
+```
+
+Mientras que la salida es más fácil de leer, realmente no hay ningún propósito para almacenar los mensajes de error en el archivo *error.txt*. Los desarrolladores de Linux se dieron cuenta de que sería bueno tener un archivo de «basura» (o «junk» en inglés) para enviar los datos innecesarios; se descarta cualquier archivo que envíes al archivo */dev/null*:
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts 2> /dev/null              
+/etc/hosts
+/etc/avahi/hosts                                                      
+sysadmin@localhost:~$
+```
+
+## 8.4.2 Mostrando los Detalles del Archivo
+
+Puede ser útil obtener información sobre el archivo al utilizar el comando `find`, porque solo el nombre del archivo en sí mismo podría no proporcionar información suficiente para que puedas encontrar el archivo correcto.
+
+Por ejemplo, puede haber siete archivos llamados hosts; si supieras que el archivo host que necesitas se había modificado recientemente, entonces sería útil ver la hora de modificación del archivo.
+
+Para ver estos detalles del archivo, utiliza la opción `-ls para el comando `find`:
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts -ls 2> /dev/null
+    41   4 -rw-r--r--   1 root     root      158 Jan 12 2010 /etc/hosts
+  6549   4 -rw-r--r--   1 root     root      1130 Jul 19 2011 /etc/avahi/hosts 
+sysadmin@localhost:~$
+```
+
+*Nota*: Las dos primeras columnas de la salida anterior son el *número inodo* del archivo y el número de bloques que el archivo utiliza para el almacenamiento. Ambos están más allá del alcance del tema en cuestión. El resto de las columnas son la salida típica del comando `ls -l: tipo de archivo, permisos, cuenta de enlaces físico, usuario propietario, grupo propietario, tamaño del archivo, hora de modificación del archivo y el nombre de archivo.

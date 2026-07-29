@@ -5641,3 +5641,46 @@ sysadmin@localhost:~$
 ```
 
 *Nota*: Las dos primeras columnas de la salida anterior son el *número inodo* del archivo y el número de bloques que el archivo utiliza para el almacenamiento. Ambos están más allá del alcance del tema en cuestión. El resto de las columnas son la salida típica del comando `ls -l: tipo de archivo, permisos, cuenta de enlaces físico, usuario propietario, grupo propietario, tamaño del archivo, hora de modificación del archivo y el nombre de archivo.
+
+## 8.4.3 Buscar los Archivos por Tamaño
+
+Una de las muchas opciones útiles de la búsqueda es la opción que le permite buscar archivos por tamaño. La opción `-size` (o «tamaño» en español) te permite buscar los archivos que son mayores o menores que un tamaño especificado, así como buscar un tamaño de archivo exacto.
+
+Cuando se especifica un tamaño de archivo, puedes proporcionar el tamaño en bytes (c), kilobytes (k), megabytes (M) o gigabytes (G). Por ejemplo, la siguiente será una búsqueda de archivos en la estructura de directorios */etc* con el tamaño exacto de 10 bytes:
+
+```bash
+sysadmin@localhost:~$ find /etc -size 10c -ls 2>/dev/null    
+   432    4 -rw-r--r--   1 root     root           10 Jan 28  2015 /etc/adjtime
+ 8814    0 drwxr-xr-x   1 root     root           10 Jan 29  2015 /etc/ppp/ip-d
+own.d                                                           
+8816    0 drwxr-xr-x   1 root     root           10 Jan 29  2015 /etc/ppp/ip-u
+p.d                                                            
+ 8921    0 lrwxrwxrwx   1 root     root           10 Jan 29  2015 /etc/ssl/cert
+s/349f2832.0 -> EC-ACC.pem                                    
+  9234    0 lrwxrwxrwx   1 root     root           10 Jan 29  2015 /etc/ssl/cert
+s/aeb67534.0 -> EC-ACC.pem                                     
+ 73468    4 -rw-r--r--   1 root     root           10 Nov 16 20:42 /etc/hostname
+sysadmin@localhost:~$
+```
+
+Si quieres buscar los archivos que son más grandes que un tamaño especificado, puedes usar el carácter + antes que el tamaño. Por ejemplo, el siguiente ejemplo buscará todos los archivos en la estructura de directorio */usr* que su tamaño sea mayor a 100 megabytes:
+
+```bash
+sysadmin@localhost:~$ find /usr -size +100M -ls 2> /dev/null
+574683 104652 -rw-r--r--   1 root      root      107158256 Aug  7 11:06 /usr/share/icons/oxygen/icon-theme.cache                    
+sysadmin@localhost:~$
+```
+
+Si quieres buscar los archivos que son más pequeños que un tamaño especificado, puedes usar el carácter - antes que el tamaño.
+
+## 8.4.4 Opciones de Búsqueda Útiles Adicionales
+
+Hay muchas opciones de búsqueda. La siguiente tabla muestra algunas:
+
+| Opción | Significado |
+| -maxdepth | Permite al usuario especificar la profundidad en la estructura de los directorios a buscar. Por ejemplo, `-maxdepth 1` significaría sólo buscar en el directorio especificado y en sus subdirectorios inmediatos. |
+| -group | Devuelve los archivos que son propiedad de un grupo especificado. Por ejemplo, `-group payroll` devolvería los archivos que son propiedad del grupo payroll (o «nómina» en español). |
+| -iname | Devuelve los archivos especificados que coinciden con el nombre de archivo, pero a diferencia del `-name`, `-iname` no es sensible a las mayúsculas y minúsculas. Por ejemplo, `-iname hosts` coincidiría con los archivos llamados *hosts*, *Hosts*, *HOSTS*, etc. |
+| -mmin | Devuelve los archivos que fueron modificados según el tiempo de modificación en minutos. Por ejemplo, `-mmin 10` coincidirá con los archivos que fueron modificados hace 10 minutos. |
+| -type | Devuelve los archivos que coinciden con el tipo de archivo. Por ejemplo, `-type f` devuelve los archivos que son archivos regulares. |
+| -user | Devuelve los archivos que son propiedad de un usuario especificado. Por ejemplo, `-user bob` devuelve los archivos que son propiedad del usuario bob. |

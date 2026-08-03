@@ -5695,3 +5695,61 @@ sysadmin@localhost:~$ find /etc -size 10c -type f -ls 2>/dev/null
 73468    4 -rw-r--r--   1 root     root           10 Nov 16 20:42 /etc/hostname
 sysadmin@localhost:~$
 ```
+
+## 8.5 Visualización de los Archivos Utilizando el Comando less
+
+Mientras que visualizar pequeños archivos con el comando `cat` no plantea ningún problema, no es una opción ideal para los archivos grandes. El comando `cat` no proporciona ninguna manera para pausar y reiniciar la pantalla fácilmente, por lo que el contenido del archivo entero es arrojado a la pantalla.
+
+Para archivos más grandes, querrás usar el comando *pager* que permite ver el contenido. Los comandos pager mostrarán una página de datos a la vez, permiténdote moverte hacia adelante y hacia atrás en el archivo utilizando las teclas de movimiento.
+
+Hay dos comandos pager comúnmente utilizados:
+
+- El comando `less`: Este comando proporciona una capacidad de paginación muy avanzada. Normalmente es el pager predeterminado utilizado por comandos como el comando `man`.
+- El comando `more`: Este comando ha existido desde los primeros días de UNIX. Aunque tenga menos funciones que el comando `less`, tiene una ventaja importante: El comando `less` no viene siempre incluido en todas las distribuciones de Linux (y en algunas distribuciones, no viene instalado por defecto). El comando `more` siempre está disponible.
+
+Cuando utilizas los comandos `more` o `less`, te permiten «moverte» en un documento utilizando los *comandos de tecla*. Ya que los desarrolladores del comando `less` basaron el comando en la funcionalidad del comando `more`, todos los comandos de tecla disponibles en el comando `more` también trabajan en el comando `less`.
+
+En este manual nos centraremos más en el comando más avanzado (`less`). Sin embargo, resulta útil que te acuerdes del comando `more` para cuando el comando `less` no esté disponible. Recuerda que la mayoría de los comandos de tecla proporcionados trabajan para ambos comandos.
+
+## 8.5.1 La Pantalla de Ayuda con el Comando less
+
+Al ver un archivo con el comando `less`, puedes utilizar la tecla **h** para mostrar una pantalla de ayuda. La pantalla de ayuda te permite ver que otros comandos están disponibles. En el ejemplo siguiente, se ejecuta el comando `less /usr/share/dict/words`. Cuando se visualiza el documento, se presiona la tecla **h**, y se muestra la pantalla de ayuda:
+
+```bash
+                    SUMMARY OF LESS COMMANDS                                     
+      Commands marked with * may be preceded by a number, N.      
+      Notes in parentheses indicate the behavior if N is given.                 
+                                                                       
+  h  H                 Display this help.                              
+  q  :q  Q  :Q  ZZ     Exit.                                           
+ ------------------------------------------------------------------------ 
+                           MOVING                                               
+                                                                        
+  e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).                 
+  y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).               
+  f  ^F  ^V  SPACE  *  Forward  one window (or N lines).                
+  b  ^B  ESC-v      *  Backward one window (or N lines).               
+  z                 *  Forward  one window (and set window to N).       
+  w                 *  Backward one window (and set window to N).               
+  ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.    
+  d  ^D             *  Forward  one half-window (and set half-window to N).     
+  u  ^U             *  Backward one half-window (and set half-window to N).     
+  ESC-)  RightArrow *  Left  one half screen width (or N positions).    
+  ESC-(  LeftArrow  *  Right one half screen width (or N positions).      
+HELP -- Press RETURN for more, or q when done
+```
+
+## 8.5.2 Los Comandos de Movimiento para less
+
+Hay muchos comandos de movimiento para el comando `less`, cada uno con múltiples teclas o combinaciones de teclas. Si bien esto puede parecer intimidante, recuerda que no necesitas memorizar todos estos comandos de movimiento; siempre puedes utilizar la tecla **h** para obtener la ayuda.
+
+El primer grupo de comandos de movimiento en los que probablemente te quieras enfocar son los que más comúnmente se utilizan. Para hacerlo aún más fácil de aprender, se resumirán las teclas que son idénticas para `more` y `less`. De esta manera, aprenderás cómo moverte en los comandos `more` y `less` al mismo tiempo:
+
+| Movimiento | Tecla |
+| Ventana hacia adelante | **Barra espaciadora** |
+| Ventana hacia atrás | **b** |
+| Línea hacia adelante | **Entrar** |
+| Salir | **q** |
+| Ayuda | **h** |
+
+Cuando se utiliza el comando `less` para moverse entre las páginas, la forma más fácil de avanzar una página hacia adelante es presionando la **barra espaciadora**.

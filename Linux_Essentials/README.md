@@ -5684,3 +5684,14 @@ Hay muchas opciones de búsqueda. La siguiente tabla muestra algunas:
 | -mmin | Devuelve los archivos que fueron modificados según el tiempo de modificación en minutos. Por ejemplo, `-mmin 10` coincidirá con los archivos que fueron modificados hace 10 minutos. |
 | -type | Devuelve los archivos que coinciden con el tipo de archivo. Por ejemplo, `-type f` devuelve los archivos que son archivos regulares. |
 | -user | Devuelve los archivos que son propiedad de un usuario especificado. Por ejemplo, `-user bob` devuelve los archivos que son propiedad del usuario bob. |
+
+## 8.4.5 Usar Múltiples Opciones
+
+Si utilizas múltiples opciones, éstas actúan como un operador lógico "y", lo que significa que para que se dé una coincidencia, todos los criterios deben coincidir, no sólo uno. Por ejemplo, el siguiente comando muestra todos los archivos en la estructura de directorio */etc* con el tamaño de 10 bytes y que son archivos simples:
+
+```bash
+sysadmin@localhost:~$ find /etc -size 10c -type f -ls 2>/dev/null       
+432    4 -rw-r--r--   1 root     root           10 Jan 28  2015 /etc/adjtime
+73468    4 -rw-r--r--   1 root     root           10 Nov 16 20:42 /etc/hostname
+sysadmin@localhost:~$
+```

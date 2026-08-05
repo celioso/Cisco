@@ -5753,3 +5753,63 @@ El primer grupo de comandos de movimiento en los que probablemente te quieras en
 | Ayuda | **h** |
 
 Cuando se utiliza el comando `less` para moverse entre las páginas, la forma más fácil de avanzar una página hacia adelante es presionando la **barra espaciadora**.
+
+## 8.5.3 Comandos de Búsqueda less
+
+Hay dos formas de buscar con el comando `less`: puedes buscar hacia adelante o hacia atrás desde tu posición actual usando patrones llamados las expresiones regulares. Más detalles en relación con las expresiones regulares se proporcionarán más adelante en este capítulo.
+
+Para iniciar una búsqueda hacia adelante desde tu posición actual, utiliza la tecla /. A continuación, escribe el texto o el patrón y presiona la tecla **Entrar**.
+
+Si se encuentra una coincidencia, el cursor se moverá en el documento hasta encontrar una coincidencia. Por ejemplo, en el siguiente gráfico la expresión «frog» (o «rana» en español) se buscó en el archivo */usr/share/dict/words*:
+
+```bash
+bullfrog                                                                
+bullfrog's                                                              
+bullfrogs                                                               
+bullheaded                                                              
+bullhorn                                                                
+bullhorn's                                                              
+bullhorns                                                               
+bullied                                                                 
+bullies                                                                 
+bulling                                                                 
+bullion                                                                 
+bullion's                                                              
+bullish                                                                 
+bullock                                                                 
+bullock's                                                               
+bullocks                                                                
+bullpen                                                                 
+bullpen's                                                               
+bullpens                                                                
+bullring                                                                
+bullring's                                                              
+bullrings                                                               
+bulls                                                                    
+:
+```
+Observa que «frog» no tiene que ser una palabra por sí misma. Observa también, que mientras el comando `less` te llevó a la primera coincidencia desde tu posición actual, todas las coincidencias se resaltaron.
+
+Si no se encuentra ninguna coincidencia hacia adelante desde tu posición actual, la última línea de la pantalla reportará «*Pattern not found*» (o «Patrón no encontrado» en español):
+
+`Pattern not found (press RETURN)`
+
+Para iniciar una búsqueda hacia atrás desde tu posición actual, pulsa la tecla **?**, después introduce el texto o el patrón y presiona la tecla **Entrar**. El cursor se moverá hacia atrás hasta encontrar la primera coincidencia o te informará que no se puede encontrar el patrón.
+
+Si la búsqueda encuentra más de una coincidencia, entonces con la tecla **n** te puedes mover a la siguiente coincidencia y la tecla **N** te permitirá ir a la coincidencia anterior.
+
+## 8.6 Revisando los Comandos head y tail
+Recordemos que los comandos head y tail se utilizan para filtrar los archivos y mostrar un número limitado de líneas. Si quieres ver un número de líneas seleccionadas desde la parte superior del archivo, utiliza el comando head y si quieres ver un número de líneas seleccionadas en la parte inferior de un archivo, utiliza el comando tail.
+
+Por defecto, ambos comandos muestran diez líneas del archivo. La siguiente tabla proporciona algunos ejemplos:
+
+Comando de Ejemplo	Explicación del texto visualizado
+head /etc/passwd	Las primeras diez líneas del archivo /etc/passwd
+head -3 /etc/group	Las primeras tres líneas del archivo/etc/group
+head -n 3 /etc/group	Las primeras tres líneas del archivo /etc/group
+help | head	Las primeras diez líneas de la salida del comando help redirigidas por la barra vertical
+tail /etc/group	Las últimas diez líneas del archivo /etc/group
+tail -5 /etc/passwd	Las últimas cinco líneas del archivo /etc/passwd
+tail -n 5 /etc/passwd	Las últimas cinco líneas del archivo /etc/passwd
+help | tail	Las últimas diez líneas de la salida del comando help redirigidas por la barra vertical
+Como puedes observar en los ejemplos anteriores, ambos comandos darán salida al texto de un archivo regular o de la salida de cualquier comando enviado mediante la barra vertical. Ambos utilizan la opción -n para indicar cuántas líneas debe contener la salida.

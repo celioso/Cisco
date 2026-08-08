@@ -5799,17 +5799,144 @@ Para iniciar una búsqueda hacia atrás desde tu posición actual, pulsa la tecl
 Si la búsqueda encuentra más de una coincidencia, entonces con la tecla **n** te puedes mover a la siguiente coincidencia y la tecla **N** te permitirá ir a la coincidencia anterior.
 
 ## 8.6 Revisando los Comandos head y tail
-Recordemos que los comandos head y tail se utilizan para filtrar los archivos y mostrar un número limitado de líneas. Si quieres ver un número de líneas seleccionadas desde la parte superior del archivo, utiliza el comando head y si quieres ver un número de líneas seleccionadas en la parte inferior de un archivo, utiliza el comando tail.
+
+Recordemos que los comandos `head` y `tail` se utilizan para filtrar los archivos y mostrar un número limitado de líneas. Si quieres ver un número de líneas seleccionadas desde la parte superior del archivo, utiliza el comando `head` y si quieres ver un número de líneas seleccionadas en la parte inferior de un archivo, utiliza el comando `tail`.
 
 Por defecto, ambos comandos muestran diez líneas del archivo. La siguiente tabla proporciona algunos ejemplos:
 
-Comando de Ejemplo	Explicación del texto visualizado
-head /etc/passwd	Las primeras diez líneas del archivo /etc/passwd
-head -3 /etc/group	Las primeras tres líneas del archivo/etc/group
-head -n 3 /etc/group	Las primeras tres líneas del archivo /etc/group
-help | head	Las primeras diez líneas de la salida del comando help redirigidas por la barra vertical
-tail /etc/group	Las últimas diez líneas del archivo /etc/group
-tail -5 /etc/passwd	Las últimas cinco líneas del archivo /etc/passwd
-tail -n 5 /etc/passwd	Las últimas cinco líneas del archivo /etc/passwd
-help | tail	Las últimas diez líneas de la salida del comando help redirigidas por la barra vertical
-Como puedes observar en los ejemplos anteriores, ambos comandos darán salida al texto de un archivo regular o de la salida de cualquier comando enviado mediante la barra vertical. Ambos utilizan la opción -n para indicar cuántas líneas debe contener la salida.
+| Comando de Ejemplo | Explicación del texto visualizado |
+|---|---|
+| head /etc/passwd | Las primeras diez líneas del archivo /etc/passwd |
+| head -3 /etc/group | Las primeras tres líneas del archivo/etc/group |
+| head -n 3 /etc/group | Las primeras tres líneas del archivo /etc/group |
+| help pipe head | Las primeras diez líneas de la salida del comando help redirigidas por la barra vertical |
+| tail /etc/group | Las últimas diez líneas del archivo /etc/group |
+| tail -5 /etc/passwd | Las últimas cinco líneas del archivo /etc/passwd |
+| tail -n 5 /etc/passwd | Las últimas cinco líneas del archivo /etc/passwd |
+| help pipe tail | Las últimas diez líneas de la salida del comando help redirigidas por la barra vertical |
+
+Como puedes observar en los ejemplos anteriores, ambos comandos darán salida al texto de un archivo regular o de la salida de cualquier comando enviado mediante la barra vertical. Ambos utilizan la opción `-n` para indicar cuántas líneas debe contener la salida.
+
+## 8.6.1 El Valor Negativo de la Opción -n
+
+Tradicionalmente en UNIX, se especifica el número de líneas a mostrar como una opción con cualquiera de los comandos, así pues `-3` significa mostrar tres líneas. Para el comando `tail`, la opción `-3` o `-n -3` siempre significará mostrar tres líneas. Sin embargo, la versión GNU del comando `head` reconoce `-n -3` como mostrar todo menos las tres últimas líneas, y sin embargo el comando `head` siempre reconoce la opción `-3` como muestra las tres primeras líneas.
+
+## 8.6.2 El Valor Positivo del Comando tail
+
+La versión GNU del comando `tail` permite una variación de cómo especificar el número de líneas que se deben imprimir. Si utilizas la opción `-n` con un número precedido por el signo más, entonces el comando `tail` reconoce esto en el sentido de mostrar el contenido a partir de la línea especificada y continuar hasta el final.
+
+Por ejemplo, el siguiente ejemplo muestra la línea #22 hasta el final de la salida del comando `nl`:
+
+```bash
+sysadmin@localhost:~$ nl /etc/passwd | tail -n +22                     
+    22  sshd:x:103:65534::/var/run/sshd:/usr/sbin/nologin               
+    23  operator:x:1000:37::/root:/bin/sh                               
+    24  sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash  
+sysadmin@localhost:~$
+```
+
+## 8.6.3 Seguimiento de los Cambios en un Archivo
+
+Puedes ver los cambios en vivo en los archivos mediante la opción `-f` del comando `tail`. Esto es útil cuando quieres seguir cambios en un archivo mientras están sucediendo.
+
+Un buen ejemplo de esto sería cuando quieres ver los archivos de registro como el administrador de sistemas. Los archivos de registro pueden utilizarse para solucionar los problemas y a menudo los administradores los verán en una ventana independiente de manera «interactiva» utilizando el comando `tail` mientras van ejecutando los comandos con los cuáles están intentando solucionar los problemas.
+
+Por ejemplo, si vas a iniciar una sesión como el usuario root, puedes solucionar los problemas con el servidor de correo electrónico mediante la visualización de los cambios en tiempo real de su archivo de registro utilizando el comando siguiente: `tail -f /var/log/mail.log`
+
+## 8.7 Ordenar Archivos o Entradas
+
+Puede utilizarse el comando `sort` para reorganizar las líneas de archivos o entradas en orden alfabético o numérico basado en el contenido de uno o más campos. Los campos están determinados por un separador de campos contenido en cada línea, que por defecto son espacios en blanco (espacios y tabuladores).
+
+En el ejemplo siguiente se crea un pequeño archivo, usando el comando `head` tomando las 5 primeras líneas del archivo */etc/passwd* y enviando la salida a un archivo llamado *mypasswd*.
+
+```bash
+sysadmin@localhost:~$ head -5 /etc/passwd > mypasswd                    
+sysadmin@localhost:~$
+```
+```bash
+sysadmin@localhost:~$ cat mypasswd                                      
+root:x:0:0:root:/root:/bin/bash                                         
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
+bin:x:2:2:bin:/bin:/bin/sh                                              
+sys:x:3:3:sys:/dev:/bin/sh                                              
+sync:x:4:65534:sync:/bin:/bin/sync                                      
+sysadmin@localhost:~$
+```
+
+Ahora vamos a ordenar (sort) el archivo mypasswd:
+
+```bash
+sysadmin@localhost:~$ sort mypasswd                                     
+bin:x:2:2:bin:/bin:/bin/sh                                              
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
+root:x:0:0:root:/root:/bin/bash                                         
+sync:x:4:65534:sync:/bin:/bin/sync                                      
+sys:x:3:3:sys:/dev:/bin/sh                                              
+sysadmin@localhost:~$
+```
+
+## 8.7.1 Opciones de Campo y Ordenamiento
+
+En el caso de que el archivo o entrada pueda separarse por otro delimitador como una coma o dos puntos, la opción `-t` permitirá especificar otro separador de campo. Para especificar los campos para `sort` (o en español «ordenar»), utiliza la opción `-k` con un argumento para indicar el número de campo (comenzando con 1 para el primer campo).
+
+Las otras opciones comúnmente usadas para el comando `sort` son `-n` para realizar un `sort` numérico y `-r` para realizar a un `sort` inverso.
+
+En el siguiente ejemplo, se utiliza la opción `-t` para separar los campos por un carácter de dos puntos y realiza un `sort` numérico utilizando el tercer campo de cada línea:
+
+```bash
+sysadmin@localhost:~$ sort -t: -n -k3 mypasswd                          
+root:x:0:0:root:/root:/bin/bash                                         
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
+bin:x:2:2:bin:/bin:/bin/sh                                              
+sys:x:3:3:sys:/dev:/bin/sh                                              
+sync:x:4:65534:sync:/bin:/bin/sync                                     
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que la opción `-r` se podía haber utilizado para invertir el `sort`, causando que los números más altos en el tercer campo aparecieran en la parte superior de la salida:
+
+```bash
+sysadmin@localhost:~$ sort -t: -n -r -k3 mypasswd                       
+sync:x:4:65534:sync:/bin:/bin/sync                                      
+sys:x:3:3:sys:/dev:/bin/sh                                              
+bin:x:2:2:bin:/bin:/bin/sh                                              
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
+root:x:0:0:root:/root:/bin/bash                                         
+sysadmin@localhost:~$
+```
+
+Por último, puede que quieras ordenarlo de una forma más compleja, como un `sort` por un campo primario y luego por un campo secundario. Por ejemplo, considera los siguientes datos:
+
+```bash
+bob:smith:23
+nick:jones:56
+sue:smith:67
+```
+
+Puede que quieras ordenar primero por el apellido (campo #2), luego el nombre (campo #1) y luego por edad (campo #3). Esto se puede hacer con el siguiente comando:
+
+`sysadmin@localhost:~$ sort -t: -k2 -k1 -k3n filename``
+
+## 8.8 Visualización de las Estadísticas de Archivo con el Comando wc
+
+El comando `wc` permite que se impriman hasta tres estadísticas por cada archivo, así como el total de estas estadísticas, siempre que se proporcione más de un nombre de archivo. De forma predeterminada, el comando `wc` proporciona el número de líneas, palabras y bytes (1 byte = 1 carácter en un archivo de texto):
+
+```bash
+sysadmin@localhost:~$ wc /etc/passwd /etc/passwd-
+  35   56 1710 /etc/passwd
+  34   55 1665 /etc/passwd-
+  69  111 3375 total
+sysadmin@localhost:~$
+```
+
+El ejemplo anterior muestra la salida de ejecutar: `wc /etc/passwd /etc/passwd-`. La salida tiene cuatro columnas: el número de líneas en el archivo, el número de palabras en el archivo, el número de bytes en el archivo y el nombre de archivo o *total*.
+
+Si quieres ver estadísticas específicas, puede utilizar `-l` para mostrar sólo el número de líneas, `-w` para mostrar sólo el número de palabras y `-c` para mostrar sólo el número de bytes.
+
+El comando `wc` puede ser útil para contar el número de líneas devueltas por algún otro comando utilizando la barra vertical. Por ejemplo, si desea saber el número total de los archivos en el directorio */etc*, puedes ejecutar `ls /etc | wc -l`:
+
+```bash
+sysadmin@localhost:~$ ls /etc/ | wc -l
+136
+sysadmin@localhost:~$
+```

@@ -5978,3 +5978,90 @@ drwxr-xr-x Videos
 -rw-rw-r-- new.txt
 sysadmin@localhost:~$
 ```
+
+## 8.10 Utilizar el Comando grep para Filtrar el Contenido del Archivo
+
+Puedes utilizar el comando `grep` para filtrar las líneas en un archivo o en la salida de otro comando basado en la coincidencia de un patrón. El patrón puede ser tan simple como el texto exacto que quieres que coincida o puede ser mucho más avanzado mediante el uso de las expresiones regulares (de las que hablaremos más adelante en este capítulo).
+
+Por ejemplo, puedes querer encontrar todos los usuarios que pueden ingresar al sistema con el shell BASH, por lo que se podría utilizar el comando `grep` para filtrar las líneas del archivo */etc/passwd* para las líneas que contengan los caracteres bash:
+
+```bash
+sysadmin@localhost:~$ grep bash /etc/passwd                             
+root:x:0:0:root:/root:/bin/bash                                         
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash  
+sysadmin@localhost:~$
+```
+
+Para que sea más fácil ver exactamente lo que coincide, utiliza la opción de `--color`. Esta opción resaltará los elementos coincidentes en rojo:
+
+```bash
+sysadmin@localhost:~$ grep --color bash /etc/passwd                             
+root:x:0:0:root:/root:/bin/bash                                         
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash  
+sysadmin@localhost:~$
+```
+
+En algunos casos no te interesan las líneas específicas que coinciden con el patrón, sino más bien cuántas líneas coinciden con el patrón. Con la opción `-c` puedes obtener un conteo del número de líneas que coinciden:
+
+```bash
+sysadmin@localhost:~$ grep -c bash /etc/passwd
+2
+sysadmin@localhost:~$
+```
+
+Cuando estás viendo la salida del comando `grep`, puede ser difícil determinar el número original de las líneas. Esta información puede ser útil cuando regreses al archivo (tal vez para editar el archivo), ya que puedes utilizar esta información para encontrar rápidamente una de las líneas coincidentes.
+
+La opción `-n` del comando `grep` muestra los números de la línea originales:
+
+```bash
+sysadmin@localhost:~$ grep -n bash /etc/passwd
+1:root:x:0:0:root:/root:/bin/bash
+24:sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bas
+sysadmin@localhost:~$
+```
+
+Algunas opciones adicionales del `grep` que pueden resultar útiles:
+
+| Ejemplos | Salida |
+|---|---|
+| `grep -v nologin /etc/passwd` | Todas las líneas que no contengan *nologin* en el archivo */etc/passwd* |
+| `grep -l linux /etc/*` | Lista de los archivos en el directorio */etc* que contengan *linux* |
+| `grep -i linux /etc/*` | Listado de las líneas de los archivos en el directorio */etc* que contengan cualquier tipo de letra (mayúscula o minúscula) del patrón de caracteres *linux* |
+| `grep -w linux /etc/*` | Listado de las líneas de los archivos en el directorio */etc* que contengan el patrón de la palabra *linux* |
+
+## 8.11 Las Expresiones Regulares Básicas
+
+Una *Expresión Regular* es una colección de caracteres «normales» y «especiales» que se utilizan para que coincida con un patrón simple o complejo. Los caracteres normales son caracteres alfanuméricos que coinciden con ellos mismos. Por ejemplo, la letra a coincide con una a.
+
+Algunos caracteres tienen significados especiales cuando se utilizan dentro de los patrones por comandos como el comando `grep`. Existen las *Expresiones Regulares Básicas* (disponible para una amplia variedad de comandos de Linux) y las *Expresiones Regulares Extendidas* (disponibles para los comandos más avanzados de Linux). Las Expresiones Regulares Básicas son las siguientes:
+
+| Expresión Regular | Coincidencias |
+|---|---|
+| . | Cualquier carácter individual |
+| [ ] | Una lista o rango de caracteres que coinciden con un carácter, a menos que el primer carácter sea el símbolo de intercalación ^, lo que entonces significa cualquier carácter que no esté en la lista |
+| * | El carácter previo que se repite cero o más veces |
+| ^ | El texto siguiente debe aparecer al principio de la línea |
+| $ | El texto anterior debe aparecer al final de la línea |
+
+El comando `grep` es sólo uno de los muchos comandos que admiten expresiones regulares. Algunos otros comandos son los comandos `more` y `less`. Mientras que a algunas de las expresiones regulares se les ponen innecesariamente con comillas simples, es una buena práctica utilizar comillas simples con tus expresiones regulares para evitar que el shell trate a interpretar su significado especial.
+
+## 8.11.1 Expresiones Regulares Básicas - el Carácter .
+
+En el ejemplo siguiente, un simple archivo primero se crea usando la redirección. Después el comando `grep` se utiliza para mostrar una coincidencia de patrón simple:
+
+```bash
+sysadmin@localhost:~$ echo 'abcddd' > example.txt
+sysadmin@localhost:~$ cat example.txt
+abcddd
+sysadmin@localhost:~$ grep --color 'a..' example.txt
+abcddd
+sysadmin@localhost:~$
+```
+En el ejemplo anterior, se puede ver que el patrón a.. coincidió con abc. El primer carácter . coincidió con b y el segundo coincidió con c.
+
+En el siguiente ejemplo, el patrón a..c no coincide con nada, así que el comando `grep` no produce ninguna salida. Para que la coincidencia tenga éxito, hay que poner dos caracteres entre a y c en el example.txt:
+
+```bash
+sysadmin@localhost:~$ grep --color 'a..c' example.txt
+sysadmin@localhost:~$
+```

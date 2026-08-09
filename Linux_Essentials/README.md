@@ -5716,26 +5716,25 @@ En este manual nos centraremos más en el comando más avanzado (`less`). Sin em
 Al ver un archivo con el comando `less`, puedes utilizar la tecla **h** para mostrar una pantalla de ayuda. La pantalla de ayuda te permite ver que otros comandos están disponibles. En el ejemplo siguiente, se ejecuta el comando `less /usr/share/dict/words`. Cuando se visualiza el documento, se presiona la tecla **h**, y se muestra la pantalla de ayuda:
 
 ```bash
-                    SUMMARY OF LESS COMMANDS                                     
-      Commands marked with * may be preceded by a number, N.      
-      Notes in parentheses indicate the behavior if N is given.                 
-                                                                       
-  h  H                 Display this help.                              
-  q  :q  Q  :Q  ZZ     Exit.                                           
+                    SUMMARY OF LESS COMMANDS
+      Commands marked with * may be preceded by a number, N.
+      Notes in parentheses indicate the behavior if N is given.
+      
+  h  H                 Display this help.
+  q  :q  Q  :Q  ZZ     Exit.
  ------------------------------------------------------------------------ 
-                           MOVING                                               
-                                                                        
-  e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).                 
-  y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).               
-  f  ^F  ^V  SPACE  *  Forward  one window (or N lines).                
-  b  ^B  ESC-v      *  Backward one window (or N lines).               
-  z                 *  Forward  one window (and set window to N).       
-  w                 *  Backward one window (and set window to N).               
-  ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.    
-  d  ^D             *  Forward  one half-window (and set half-window to N).     
-  u  ^U             *  Backward one half-window (and set half-window to N).     
-  ESC-)  RightArrow *  Left  one half screen width (or N positions).    
-  ESC-(  LeftArrow  *  Right one half screen width (or N positions).      
+                           MOVING                                    
+  e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).
+  y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).
+  f  ^F  ^V  SPACE  *  Forward  one window (or N lines).
+  b  ^B  ESC-v      *  Backward one window (or N lines).
+  z                 *  Forward  one window (and set window to N).
+  w                 *  Backward one window (and set window to N)
+  ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.
+  d  ^D             *  Forward  one half-window (and set half-window to N).
+  u  ^U             *  Backward one half-window (and set half-window to N).
+  ESC-)  RightArrow *  Left  one half screen width (or N positions).
+  ESC-(  LeftArrow  *  Right one half screen width (or N positions).
 HELP -- Press RETURN for more, or q when done
 ```
 
@@ -5763,30 +5762,29 @@ Para iniciar una búsqueda hacia adelante desde tu posición actual, utiliza la 
 Si se encuentra una coincidencia, el cursor se moverá en el documento hasta encontrar una coincidencia. Por ejemplo, en el siguiente gráfico la expresión «frog» (o «rana» en español) se buscó en el archivo */usr/share/dict/words*:
 
 ```bash
-bullfrog                                                                
-bullfrog's                                                              
-bullfrogs                                                               
-bullheaded                                                              
-bullhorn                                                                
-bullhorn's                                                              
-bullhorns                                                               
-bullied                                                                 
-bullies                                                                 
-bulling                                                                 
-bullion                                                                 
-bullion's                                                              
-bullish                                                                 
-bullock                                                                 
-bullock's                                                               
-bullocks                                                                
-bullpen                                                                 
-bullpen's                                                               
-bullpens                                                                
-bullring                                                                
-bullring's                                                              
-bullrings                                                               
-bulls                                                                    
-:
+bullfrog
+bullfrog's
+bullfrogs
+bullheaded
+bullhorn
+bullhorn's
+bullhorns
+bullied
+bullies
+bulling
+bullion
+bullion's
+bullish
+bullock
+bullock's
+bullocks
+bullpen
+bullpen's
+bullpens
+bullring
+bullring's
+bullrings
+bulls
 ```
 Observa que «frog» no tiene que ser una palabra por sí misma. Observa también, que mientras el comando `less` te llevó a la primera coincidencia desde tu posición actual, todas las coincidencias se resaltaron.
 
@@ -5828,9 +5826,9 @@ La versión GNU del comando `tail` permite una variación de cómo especificar e
 Por ejemplo, el siguiente ejemplo muestra la línea #22 hasta el final de la salida del comando `nl`:
 
 ```bash
-sysadmin@localhost:~$ nl /etc/passwd | tail -n +22                     
-    22  sshd:x:103:65534::/var/run/sshd:/usr/sbin/nologin               
-    23  operator:x:1000:37::/root:/bin/sh                               
+sysadmin@localhost:~$ nl /etc/passwd | tail -n +22
+    22  sshd:x:103:65534::/var/run/sshd:/usr/sbin/nologin
+    23  operator:x:1000:37::/root:/bin/sh
     24  sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash  
 sysadmin@localhost:~$
 ```
@@ -5850,28 +5848,28 @@ Puede utilizarse el comando `sort` para reorganizar las líneas de archivos o en
 En el ejemplo siguiente se crea un pequeño archivo, usando el comando `head` tomando las 5 primeras líneas del archivo */etc/passwd* y enviando la salida a un archivo llamado *mypasswd*.
 
 ```bash
-sysadmin@localhost:~$ head -5 /etc/passwd > mypasswd                    
+sysadmin@localhost:~$ head -5 /etc/passwd > mypasswd
 sysadmin@localhost:~$
 ```
 ```bash
-sysadmin@localhost:~$ cat mypasswd                                      
-root:x:0:0:root:/root:/bin/bash                                         
-daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
-bin:x:2:2:bin:/bin:/bin/sh                                              
-sys:x:3:3:sys:/dev:/bin/sh                                              
-sync:x:4:65534:sync:/bin:/bin/sync                                      
+sysadmin@localhost:~$ cat mypasswd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
 sysadmin@localhost:~$
 ```
 
 Ahora vamos a ordenar (sort) el archivo mypasswd:
 
 ```bash
-sysadmin@localhost:~$ sort mypasswd                                     
-bin:x:2:2:bin:/bin:/bin/sh                                              
-daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
-root:x:0:0:root:/root:/bin/bash                                         
-sync:x:4:65534:sync:/bin:/bin/sync                                      
-sys:x:3:3:sys:/dev:/bin/sh                                              
+sysadmin@localhost:~$ sort mypasswd
+bin:x:2:2:bin:/bin:/bin/sh
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+root:x:0:0:root:/root:/bin/bash
+sync:x:4:65534:sync:/bin:/bin/sync
+sys:x:3:3:sys:/dev:/bin/sh
 sysadmin@localhost:~$
 ```
 
@@ -5884,24 +5882,24 @@ Las otras opciones comúnmente usadas para el comando `sort` son `-n` para reali
 En el siguiente ejemplo, se utiliza la opción `-t` para separar los campos por un carácter de dos puntos y realiza un `sort` numérico utilizando el tercer campo de cada línea:
 
 ```bash
-sysadmin@localhost:~$ sort -t: -n -k3 mypasswd                          
-root:x:0:0:root:/root:/bin/bash                                         
-daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
-bin:x:2:2:bin:/bin:/bin/sh                                              
-sys:x:3:3:sys:/dev:/bin/sh                                              
-sync:x:4:65534:sync:/bin:/bin/sync                                     
+sysadmin@localhost:~$ sort -t: -n -k3 mypasswd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
 sysadmin@localhost:~$
 ```
 
 Ten en cuenta que la opción `-r` se podía haber utilizado para invertir el `sort`, causando que los números más altos en el tercer campo aparecieran en la parte superior de la salida:
 
 ```bash
-sysadmin@localhost:~$ sort -t: -n -r -k3 mypasswd                       
-sync:x:4:65534:sync:/bin:/bin/sync                                      
-sys:x:3:3:sys:/dev:/bin/sh                                              
-bin:x:2:2:bin:/bin:/bin/sh                                              
-daemon:x:1:1:daemon:/usr/sbin:/bin/sh                                   
-root:x:0:0:root:/root:/bin/bash                                         
+sysadmin@localhost:~$ sort -t: -n -r -k3 mypasswd
+sync:x:4:65534:sync:/bin:/bin/sync
+sys:x:3:3:sys:/dev:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+root:x:0:0:root:/root:/bin/bash
 sysadmin@localhost:~$
 ```
 
@@ -5986,18 +5984,18 @@ Puedes utilizar el comando `grep` para filtrar las líneas en un archivo o en la
 Por ejemplo, puedes querer encontrar todos los usuarios que pueden ingresar al sistema con el shell BASH, por lo que se podría utilizar el comando `grep` para filtrar las líneas del archivo */etc/passwd* para las líneas que contengan los caracteres bash:
 
 ```bash
-sysadmin@localhost:~$ grep bash /etc/passwd                             
-root:x:0:0:root:/root:/bin/bash                                         
-sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash  
+sysadmin@localhost:~$ grep bash /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
 sysadmin@localhost:~$
 ```
 
 Para que sea más fácil ver exactamente lo que coincide, utiliza la opción de `--color`. Esta opción resaltará los elementos coincidentes en rojo:
 
 ```bash
-sysadmin@localhost:~$ grep --color bash /etc/passwd                             
-root:x:0:0:root:/root:/bin/bash                                         
-sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash  
+sysadmin@localhost:~$ grep --color bash /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
 sysadmin@localhost:~$
 ```
 
@@ -6065,3 +6063,283 @@ En el siguiente ejemplo, el patrón a..c no coincide con nada, así que el coman
 sysadmin@localhost:~$ grep --color 'a..c' example.txt
 sysadmin@localhost:~$
 ```
+
+## 8.11.2 Expresiones Regulares Básicas - el Carácter [ ]
+
+Si usas el carácter ., entonces cualquier carácter posible podría coincidir. En algunos casos quieres especificar exactamente los caracteres que quieres que coincidan. Por ejemplo, tal vez quieres que coincida un sólo carácter alfa minúscula o un carácter de número. Para ello, puedes utilizar los caracteres de expresiones regulares [ ] y especificar los caracteres válidos dentro de los caracteres [ ].
+
+Por ejemplo, el siguiente comando coincide con dos caracteres, el primero es ya sea una a o una b mientras que el segundo es una a, b, c o d:
+
+```bash
+sysadmin@localhost:~$ grep --color '[ab][a-d]' example.txt
+abcddd
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que puedes enumerar cada carácter posible [abcd] o proporcionar un rango [a-d] siempre que esté en el orden correcto. Por ejemplo, [d-a] no funcionaría ya que no es un intervalo válido:
+
+```bash
+sysadmin@localhost:~$ grep --color '[d-a]' example.txt
+grep: Invalid range end
+sysadmin@localhost:~$
+```
+El rango se especifica mediante un estándar denominado la tabla ASCII. Esta tabla es una colección de todos los caracteres imprimibles en un orden específico. Puedes ver la tabla ASCII con el comando `man ascii`. Un pequeño ejemplo:
+
+```bash
+      041  33  21  !                                 141   97  61  a
+      042  34  22  “                                 142   98  62  b
+      043  35  23  #                                 143   99  63  c
+      044  36  24  $                                 144   100 64  d
+      045  37  25  %                                 145   101 65  e
+      046  38  26  &                                 146   102 66  f
+```
+
+Puesto que la a tiene un valor numérico más pequeño (141) que la d (144), el rango a-d incluye todos los caracteres de la a a la d.
+
+¿Qué pasa si quieres un carácter que puede ser cualquier cosa menos una x, y o z? No querrías proporcionar un conjunto de [ ] con todos los caracteres excepto x, y o z.
+
+Para indicar que quieres que coincida un carácter que no es uno de lo listados, inicia tu conjunto de [ ] con el símbolo ^. El siguiente ejemplo muestra la coincidencia de un patrón que incluye un carácter que no es un a, b o c seguida de un d:
+
+```bash
+sysadmin@localhost:~$ grep --color '[^abc]d' example.txt
+abcddd
+sysadmin@localhost:~$
+```
+
+8.11.3 Expresiones Regulares Básicas - el Carácter *
+El carácter * se puede utilizar para coincidir con «cero o más de los caracteres previos». El siguiente ejemplo coincidirá con cero o más caracteres d:
+
+```bash
+sysadmin@localhost:~$ grep --color 'd*' example.txt
+abcddd
+sysadmin@localhost:~$
+```
+
+## 8.11.4 Expresiones Regulares Básicas - los Caracteres ^ y $
+
+Cuando quieres que coincida un patrón, tal coincidencia puede ocurrir en cualquier lugar de la línea. Puede que quieras especificar que la coincidencia se presentara al principio de la línea o al final de la línea. Para que coincida con el principio de la línea, comienza el patrón con el símbolo ^.
+
+En el ejemplo siguiente se agrega otra línea al archivo example.txt para mostrar el uso del símbolo ^:
+
+```bash
+sysadmin@localhost:~$ echo "xyzabc" >> example.txt
+sysadmin@localhost:~$ cat example.txt
+abcddd
+xyzabc
+sysadmin@localhost:~$ grep --color "a" example.txt
+abcddd
+xyzabc
+sysadmin@localhost:~$ grep --color "^a" example.txt
+abcddd
+sysadmin@localhost:~$
+```
+Ten en cuenta que en la primera salida del ``grep``, ambas líneas coinciden debido a que ambas contienen la letra a. En la segunda salida ``grep``, solo coincide con la línea que comienza con la letra a.
+
+Para especificar que coincida al final de la línea, termina el patrón con el carácter $. Por ejemplo, para encontrar sólo las líneas que terminan con la letra c:
+
+```bash
+sysadmin@localhost:~$ grep "c$" example.txt
+xyzabc
+sysadmin@localhost:~$
+```
+
+## 8.11.5 Expresiones Regulares Básicas - el Carácter \
+
+En algunos casos querrás que la búsqueda coincida con un carácter que resulta ser un carácter especial de la expresión regular. Observa el siguiente ejemplo:
+
+```bash
+sysadmin@localhost:~$ echo "abcd*" >> example.txt
+sysadmin@localhost:~$ cat example.txt
+abcddd
+xyzabc
+abcd*
+sysadmin@localhost:~$ grep --color "cd*" example.txt
+abcddd
+xyzabc
+abcd*
+sysadmin@localhost:~$
+```
+
+En la salida del comando grep anterior, ves que cada línea corresponde porque estás buscando el carácter c seguido de cero o más caracteres d. Si quieres buscar un carácter *, coloca el carácter \ antes del carácter *:
+
+```bash
+sysadmin@localhost:~$ grep --color "cd\*" example.txt
+abcd*
+sysadmin@localhost:~$
+```
+
+## 8.12 Expresiones Regulares Extendidas
+
+El uso de las Expresiones Regulares Extendidas requiere a menudo una opción especial proporcionada al comando para que éste las reconozca. Históricamente, existe un comando llamado `egrep`, que es similar al `grep`, pero es capaz de entender su uso. Ahora, el comando `egrep` es obsoleto a favor del uso del `grep` con la opción `-E`.
+
+Las siguientes expresiones regulares se consideran «extendidas»:
+
+| RE | Significado |
+|---|---|
+| ? | Coincide con el carácter anterior cero o una vez más, así que es un carácter opcional | 
+| + | Coincide con el carácter anterior repetido una o más veces |
+|	pipe | Alternación o como un operador lógico |
+
+Algunos ejemplos de expresiones regulares extendidas:
+
+| Comando | Significado | Coincidencias |
+|---|---|---|
+| grep -E 'colou?r' 2.txt | Haz coincidir colo seguido por cero o un carácter u | color colour |
+| grep -E 'd+' 2.txt | Coincide con uno o más d caracteres | d dd ddd dddd |
+| grep -E 'gray pipe grey' 2.txt | Coincide con gray o grey | gray grey |
+
+## 8.13 El Command xargs
+
+El comando `xargs` se utiliza para construir y ejecutar líneas de comandos de una entrada estándar. Este comando es muy útil cuando se necesita ejecutar un comando con una lista de argumentos muy larga, que en algunos casos puede resultar en un error si la lista de argumentos es demasiado larga.
+
+El comando `xargs` tiene una opción `-0`, que desactiva la cadena de fin de archivo, permitiendo el uso de los argumentos que contengan espacios, comillas o barras diagonales inversas.
+
+El comando `xargs` es útil para permitir que los comandos se ejecuten de manera más eficiente. Su objetivo es construir la línea de comandos para que un comando se ejecute las menos veces posibles con tantos argumentos como sea posible, en lugar de ejecutar el comando muchas veces con un argumento cada vez.
+
+El comando `xargs` funciona separando la lista de los argumentos en sublistas y ejecutando el comando con cada sublista. El número de los argumentos en cada sublista no excederá el número máximo de los argumentos para el comando ejecutado, y por lo tanto, evita el error de «*Argument list too long*» (o «Lista de argumentos demasiado larga» en español).
+
+En el ejemplo siguiente se muestra un escenario donde el comando `xargs` permite que muchos archivos sean eliminados, y donde el uso de un carácter comodín normal (glob) falló:
+
+```bash
+sysadmin@localhost:~/many$ rm *
+bash: /bin/rm: Argument list too long
+sysadmin@localhost:~/many$ ls | xargs rm
+sysadmin@localhost:~/many$
+```
+
+# Práctica 08
+
+## 8.1 Introducción
+
+Este es Lab 8: Barras verticales, Redirección y REGEX Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán cómo redirigir los flujos de texto, utilizar expresiones regulares, y los comandos para filtrar los archivos de texto.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+1. Aprender cómo redirigir y canalizar la entradas, salidas y errores stándar con las barras verticales.
+2. Utilizar las expresiones regulares para filtrar la salida de comandos o el contenido del archivo.
+3. Visualizar archivos de gran tamaño o salida de comandos con programas paginación y visualizar partes seleccionadas.
+
+## 8.2 Las Barras Verticales y le Redirección
+
+Normalmente, cuando ejecutas un comando, se muestra la salida en la ventana de la terminal. Esta salida (también llamada un canal) se llama salida estándar, simbolizada por el término *stdout*. El número descriptor del archivo para este canal es 1.
+
+El error estándar (*stderr*) se produce cuando se produce un error durante la ejecución de un comando; tiene un descriptor de archivo de 2. Los mensajes de error también se envían a la ventana de la terminal de forma predeterminada.
+
+En esta práctica, vas a utilizar los caracteres que redirigen la salida de la salida estándar (*stdout*) y el error estándar (*stderr*) a un archivo u otro comando en lugar de la pantalla de la terminal.
+
+La entrada estándar, *stdin*, por lo general la proporcionas tú a un comando escribiendo en el teclado; número descriptor de archivo es 0. Sin embargo, mediante la redirección de la entrada estándar, los archivos pueden también ser utilizados como *stdin*.
+
+## 8.2.1 Paso 1
+
+Utiliza el símbolo de redirección *>* para redirigir la salida desde la salida normal de *stdout* (terminal) a un archivo. Escribe lo siguiente:
+
+```bash
+echo "Hello World"
+echo "Hello World" > mymessage
+cat mymessage
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ echo "Hello World"
+Hello World
+sysadmin@localhost:~$ echo "Hello World" > mymessage
+sysadmin@localhost:~$ cat mymessage
+Hello World
+sysadmin@localhost:~$
+```
+El primer comando repite el mensaje (*stdout*) a la terminal.
+
+El segundo comando redirecciona la salida; en lugar de enviarla a la terminal, la salida se envía a un archivo llamado *mymessage*.
+
+El último comando muestra el contenido del archivo *mymessage*.
+
+## 8.2.2 Paso 2
+
+Cuando utilizas el símbolo *>*  para redirigir la *stdout*, los contenidos del archivo se destruyen primero. Escribe los siguientes comandos para ver una demostración:
+
+```bash
+cat mymessage
+echo Greetings > mymessage
+cat mymessage
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ cat mymessage
+Hello World
+sysadmin@localhost:~$ echo Greetings > mymessage
+sysadmin@localhost:~$ cat mymessage
+Greetings
+sysadmin@localhost:~$
+```
+
+Observa que el uso de un símbolo de redirección sobrescribe un archivo existente. Esto se llama «sobrescribir accidentalmente» (clobbering) un archivo.
+
+## 8.2.3 Paso 3
+
+Puedes evitar sobrescribir accidentalmente un archivo mediante el uso de *>>* en lugar de *>*. Mediante el uso de *>>* anexas a un archivo. Ejecuta los siguientes comandos para ver una demostración:
+
+```bash
+cat mymessage
+echo "How are you?" >> mymessage
+cat mymessage
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ cat mymessage
+Greetings
+sysadmin@localhost:~$ echo "How are you?" >> mymessage
+sysadmin@localhost:~$ cat mymessage
+Greetings
+How are you?
+sysadmin@localhost:~$
+```
+
+Recuerda que mediante el uso de *>>* todos los datos existentes se conservan y los nuevos datos se añaden al final del archivo.
+
+## 8.2.4 Paso 4
+
+El comando `find` comando es un buen comando para demostrar cómo el *stderr* funciona. Este comando busca en el sistema de archivos los archivos basándose en los criterios tales como el nombre de archivo. Ejecuta el siguiente comando y observa los resultados:
+
+`find /etc -name hosts`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts
+find: `/etc/ssl/private': Permission denied
+/etc/hosts
+sysadmin@localhost:~$
+```
+
+Observa el mensaje de error que indica que no tienes permiso para acceder a ciertos archivos/directorios. Esto se debe a que como un usuario normal no tiene derecho a "mirar dentro" de algunos directorios. Estos tipos de mensajes de error se envían al *stderr*, no a la *stdout*.
+
+Trataremos el comando `find` con mayor detalle más adelante. El comando solo se utiliza ahora para demostrar la diferencia entre la *stdout* y el *stderr*.
+
+## 8.2.5 Paso 5
+
+Para redirigir el *stderr* (mensajes de error) a un archivo, emite el siguiente comando:
+
+```bash
+find /etc -name hosts 2> err.txt
+cat err.txt
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts 2> err.txt
+/etc/hosts
+sysadmin@localhost:~$ cat err.txt
+find: `/etc/ssl/private': Permission denied
+sysadmin@localhost:~$
+```
+
+Recuerda que el descriptor de archivo para el *stderr* es el número *2*, por lo que se utiliza junto con el símbolo *>*  para redirigir la salida *sdterr* a un archivo llamado *err.txt*. Ten en cuenta que *1>* es lo mismo que *>*.
+
+Nota: El ejemplo anterior demuestra la importancia de conocer la redirección. Si queires "ignorar" los errores que muestra el comando `find`, puedes redirigir los mensajes a un archivo y verlos más tarde, haciendo más fácil centrarse en el resto de la salida del comando.

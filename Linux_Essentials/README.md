@@ -6343,3 +6343,227 @@ sysadmin@localhost:~$
 Recuerda que el descriptor de archivo para el *stderr* es el número *2*, por lo que se utiliza junto con el símbolo *>*  para redirigir la salida *sdterr* a un archivo llamado *err.txt*. Ten en cuenta que *1>* es lo mismo que *>*.
 
 Nota: El ejemplo anterior demuestra la importancia de conocer la redirección. Si queires "ignorar" los errores que muestra el comando `find`, puedes redirigir los mensajes a un archivo y verlos más tarde, haciendo más fácil centrarse en el resto de la salida del comando.
+
+## 8.2.6 Paso 6
+
+También puedes redirigir *stdout* y *stderr* en dos archivos separados.
+
+```bash
+find /etc -name hosts > std.out 2> std.err
+cat std.err
+cat std.out
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts > std.out 2> std.err
+sysadmin@localhost:~$ cat std.err
+find: `/etc/ssl/private': Permission denied
+sysadmin@localhost:~$ cat std.out
+/etc/hosts
+sysadmin@localhost:~$
+```
+
+Observa que se permite poner un espacio después del símbolo de redirección >, pero no es obligatorio.
+
+## 8.2.7 Paso 7
+
+Para redirigir tanto la salida estándar (*stdout*) como el error estándar (*stderr*) a un archivo, primero redirige la *stdout* a un archivo y luego redirige el *stderr* a ese mismo archivo mediante el uso de la notación *2>&1*.
+
+```bash
+find /etc -name hosts >find.out 2>&1
+cat find.out
+```
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find /etc -name hosts > find.out 2>&1
+sysadmin@localhost:~$ cat find.out
+find: `/etc/ssl/private': Permission denied
+/etc/hosts
+sysadmin@localhost:~$
+```
+
+La parte del comando *2>&1* significa enviar el *stderr* (canal 2) a la misma ubicación a la que va la *stdout* (canal 1).
+
+## 8.2.8 Paso 8
+
+La entrada estándar (*stdin*) también puede ser redirigida. Normalmente la *stdin* proviene del teclado, pero a veces quieres que provenga de un archivo. Por ejemplo, el comando `tr` traduce los caracteres, pero sólo acepta los datos de la *stdin*, nunca de un nombre de archivo proporcionado como argumento. Esto es muy útil cuando quieres hacer algo así como poner en mayúscula los datos que se introducen desde el teclado (Nota: Presiona **Control+D** para señalar al comando `tr` que detenga el procesamiento de la entrada estándar):
+
+```bash
+tr a-z A-Z
+this is interesting
+how do I stop this?
+^D
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ tr a-z A-Z
+this is interesting
+THIS IS INTERESTING
+how do I stop this?
+HOW DO I STOP THIS?
+sysadmin@localhost:~$
+```
+
+**Nota**: ^D simboliza **Control+D**
+
+## 8.2.9 Paso 9
+
+El comando `tr` acepta la entrada del teclado (*stdin*), traduce los caracteres y luego envía la salida a *stdout*. Para crear un archivo de todos los caracteres en minúscula, ejecuta lo siguiente:
+
+```bash
+tr A-Z a-z > myfile
+Wow, I SEE NOW
+This WORKS!
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ tr A-Z a-z > myfile
+Wow, I SEE NOW
+This WORKS!
+sysadmin@localhost:~$
+```
+
+Presiona la tecla *Entrar* para asegurarte de que el cursor está en la línea bajo el texto «This works!» (o «¡Esto funciona!» en español), y a continuación, utiliza *Control + D* para detener la entrada. Para verificar que has creado el archivo, ejecuta el siguiente comando:
+
+`cat myfile``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ cat myfile
+wow, i see now
+this works!
+sysadmin@localhost:~$
+```
+
+## 8.2.10 Paso 10
+
+Ejecuta los siguientes comandos para utilizar el comando `tr` mediante la redirección de la *stdin* desde un archivo:
+
+```bash
+cat myfile
+tr a-z A-Z < myfile
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ cat myfile
+wow, i see now
+this works!
+sysadmin@localhost:~$ tr a-z A-Z < myfile
+WOW, I SEE NOW
+THIS WORKS!
+sysadmin@localhost:~$
+```
+
+## 8.2.11 Paso 11
+
+Otra forma popular de redirección es tomar la salida de un comando y enviarlo a otro comando como entrada. Por ejemplo, la salida de algunos comandos puede ser masiva, lo que resulta en el desplazamiento de la salida en la pantalla demasiado rápido para leer. Ejecuta el siguiente comando para tomar la salida del comando `ls` y enviarlo al comando `more` que muestra una página de datos a la vez:
+
+`ls -l /etc | more`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls -l /etc | more
+total 372
+-rw-r--r-- 1 root root    2981 Jan 28  2015 adduser.conf
+-rw-r--r-- 1 root root      10 Jan 28  2015 adjtime
+drwxr-xr-x 1 root root     900 Jan 29  2015 alternatives
+drwxr-xr-x 1 root root     114 Jan 29  2015 apparmor.d
+drwxr-xr-x 1 root root     168 Oct  1  2014 apt
+-rw-r--r-- 1 root root    2076 Apr  3  2012 bash.bashrc
+drwxr-xr-x 1 root root      72 Jan 28  2015 bash_completion.d
+drwxr-sr-x 1 root bind     342 Jan 29  2015 bind
+-rw-r--r-- 1 root root     356 Apr 19  2012 bindresvport.blacklist
+-rw-r--r-- 1 root root     321 Mar 30  2012 blkid.conf
+lrwxrwxrwx 1 root root      15 Jun 18  2014 blkid.tab -> /dev/.blkid.tab      
+drwxr-xr-x 1 root root      16 Jan 29  2015 ca-certificates
+-rw-r--r-- 1 root root    7464 Jan 29  2015 ca-certificates.conf
+drwxr-xr-x 1 root root      14 Jan 29  2015 calendar
+drwxr-xr-x 1 root root      24 Jan 29  2015 cron.d
+drwxr-xr-x 1 root root     134 Jan 29  2015 cron.daily
+drwxr-xr-x 1 root root      24 Jan 29  2015 cron.hourly
+drwxr-xr-x 1 root root      24 Jan 29  2015 cron.monthly
+-rw-r--r-- 1 root root    2969 Mar 15  2012 debconf.conf
+--More--
+```
+
+Tendrás que presionar la **Barra Espaciadora** para continuar o también puedes presionar **Control + C** para salirte de este listado.
+
+El comando `cut` es útil para extraer los campos de los archivos que están delimitados por un carácter, como el de dos puntos (:) en */etc/passwd*, o que tienen un ancho fijo. Lo vamos a utilizar en los próximos ejemplos, ya que normalmente proporciona una gran cantidad de salida que se puede utilizar para demostrar el uso del carácter *|*.
+
+## 8.2.12 Paso 12
+
+En el siguiente ejemplo, se utiliza un comando llamado cut para extraer todos los nombres de usuario de una base de datos denominada /etc/passwd (un archivo que contiene información sobre la cuenta de usuario). Primero, intenta ejecutar el comando cut por sí mismo:
+
+`cut -d: -f1 /etc/passwd`
+
+Una parte de la salida del comando se muestra en el siguiente gráfico.
+
+```bash
+sysadmin@localhost:~$ cut -d: -f1 /etc/passwd
+root
+daemon
+bin
+sys
+sync
+games
+man
+lp
+mail
+news
+uucp
+proxy
+www-data
+backup
+list
+irc
+gnats
+nobody
+libuuid
+syslog
+bind
+sshd
+operator
+```
+
+## 8.2.13 Paso 13
+
+La salida en el ejemplo anterior estaba desordenada y desplazada fuera de la pantalla. En el siguiente paso vas a tomar la salida del comando `cut` y los vas a enviar al comando `sort` para ordenar la salida:
+
+`cut -d: -f1 /etc/passwd | sort`
+
+Una parte de la salida del comando se muestra en el siguiente gráfico.
+
+```bash
+sysadmin@localhost:~$ cut -d: -f1 /etc/passwd | sort
+backup
+bin
+bind
+daemon
+games
+gnats
+irc
+libuuid
+list
+lp
+mail
+man
+news
+nobody
+operator
+proxy
+root
+sshd
+sync
+sys
+```

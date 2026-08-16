@@ -6567,3 +6567,169 @@ sshd
 sync
 sys
 ```
+
+## 8.2.14 Paso 14
+
+Ahora la salida está ordenada, pero todavía se desplaza fuera de la pantalla. Envía la salida del comando `sort` al comando `more` para resolver este problema:
+
+`cut -d: -f1 /etc/passwd | sort | more`
+
+```bash
+sysadmin@localhost:~$ cut -d: -f1 /etc/passwd | sort | more
+backup
+bin
+bind
+daemon
+games
+gnats
+irc
+libuuid
+list
+lp
+mail
+man
+news
+nobody
+operator
+proxy
+root
+sshd
+sync
+sys
+sysadmin
+syslog
+uucp
+--More--
+```
+
+## 8.3 Utilizar el comando find para Encontrar Archivos
+
+En esta tarea vas a utilizar el comando `find` para buscar archivos.
+
+El comando `find` es un comando muy flexible con una serie de opciones que permiten a los usuarios localizar archivos basándose en una amplia gama de criterios tales como nombre de archivo, tamaño, fecha, tipo y permiso. La estructura básica del comando es:
+
+`find <directorio para iniciar la búsqueda> -criteria <argumento para los criterios>``
+
+El comando iniciará la búsqueda en el directorio especificado y busca de forma recursiva en todos los subdirectorios.
+
+## 8.3.1 Paso 1
+
+Busca los archivos comenzando por tu directorio home que contienen el nombre `bash`.
+
+`find ~ -name "*bash*"``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find ~ -name "*bash*"
+/home/sysadmin/.bash_logout
+/home/sysadmin/.bashrc
+sysadmin@localhost:~$
+```
+
+Recuerda que `~` se utiliza para representar el directorio home.
+
+## 8.3.2 Paso 2
+
+Encuentra los archivos que fueron modificados (o creados) hace menos de 5 minutos en el directorio especificado mediante el uso de los comandos siguientes:
+
+```bash
+find ~/Music -mmin -5
+touch ~/Music/mysong
+find ~/Music -mmin -5
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find ~/Music -mmin -5
+sysadmin@localhost:~$ touch ~/Music/mysong
+sysadmin@localhost:~$ find ~/Music -mmin -5
+/home/sysadmin/Music
+/home/sysadmin/Music/mysong
+sysadmin@localhost:~$
+```
+
+El primer comando `find` no encuentra los archivos que fueron modificados dentro del tiempo especificado. A continuación, crea un archivo mediante el uso del comando `touch` y ejecuta el comando `find` de nuevo, lo que resultará en que el comando `find` descubrirá el archivo nuevo.
+
+El directorio *Music* se visualizó con el segundo comando `find` porque el directorio se modificó, el resultado de un archivo que fue añadido al directorio.
+
+## 8.3.3 Paso 3
+
+Ejecuta el siguiente comando para buscar los archivos en el directorio */usr*  con tamaño mayor a 2 MB:
+
+`find /usr -size +2M``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find /usr -size +2M
+/usr/bin/python2.7
+/usr/lib/perl/5.14.2/auto/Encode/JP/JP.so
+/usr/lib/perl/5.14.2/auto/Encode/KR/KR.so
+/usr/share/GeoIP/GeoIPv6.dat
+/usr/share/file/magic.mgc
+sysadmin@localhost:~$
+```
+
+## 8.3.4 Paso 4
+
+Encuentra los archivos de tipo "directorio" en la ubicación especificada.
+
+`find /usr/share/bug -type d``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find /usr/share/bug -type d
+/usr/share/bug
+/usr/share/bug/apt
+/usr/share/bug/gnupg
+/usr/share/bug/initramfs-tools
+/usr/share/bug/procps
+/usr/share/bug/cron
+/usr/share/bug/file
+/usr/share/bug/libmagic1
+/usr/share/bug/logrotate
+/usr/share/bug/man-db
+/usr/share/bug/vim-tiny
+sysadmin@localhost:~$
+```
+
+## 8.3.5 Paso 5
+
+Para verificar que la salida muestra los directorios, usa la opción `-ls`. El comando `find` utiliza la opción `-print` por defecto que muestra sólo los nombres de archivo. La opción `-ls` proporciona detalles de los archivos:
+
+`find /usr/share/bug -type d -ls`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ find /usr/share/bug -type d -ls
+2280    0 drwxr-xr-x   1 root     root          138 Jan 29  2015 /usr/share/bug
+  2281    0 drwxr-xr-x   1 root     root           12 Jan 28  2015 /usr/share/bu
+g/apt
+2283    0 drwxr-xr-x   1 root     root           14 Jan 28  2015 /usr/share/bug/gnupg
+2285    0 drwxr-xr-x   1 root     root           12 Jan 28  2015 /usr/share/bug/initramfs-tools
+2287    0 drwxr-xr-x   1 root     root           14 Jan 28  2015 /usr/share/bug/procps
+10784    0 drwxr-xr-x   1 root     root           26 Jan 29  2015 /usr/share/bug/cron
+10787    0 drwxr-xr-x   1 root     root           28 Jan 29  2015 /usr/share/bug/file
+10790    0 drwxr-xr-x   1 root     root           28 Jan 29  2015 /usr/share/bug/libmagic1
+10793    0 drwxr-xr-x   1 root     root           12 Jan 29  2015 /usr/share/bug/logrotate
+10795    0 drwxr-xr-x   1 root     root           14 Jan 29  2015 /usr/share/bu
+g/man-db
+10797    0 drwxr-xr-x   1 root     root           26 Jan 29  2015 /usr/share/bug/vim-tiny
+sysadmin@localhost:~$
+```
+
+Recuerda que el carácter *d* antes de los permisos *rwxr-x-r-x* indica que el archivo es un directorio.
+
+## 8.4 Visualización de Archivos de Texto Grandes
+
+A pesar de que los archivos de texto grandes se pueden ver con el comando `cat`, es incómodo desplazarse atrás hacia la parte superior del archivo. Además, archivos de gran tamaño no se pueden mostrar de esta manera, porque la ventana de la terminal sólo almacena un número determinado de las líneas de la salida en la memoria.
+
+El uso de los comando `more` o `less` permite al usuario ver los datos una "página" o una línea a la vez. Estos comandos de "paginación" también permiten otras formas de navegación y búsqueda que se demostrará en esta sección.
+
+Nota: en los ejemplos se utilizan ambos comandos, el `more` y el `less`. La mayoría de las veces, los comandos funcionan de la misma manera, sin embargo, el comando `less` es más avanzado y tiene más opciones. Sin embargo, es importante conocer el comando `more`, porque algunas distribuciones de Linux no tienen el comando `less`, pero todas las distribuciones de Linux tienen el comando `more`.
+
+Si no quieres ver el archivo completo o toda la salida como un comando, entonces hay muchos comandos que son capaces de filtrar el contenido del archivo o de la salida. En esta sección, aprenderás a utilizar los comandos `head` y `tail` para poder extraer información de la parte superior o inferior de la salida del contenido de un comando o archivo.

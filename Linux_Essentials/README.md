@@ -6938,3 +6938,162 @@ sys:x:3:3:sys:/dev:/bin/sh
 sysadmin@localhost:~$
 ```
 
+## 8.5 Búsqueda de Texto Usando las Expresiones Regulares
+
+En esta tarea vas a utilizar la familia de comandos `grep` con las expresiones regulares para buscar una cadena específica de caracteres en una secuencia de datos (por ejemplo, un archivo de texto).
+
+El comando `grep` utiliza las *expresiones regulares básicas*, caracteres especiales tales como los comodines que coinciden con los patrones en los datos. El comando `grep` devuelve toda la línea que contiene el patrón que coincida.
+
+La opción `-E` del comando `grep` se puede utilizar para realizar búsquedas con las *expresiones regulares extendidas*, unas expresiones regulares más potentes. Otra forma de utilizar las expresiones regulares extendidas es utilizar el comando `egrep`.
+
+El comando `fgrep` se utiliza para hacer que la búsqueda coincida con los caracteres literales, ignorando el significado especial de los caracteres de expresiones regulares.
+
+## 8.5.1 Paso 1
+
+El uso del `grep` en su forma más simple es la búsqueda de una determinada cadena de caracteres, tales como *sshd* en el archivo */etc/passwd*. El comando `grep` imprimirá toda la línea que contiene la coincidencia:
+
+```bash
+cd /etc
+grep sshd passwd
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ cd /etc
+sysadmin@localhost:/etc$ grep sshd passwd
+sshd:x:103:65534::/var/run/sshd:/usr/sbin/nologin
+sysadmin@localhost:/etc$
+```
+
+## 8.5.2 Paso 2
+
+Las expresiones regulares son «codiciosos» en el sentido de que van a coincidir con cada instancia del patrón especificado:
+
+`grep root passwd``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep root passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:1000:37::/root:/bin/sh
+sysadmin@localhost:/etc$
+```
+
+Ten en cuenta los aspectos destacados en rojo indicando exactamente lo que coincidió. También puedes ver que todas las apariciones de root fueron agrupadas en cada línea.
+
+## 8.5.3 Paso 3
+
+Para limitar la salida puedes utilizar las expresiones regulares para especificar un patrón más preciso. Por ejemplo, el símbolo de intercalación (*^ *) se puede utilizar para coincidir con un patrón al principio de una línea; por lo que cuando se ejecuta la siguiente línea de comandos, sólo las líneas que comienzan con *root* deben coincidir y se deben mostrar:
+
+`grep '^root' passwd``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep '^root' passwd
+root:x:0:0:root:/root:/bin/bash
+sysadmin@localhost:/etc$
+```
+
+Ten en cuenta que hay dos instancias adicionales de la palabra *root* pero sólo la que aparece al comienzo de la línea coincidirá (se muestra en rojo).
+
+**Procedimiento recomendado**: Usa comillas simples (no comillas dobles) en torno a las expresiones regulares para evitar que el programa de shell trate de interpretarlas.
+
+## 8.5.4 Paso 4
+
+Encuentra la coincidencia con el patrón *sync* en cualquier parte de una línea:
+
+`grep 'sync' passwd``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep 'sync' passwd
+sync:x:4:65534:sync:/bin:/bin/sync
+sysadmin@localhost:/etc$
+```
+
+## 8.5.5 Paso 5
+
+Utiliza el símbolo *$* para que coincida con el patrón sync al final de una línea:
+
+*grep 'sync$' passwd*
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep 'sync$' passwd
+sync:x:4:65534:sync:/bin:/bin/sync
+sysadmin@localhost:/etc$
+```
+
+El primer comando coincide con todos los casos; el segundo sólo coincide con la instancia al final de la línea.
+
+## 8.5.6 Paso 6
+
+Utiliza el carácter de punto *.* para que coincida con cualquier carácter individual. Por ejemplo, ejecuta el siguiente comando para que coincida con cualquier carácter seguido de una *'y'*:
+
+`grep '.y' passwd``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep '.y' passwd
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
+proxy:x:13:13:proxy:/bin:/bin/sh
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh       
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+syslog:x:101:103::/home/syslog:/bin/false
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash        
+sysadmin@localhost:/etc$
+```
+
+## 8.5.7 Paso 7
+
+La barra vertical *|* u «operador de la alternancia», actúa como un operador "or". Por ejemplo, ejecuta lo siguiente para intentar encontrar coincidencia con sshd, root u operator:
+
+`grep 'sshd|root|operator' passwd``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep 'sshd|root|operator' passwd
+sysadmin@localhost:/etc$
+```
+Observa que el comando `grep` no reconoce la barra vertical como un operador de alternancia de forma predeterminada. El comando `grep` en realidad incluye la barra vertical como un carácter normal en el patrón que debe coincidir. El uso de `grep -E` o `egrep` te permitirá utilizar las expresiones regulares extendidas incluyendo la alternancia.
+
+## 8.5.8 Paso 8
+
+Utiliza la opción '-E' para permitir que el 'grep' opere en el modo extendido con el fin de reconocer al operador de alternancia:
+
+`grep -E 'sshd|root|operator' passwd`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep -E 'sshd|root|operator' passwd
+root:x:0:0:root:/root:/bin/bash
+sshd:x:103:65534::/var/run/sshd:/usr/sbin/nologin
+operator:x:1000:37::/root:/bin/sh
+sysadmin@localhost:/etc$
+```
+
+## 8.5.9 Paso 9
+
+Utiliza otra expresión regular extendida, esta vez con `egrep` con alternancia en un grupo para que coincida con un patrón. Las cadenas *nob* y *non* coincidirán:
+
+`egrep 'no(b|n)' passwd``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ egrep 'no(b|n)' passwd
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+sysadmin@localhost:/etc$
+```
+
+Nota: Los paréntesis, *( )*, se utilizan para limitar el «alcance» del carácter *|* . Sin ellos, como *nob|n*, el patrón hubiera significado «coincide con *nob* o bien con *n*»
+

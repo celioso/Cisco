@@ -7141,3 +7141,217 @@ operator:x:1000:37::/root:/bin/sh
 sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash        
 sysadmin@localhost:/etc$
 ```
+
+## 9.1 Introducción
+
+En este capítulo, vamos a hablar sobre cómo las herramientas que has aprendido hasta ahora pueden transformarse en scripts reutilizables.
+
+![Linux,the final frontier.](images/7-LPI-Graphics.png)
+
+Traducción Imagen: **Linux, la frontera final**. Linux es usado en el espacio por la NASA. El Fénix Mars Rover e incluso en la estación espacial internacional
+
+## 9.2 Scripts Shell en Pocas Palabras
+
+Un script *shell* es un archivo de comandos ejecutables que ha sido almacenado en un archivo de texto. Cuando el archivo se ejecuta, se ejecuta cada comando. Los scripts shell tienen acceso a todos los comandos del shell, incluyendo la lógica. Un script (o «secuencia de comandos» en español), por lo tanto, puede detectar la presencia de un archivo o buscar una salida particular y cambiar su comportamiento en consecuencia. Se pueden crear scripts para automatizar partes repetitivas de tu trabajo, que ahorran tu tiempo y aseguran consistencia cada vez que utilices el script. Por ejemplo, si ejecutas los mismos cinco comandos todos los días, puedes convertirlos en un script shell que reduce tu trabajo a un comando.
+
+Un script puede ser tan simple como un único comando:
+
+`echo “Hello, World!”`
+
+El script, *test.sh*, consta de una sola línea que imprime la cadena *Hello*, *World!* (o «¡Hola, Mundo!» en español) en la consola.
+
+Ejectutar un script puede hacerse, ya sea pasándolo como un argumento a tu shell o ejecuándolo directamente:
+
+```bash
+sysadmin@localhost:~$ sh test.sh
+Hello, World!
+sysadmin@localhost:~$ ./test.sh
+-bash: ./test.sh: Permission denied
+sysadmin@localhost:~$ chmod +x ./test.sh
+sysadmin@localhost:~$ ./test.sh
+Hello, World!
+```
+
+En el ejemplo anterior, en primer lugar, el script se ejecuta como un argumento del shell. A continuación, se ejecuta el script directamente desde el shell. Es raro tener el directorio actual en la ruta de búsqueda binaria *$PATH*, por lo que el nombre viene con el prefijo *./* para indicar que se debe ejecutar en el directorio actual.
+
+El error *Permission denied*(o «Permiso denegado» en español) significa que el script no ha sido marcado como ejecutable. Un comando `chmod` rápido después y el script funciona. El comando `chmod` se utiliza para cambiar los permisos de un archivo, que se explica en detalle en un capítulo posterior.
+
+Hay varios shells con su propia sintaxis de lenguaje. Por lo tanto, los scripts más complicados indicarán un shell determinado, especificando la ruta absoluta al intérprete como la primera línea, con el prefijo *#!*, tal como lo muestra el siguiente ejemplo:
+
+```bash
+#!/bin/sh
+echo “Hello, World!”
+```
+
+o
+
+```bash
+#!/bin/bash
+echo “Hello, World!”
+```
+
+Los dos caracteres *#!* se llaman tradicionalmente el hash y el bang respectivamente, que conduce a la forma abreviada «shebang» cuando se utilizan al principio de un script.
+
+Por cierto, el shebang (o crunchbang) se utiliza para los scripts shell tradicionales y otros lenguajes basados en texto como Perl, Ruby y Python. Cualquier archivo de texto marcado como ejecutable se ejecutará bajo el intérprete especificado en la primera línea mientras se ejecuta el script directamente. Si el script se invoca directamente como argumento a un intérprete, como *sh script* o *bash script*, se utilizará el shell proporcionado, independientemente de lo que está en la línea del shebang.
+
+Ayuda sentirse cómodo utilizando un editor de texto antes de escribir los scripts shell, ya que se necesitarás crear los archivos de texto simple. Las herramientas de oficina tradicionales como LibreOffice, que dan salida a archivos que contienen la información de formato y otra información, no son adecuadas para esta tarea.
+
+## 9.3 Editar los Scripts Shell
+
+UNIX tiene muchos editores de texto y las ventajas del uno sobre el otro se debaten muy a menudo. Dos de ellos vienen mencionados específicamente en el programa del curso de los aspectos esenciales de LPI: El editor de GNU `nano` es un editor muy sencillo y bien adaptado para editar pequeños archivos de texto. El Visual Editor , `vi`, o su versión más reciente, VI mejorado (`vim`), es un editor muy potente pero tiene un arduo proceso de aprendizaje. Nosotros nos centraremos en el `nano`.
+
+Introduce `nano test.sh` y verás una pantalla similar a esta:
+
+```bash
+GNU nano 2.2.6              File: test.sh                         modified
+
+#!/bin/sh
+
+echo "Hello, World!"
+echo -n "the time is "
+date
+                                    
+                                                                    
+^G Get Help  ^O WriteOut  ^R Read File ^Y Prev Page ^K Cut Text  ^C Cur Po 
+^X Exit      ^J Justify   ^W Where Is  ^V Next Page ^U UnCut Text^T To Spell
+```
+
+El editor `nano` tiene algunas características que debes conocer. Simplemente escribes con tu teclado, utiliza las flechas para moverte y el botón *suprimir/retroceso* para borrar texto. A lo largo de la parte inferior de la pantalla puedes ver algunos comandos disponibles, que son sensible al contexto y cambian dependiendo de lo que estás haciendo. Si te encuentras directamente en la máquina Linux, o sea no te conectas a través de la red, puedes utilizar el ratón para mover el cursor y resaltar el texto.
+
+Para familiarizarte con el editor, comienza a escribir un script shell sencillo dentro del editor `nano`:
+
+```bash
+GNU nano 2.2.6              File: test.sh                         modified
+
+#!/bin/sh
+
+echo "Hello, World!"
+echo -n "the time is "
+date
+
+
+^G Get Help  ^O WriteOut  ^R Read File ^Y Prev Page ^K Cut Text  ^C Cur Po 
+^X Exit      ^J Justify   ^W Where Is  ^V Next Page ^U UnCut Text^T To Spell
+```
+
+Ten en cuenta que la opción de la parte inferior izquierda es *^X Exit* que significa «presiona **control** y **X** para salir». Presione **Ctrl** con **X** y la parte inferior cambiará:
+
+```bash
+Save modified buffer (ANSWERING "No" WILL DESTROY CHANGES) ?                 
+ Y Yes                                                                       
+ N No           ^C Cancel
+```
+
+En este punto, puedes salir del programa sin guardar los cambios pulsando la tecla **N** o guardar primero pulsando **Y** para guardar. El valor predeterminado es guardar el archivo con el nombre de archivo actual. Puedes presionar la tecla **Entrar** para guardar y salir.
+
+Después de guardar regresarás al shell prompt. Regresa al editor. Esta vez pulsa **Ctrl** y **O** para guardar tu trabajo sin salir del editor. Los prompts son iguales en gran parte, salvo que estás de nuevo en el editor.
+
+Esta vez utiliza las teclas de la flecha para mover el cursor a la línea que contiene el texto «*The time is*» (o «La hora es» en español). Presiona **Control** y **K** dos veces para cortar las dos últimas líneas al búfer de copia. Mueve el cursor a la línea restante y presiona **Control** y **U** una vez para pegar el búfer de copia a la posición actual. Esto hace que el script muestre la hora actual antes de saludarte y te ahorra tener que volver a escribir las líneas.
+
+Otros comandos útiles que puedas necesitar son:
+
+| Comando | Descripción |
+|---|---|
+| Ctrl + W | buscar en el documento |
+| Ctrl + W, luego Control + R | buscar y reemplazar |
+| Ctrl + G | mostrar todos los comandos posibles |
+| Ctrl + Y/V | página hacia arriba / abajo |
+| Ctrl + C | mostrar la posición actual en el archivo y el tamaño del archivo |
+
+## 9.4 El Scripting Básico
+
+Anteriormente en este capítulo tuviste tu primera experiencia de scripting y recibiste una introducción a un script muy básico que ejecuta un comando simple. El script comenzó con la línea shebang, que le dice al Linux que tiene que utilizar el /bin/bash (lo que es Bash) para ejecutar un script.
+
+Aparte de ejecutar comandos, hay 3 temas que debes conocer:
+
+- Las variables, que contienen información temporal en el script
+- Las condicionales, que te dejan hacer varias cosas basadas en las pruebas que vas introduciendo
+- Los Loops, que te permiten hacer lo mismo una y otra vez
+
+## 9.4.1 Las Variables
+
+Las variables son una parte esencial de cualquier lenguaje de programación. A continuación se muestra un uso muy simple de las variables:
+
+```bash
+#!/bin/bash
+
+ANIMAL="penguin"
+echo "My favorite animal is a $ANIMAL"
+```
+
+Después de la línea shebang está una directiva para asignar un texto a una variable. El nombre de la variable es *ANIMAL* y el signo de igual asigna la cadena *penguin* (o «pingüino» en español). Piensa en una variable como una caja en la que puedes almacenar cosas. Después de ejecutar esta línea, la caja llamada *ANIMAL* contiene la palabra *penguin*.
+
+Es importante que no haya ningún espacio entre el nombre de la variable, el signo de igual y el elemento que se asignará a la variable. Si le pones espacio, obtendrás un error como «*command not found*». No es necesario poner la variable en mayúsculas pero es una convención útil para separar las variables de los comandos que se ejecutarán.
+
+A continuación, el script despliega una cadena en la consola. La cadena contiene el nombre de la variable precedido por un signo de dólar. Cuando el intérprete ve el signo de dólar reconoce que va a sustituir el contenido de la variable, lo que se llama interpolación. La salida del script es *My favorite animal is a penguin* (o «My animal favorito es un pingüino» en español.)
+
+Así que recuerda esto: Para asignar una variable, usa el nombre de la variable. Para acceder al contenido de la variable, pon el prefijo del signo de dólar. ¡A continuación, vamos a mostrar una variable a la que se asigna el contenido de otra variable!
+
+```bash
+#!/bin/bash
+
+ANIMAL=penguin
+SOMETHING=$ANIMAL
+echo "My favorite animal is a $SOMETHING"
+```
+
+*ANIMAL* contiene la cadena *penguin* (como no hay espacios, se muestra la sintaxis alternativa sin usar las comillas). A *SOMETHING* se le asigna el contenido de ANIMAL (porque a la variable *ANIMAL* le procede el signo de dólar).
+
+Si quieres, puedes asignar una cadena interpolada a una variable. Esto es bastante común en las grandes secuencias de comandos, ya que puedes construir un comando más grande y ejecutarlo!
+
+Otra forma de asignar una variable es utilizar la salida de otro comando como el contenido de la variable incluyendo el comando entre los comillas invertidas:
+
+```bash
+#!/bin/bash
+CURRENT_DIRECTORY=`pwd`
+echo "You are in $CURRENT_DIRECTORY"
+```
+
+Este patrón a menudo se utiliza para procesar texto. Puedes tomar el texto de una variable o un archivo de entrada y pasarlo por otro comando como `sed` o `awk` para extraer ciertas partes y guardar el resultado en una variable.
+
+Es posible obtener entradas del usuario de su script y asignarlo a una variable mediante el comando `read` (o «leer» en español):
+
+```bash
+#!/bin/bash
+
+echo -n "What is your name? "
+read NAME
+echo "Hello $NAME!"
+```
+
+El comando `read` puede aceptar una cadena directo desde el teclado o como parte de la redirección de comandos tal como aprendiste en el capítulo anterior.
+
+Hay algunas variables especiales además de las establecidas. Puedes pasar argumentos a tu script:
+
+```bash
+#!/bin/bash
+echo "Hello $1"
+```
+
+El signo de dólar seguido de un número *N* corresponde al argumento *Nth* pasado al script. Si invocas al ejemplo anterior con `./test.sh` el resultado será *Hola Linux*. La variable *$0* contiene el nombre del script.
+
+Después de que un programa se ejecuta, ya sea un binario o un script, devuelve el exit code (o «código de salida» en español) que es un número entero entre 0 y 255. Puedes probarlo con la variable *$?* para ver si el comando anterior se ha completado con éxito.
+
+```bash
+sysadmin@localhost:~$ grep -q root /etc/passwd
+sysadmin@localhost:~$ echo $?
+0
+sysadmin@localhost:~$ grep -q slartibartfast /etc/passwd
+sysadmin@localhost:~$ echo $?
+1
+```
+
+Se utilizó el comando `grep` para buscar una cadena dentro de un archivo con el indicador `-q`, que significa «silencioso» (o «quiet» en inglés). El `grep`, mientras se ejecuta en modo silencioso, devuelve *0*, si la cadena se encontró y *1* en el caso contrario. Esta información puede utilizarse en un condicional para realizar una acción basada en la salida de otro comando.
+
+Además puedes establecer el código de salida de tu propio script con el comando exit:
+
+```bash
+#!/bin/bash
+# Something bad happened!
+exit 1
+```
+
+El ejemplo anterior muestra un comentario *#*. Todo lo que viene después de la etiqueta hash se ignora, se puede utilizar para ayudar al programador a dejar notas. El comando `exit 1` devuelve el código de salida *1* al invocador. Esto funciona incluso en el shell. Si ejecutas este script desde la línea de comandos y luego introduces `echo $?`, verás que devolverá *1*.
+
+Por convención, un código de salida de *0* significa «todo está bien». Cualquier código de salida mayor que *0* significa que ocurrió algún tipo de error, que es específico para el programa. Viste que `grep` utiliza 1 lo que significa que la cadena no se encontró.
+

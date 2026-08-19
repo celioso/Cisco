@@ -7097,3 +7097,47 @@ sysadmin@localhost:/etc$
 
 Nota: Los paréntesis, *( )*, se utilizan para limitar el «alcance» del carácter *|* . Sin ellos, como *nob|n*, el patrón hubiera significado «coincide con *nob* o bien con *n*»
 
+## 8.5.10 Paso 10
+
+Los corchetes `[ ]` también se pueden utilizar para que la búsqueda coincida con un solo carácter, sin embargo a diferencia del punto `.`, los corchetes `[ ]` se utilizan para especificar exactamente qué carácter debe coincidir. Por ejemplo, si quieres que coincida con un carácter numérico, puedes especificar `[0-9]`. Ejecuta el siguiente comando para una demostración:
+
+`head passwd | grep '[0-9]'`
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ head passwd | grep '[0-9]'
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/bin/sh
+man:x:6:12:man:/var/cache/man:/bin/sh
+lp:x:7:7:lp:/var/spool/lpd:/bin/sh
+mail:x:8:8:mail:/var/mail:/bin/sh
+news:x:9:9:news:/var/spool/news:/bin/sh
+sysadmin@localhost:/etc$
+```
+
+Nota: El comando `head` se utiliza para limitar la salida del comando `grep`.
+
+## 8.5.11 Paso 11
+
+Supón que quieres buscar un patrón que contiene una secuencia de tres dígitos. Puedes usar `{ }`  con un número para expresar que quieres repetir un patrón un número específico de veces; por ejemplo: `{3}` El uso del calificador numérico requiere un modo extendido de `grep`:
+
+`grep -E '[0-9]{3}' passwd`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:/etc$ grep -E '[0-9]{3}' passwd
+sync:x:4:65534:sync:/bin:/bin/sync
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+libuuid:x:100:101::/var/lib/libuuid:/bin/sh
+syslog:x:101:103::/home/syslog:/bin/false
+bind:x:102:105::/var/cache/bind:/bin/false
+sshd:x:103:65534::/var/run/sshd:/usr/sbin/nologin
+operator:x:1000:37::/root:/bin/sh
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash        
+sysadmin@localhost:/etc$
+```

@@ -7355,3 +7355,152 @@ El ejemplo anterior muestra un comentario *#*. Todo lo que viene después de la 
 
 Por convención, un código de salida de *0* significa «todo está bien». Cualquier código de salida mayor que *0* significa que ocurrió algún tipo de error, que es específico para el programa. Viste que `grep` utiliza 1 lo que significa que la cadena no se encontró.
 
+## 9.4.2 Condicionales
+
+Ahora que puedes ver y definir las variables, es hora de hacer que tus propios scripts tengan diferentes funciones basadas en pruebas, llamado branching (o «ramificación» español). La instrucción *if* (o «si» en español) es el operador básico para implementar un branching.
+
+La instrucción *if* se ve así:
+
+```bash
+if somecommand; then
+  # do this if somecommand has an exit code of 0
+fi
+```
+
+El siguiente ejemplo ejecutará «somecommand» (en realidad, todo hasta el punto y coma) y si el código de salida es *0*, entonces se ejecutará el contenido hasta el cierre *fi*. Usando lo que sabes acerca del `grep`, ahora puedes escribir un script que hace cosas diferentes, basadas en la presencia de una cadena en el archivo de contraseñas:
+
+```bash
+#!/bin/bash
+
+if grep -q root /etc/passwd; then
+  echo root is in the password file
+else
+  echo root is missing from the password file
+fi
+```
+
+De los ejemplos anteriores podrías recordar que el código de salida del `grep` es *0* si se encuentra la cadena. El ejemplo anterior utiliza esto en una línea para imprimir un mensaje si *root* está en el archivo *passwd*, u otro mensaje si no es así. La diferencia aquí es que en lugar de un fi para cerrar, el bloque *if*, hay un *else*. Esto te permite realizar una acción si la condición es verdadera, y otra si la condición es falsa. El bloque *else* siempre debe cerrarse con la palabra clave *fi*.
+
+Otras tareas comunes son buscar la presencia de un archivo o directorio y comparar cadenas y números. Podrías iniciar un archivo de registro si no existe, o comparar el número de líneas en un archivo con la última vez que se ejecutó. El comando *if* es claramente de ayuda aquí, pero ¿qué comando debes usar para hacer la comparación?
+
+El comando `test` te da un acceso fácil los operadores de prueba de comparación y archivos. Por ejemplo:
+
+| Comando | Descripción |
+|---|---|
+| `test –f /dev/ttyS0` | 0 si el archivo existe |
+| `test ! –f /dev/ttyS0` | 0 si el archivo no existe |
+| `test –d /tmp` | 0 si el directorio existe |
+| test –x `which ls` | sustituir la ubicación de ls y luego (probar) test, si el usuario puede ejecutar |
+| `test 1 –eq 1`	| 0 si tiene éxito la comparación numérica |
+| `test ! 1 –eq 1` |	NO – 0 si la comparación falla |
+| `test 1 –ne 1` | Más fácil, ejecutar test (probar) si hay desigualdad numérica |
+| `test “a” = “a”` | 0 si tiene éxito la comparación de cadenas |
+| `test “a” != “a”`	| 0 si las cadenas son diferentes |
+| `test 1 –eq 1 –o 2 –eq 2`	| `-o` es OR: cualquiera de las opciones pueden ser igual |
+| `test 1 –eq 1 –a 2 –eq 2	| `-a` es AND: ambas comparaciones deben ser iguales |
+
+Es importante tener en cuenta que el `test` ve las comparaciones de números enteros y cadenas de manera distinta. *01* y *1* son iguales por comparación numérica, pero no para comparación de cadenas o strings. Siempre debes tener cuidado y recordar qué tipo de entrada esperas.
+
+Hay muchas más pruebas, como `–gt` para mayor que, formas de comprobar si un archivo es más reciente que los otros y muchos más. Para más información consulta la página `test man`.
+
+La salida de `test` es bastante largo para un comando que se usa con tanta frecuencia, por lo que tiene un alias llamado *[* (corchete cuadrado izquierdo). Si incluyes tus condiciones en corchetes, es lo mismo que si ejecutaras el `test`. Por lo tanto, estas instrucciones son idénticas.
+
+```bash
+if test –f /tmp/foo; then
+if [ -f /tmp/foo]; then
+```
+
+Mientras que la última forma es de uso más frecuente, es importante entender que el corchete es un comando en sí que funciona de manera semejante al `test` excepto que requiere el corchete cuadrado de cierre.
+
+La instrucción *if* tiene una forma final que te permite hacer varias comparaciones al mismo tiempo usando *elif* (abreviatura de *elseif*).
+
+```bash
+#!/bin/bash
+
+if [ "$1" = "hello" ]; then
+  echo "hello yourself"
+elif [ "$1" = "goodbye" ]; then
+  echo "nice to have met you"
+  echo "I hope to see you again"
+else
+  echo "I didn't understand that"
+fi
+```
+
+El código anterior compara el primer argumento pasado al script. Si es *hello*, se ejecuta el primer bloque. Si no es así, el script de comandos comprueba si es *goodbye* e invoca con el comando `echo` con un diferente mensaje entonces. De lo contrario, se envía un tercer mensaje. Ten en cuenta que la variable *$1* viene entre comillas y se utiliza el operador de comparación de cadenas en lugar de la versión numérica (`-eq`).
+
+Las pruebas *if/elif/else* pueden ser bastante detalladas y complicadas. La instrucción case proporciona una forma distinta de hacer las pruebas múltiples más fáciles.
+
+```bash
+#!/bin/bash
+
+case "$1" in
+hello|hi)
+  echo "hello yourself"
+  ;;
+goodbye)
+  echo "nice to have met you"
+  echo "I hope to see you again"
+  ;;
+*)
+  echo "I didn't understand that"
+esac
+```
+
+La instrucción *case* comienza con la descripción de la expresión que se analiza: *case EXPRESSION in*. La expresión aquí es $1 entre comillas.
+
+A continuación, cada conjunto de pruebas se ejecutan como una coincidencia de patrón terminada por un paréntesis de cierre. El ejemplo anterior primero busca *hello* o *hi*; múltiples opciones son separadas por la barra vertical *|* que es un operador OR en muchos lenguajes de programación. Después de esto, se ejecutan los comandos si el patrón devuelve verdadero y se terminan con dos signos de punto y coma. El patrón se repite.
+
+El patrón * es igual a *else*, ya que coincide con cualquier cosa. El comportamiento de la instrucción case es similar a la instrucción *if/elif/else* en que el proceso se detiene tras la primera coincidencia. Si ninguna de las otras opciones coincide, el patrón * asegurá que coincida con la última.
+
+Con una sólida comprensión de las condicionales puedes hacer que tus scripts tomen acción sólo si es necesario.
+
+## 9.4.3 Los Loops
+
+Los loops (o «ciclos o bucles» en español) permiten que un código se ejecute repetidas veces. Pueden ser útiles en numerosas situaciones, como cuando quieres ejecutar los mismos comandos sobre cada archivo en un directorio, o repetir alguna acción 100 veces. Hay dos loops principales en los scripts del shell: el loop *for* y el loop *while*.
+
+Los loops *for* se utilizan cuando tienes una colección finita que quieres repetir, como una lista de archivos o una lista de nombres de servidor:
+
+```bash
+#!/bin/bash
+
+SERVERS="servera serverb serverc"
+for S in $SERVERS; do
+  echo "Doing something to $S"
+done
+```
+
+Primero, el script establece una variable que contiene una lista de nombres de servidor separada por espacios. La instrucción for entonces cicla (realiza «loops») sobre la lista de los servidores, cada vez que establece la variable *S* con el nombre del servidor actual. La elección de la S es arbitraria, pero ten en cuenta que la *S* no tiene un signo de dólar, pero en el *$SERVERS* sí lo tiene, lo que muestra que se *$SERVERS* se extenderá a la lista de servidores. La lista no tiene que ser una variable. Este ejemplo muestra dos formas más para pasar una lista.
+
+´´´bash
+#!/bin/bash
+
+for NAME in Sean Jon Isaac David; do
+  echo "Hello $NAME"
+done
+
+for S in *; do
+  echo "Doing something to $S"
+done
+```
+
+El primer loop es funcionalmente el mismo que en el ejemplo anterior, excepto que la lista se pasa directamente al loop *for* en lugar de usar una variable. Usar una variable ayuda a que el script sea más claro, ya que una persona fácilmente puede realizar cambios en la variable en lugar de ver el loop.
+
+El segundo loop utiliza comodín * que es un *file glob*. El shell expande eso a todos los archivos en el directorio actual.
+
+El otro tipo de loop, un loop *while*, opera en una lista de tamaño desconocido. Su trabajo es seguir ejecutándose y en cada iteración realizar un `test` para ver si se tiene que ejecutar otra vez. Lo puedes ver como «mientras que una condición es verdadera, haz cosas».
+
+```bash
+#!/bin/bash
+
+i=0
+while [ $i -lt 10 ]; do
+  echo $i
+  i=$(( $i + 1))
+done
+echo "Done counting"
+```
+
+El ejemplo anterior muestra un loop *while* que cuenta de 0 a 9. Un contador de variables, *i*, arranca en *0*. Luego, un loop *while* se ejecuta con un `test` siendo «is `$i` less than 10?» (o «¿es `$i` menor que 10?») ¡Ten en cuenta que el loop *while* utiliza la misma notación que la instrucción *if*.
+
+Dentro del loop *while* el valor actual de *i* es mostrado en pantalla, y luego se le añade *1* a través del comando *$((aritmética))* y se asigna de regreso al *i*. Una vez que *i* llega a 10, la instrucción *while* regresa falso y el proceso continuará después del loop.

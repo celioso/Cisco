@@ -7504,3 +7504,94 @@ echo "Done counting"
 El ejemplo anterior muestra un loop *while* que cuenta de 0 a 9. Un contador de variables, *i*, arranca en *0*. Luego, un loop *while* se ejecuta con un `test` siendo «is `$i` less than 10?» (o «¿es `$i` menor que 10?») ¡Ten en cuenta que el loop *while* utiliza la misma notación que la instrucción *if*.
 
 Dentro del loop *while* el valor actual de *i* es mostrado en pantalla, y luego se le añade *1* a través del comando *$((aritmética))* y se asigna de regreso al *i*. Una vez que *i* llega a 10, la instrucción *while* regresa falso y el proceso continuará después del loop.
+
+# 9 Practica
+
+## 9.1 Introducción
+
+Este es Lab 9: Los comandos de script Linux Essentials. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán cómo utilizar el editor vi para crear los scripts básicos del shell utilizando los comandos, variables e instrucciones de control esenciales del shell.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+- Utilizar el editor vi para crear y editar los archivos de texto.
+- Crear los scripts del shell simples.
+- Crear los scripts del shell con ejecución condicional.
+- Utilizar los loops en el script para la repetición.
+
+## 9.2 La Edición de Texto Básica
+
+La mayoría de las distribuciones de Linux tienen más de un editor de texto. Estos pueden incluir editores simples de sólo texto, tales como `nano`, o editores gráficos, tales como `gedit`.
+
+En esta tarea, explorarás algunas de las características básicas de edición de texto en el editor `vi`. Todas las distribuciones tienen alguna versión de `vi`. El editor `vi` es un potente editor de texto con una pequeña curva de aprendizaje, pero capaz de realizar una amplia variedad de tareas de edición de texto.
+
+El editor `vi` tiene dos modos: inserción y comando. En el modo de inserción se agrega el texto a un documento. En el modo de comandos, pueden realizarse las operaciones tales como la navegación, la búsqueda, guardar y salir del editor.
+
+## 9.2.1 Paso 1
+
+Para crear un nuevo archivo ejecuta el siguiente comando:
+
+`vi myfile``
+
+Escribe una *i* para entrar al modo de «inserción» del `vi`(más sobre esto más adelante). A continuación, introduce el siguiente texto:
+
+```test
+Welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+```
+
+A continuación, presiona la tecla **Esc** para salir del modo de inserción. Introduce *:wq* para escribir el archivo en el disco y salir.
+
+**Nota**: Cada uno de los comandos anteriores los verás en mayor detalle más adelante en este laboratorio. El propósito del paso anterior era crear un archivo para trabajar durante este laboratorio.
+
+## 9.2.2 Paso 2
+
+Invoca el editor `vi` para modificar el archivo creado. Cuando invocas el `vi`, te colocas en el modo comando por defecto:
+
+`vi myfile``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+Welcome to the vi editor.                                                     
+It is a very powerful text editor.                                            
+Especially for those who master it.                                           
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+"myfile" 3 lines, 97 characters
+```
+
+Observa que en la parte inferior izquierda se muestran el nombre del archivo, el número de líneas y el número de caracteres en el archivo.
+
+## 9.2.3 Paso 3
+
+Presiona cada una de las siguientes teclas dos veces y observa cómo se mueve el cursor. Recuerda que estás en el modo de comando:
+
+| Teclas	| Función |
+| j | Mueve el cursor una línea hacia abajo (igual que la flecha hacia abajo) |
+| k	| Mueve el cursor una línea hacia arriba (igual que la flecha hacia arriba) |
+| l	| Mueve el cursor un carácter a la derecha (igual que la flecha derecha) |
+| h	| Mueve el cursor un carácter a la izquierda (igual que la flecha izquierda) |
+| w	| Mueve el cursor al principio de la siguiente palabra |
+| e | Mueve el cursor al final de la palabra |
+| b	| Mueve el cursor al principio de la palabra anterior |
+
+**Advertencia**: Si introduces cualquier otra clave que no sean las de arriba, puedes terminar en el modo de inserción. No te asustes! Presiona la tecla *Esc*, luego `:q!` + la tecla *Entrar*. Con esto debes salir del `vi` sin guardar los cambios. ¡A continuación, ejecuta `vi myfile` y regresas al editor `vi`!

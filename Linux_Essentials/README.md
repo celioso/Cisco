@@ -7595,3 +7595,15 @@ Presiona cada una de las siguientes teclas dos veces y observa cómo se mueve el
 | b	| Mueve el cursor al principio de la palabra anterior |
 
 **Advertencia**: Si introduces cualquier otra clave que no sean las de arriba, puedes terminar en el modo de inserción. No te asustes! Presiona la tecla *Esc*, luego `:q!` + la tecla *Entrar*. Con esto debes salir del `vi` sin guardar los cambios. ¡A continuación, ejecuta `vi myfile` y regresas al editor `vi`!
+
+## 9.2.4 Paso 4
+
+Más navegación con el cursor de `vi`: Presiona las siguientes teclas y observa cómo se mueve el cursor:
+
+| Teclas | Función |
+|---|---|
+| $ | Mueve el cursor al final de la línea actual (igual que la tecla **Fin**) |
+| 0 (zero) | Mueve el cursor al inicio de la línea actual (igual que la tecla **Inicio** )
+| 3G | Salta a la tercera línea (nG salta a la enésima línea) |
+| 1G | Salta a la primera línea |
+| **Shift+G** | Salta a la última línea |

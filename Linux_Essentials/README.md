@@ -7620,8 +7620,77 @@ k
 
 El cursor debe estar en la letra *v* de la palabra *very* como se muestra a continuación:
 
-Welcome to the vi editor.                                                     
-It is a very powerful text editor.                                            
-Especially for those who master it.                                           
-~                                                                             
-~        
+```bash
+Welcome to the vi editor.
+It is a very powerful text editor.          
+Especially for those who master it.         
+~ 
+~
+```
+
+## 9.2.6 Paso 6
+
+Elimina la palabra very emitiendo el comando dw (delete word):
+
+`dw``
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a p
+owerful text editor.
+Especially for those who master it.
+~
+```
+
+## 9.2.7 Paso 7
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a v
+ery powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.8 Paso 8
+
+Eliminar dos palabras:
+
+`2dw`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a t
+ext editor.
+Especially for those who master it.         
+~                                 
+~
+```
+
+## 9.2.9 Paso 9
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a v
+ery powerful text editor.
+Especially for those who master it.
+~
+~
+```

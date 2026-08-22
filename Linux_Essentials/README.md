@@ -7607,3 +7607,21 @@ Más navegación con el cursor de `vi`: Presiona las siguientes teclas y observa
 | 3G | Salta a la tercera línea (nG salta a la enésima línea) |
 | 1G | Salta a la primera línea |
 | **Shift+G** | Salta a la última línea |
+
+## 9.2.5 Paso 5
+
+Mueve el cursor al principio de la palabra «*very*» presionando las teclas siguientes:
+
+```bash
+G
+k
+8l (es el número ocho seguido de la letra "l")
+```
+
+El cursor debe estar en la letra *v* de la palabra *very* como se muestra a continuación:
+
+Welcome to the vi editor.                                                     
+It is a very powerful text editor.                                            
+Especially for those who master it.                                           
+~                                                                             
+~        

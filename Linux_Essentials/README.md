@@ -7694,3 +7694,135 @@ Especially for those who master it.
 ~
 ~
 ```
+
+## 9.2.10 Paso 10
+
+Eliminar cuatro caracteres, uno a la vez:
+
+`xxxx``
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.  
+It is a
+powerful text editor.                   
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.11 Paso 11
+
+Deshacer las últimas 4 operaciones y recuperar los caracteres eliminados:
+
+`4u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a v
+ery powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.12 Paso 12
+
+Eliminar 14 caracteres:
+
+`14x`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a t
+ext editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.13 Paso 13
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a v
+ery powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.14 Paso 14
+
+Eliminar los cinco caracteres a la izquierda del cursor (introduce 5 y después Shift+x):
+
+`5X`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It v
+ery powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.15 Paso 15
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It i
+s a very powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.16 Paso 16
+
+Eliminar la línea actual
+
+`dd`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.17 Paso 17
+Lo que se prolongó, borró o extrajo, puede ser «pegado». Pega las líneas eliminadas por debajo de la línea actual:
+
+`p`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+Especially for those who master it.
+It is a very powerful text editor.
+~
+~
+```

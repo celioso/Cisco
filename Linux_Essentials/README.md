@@ -7826,3 +7826,69 @@ It is a very powerful text editor.
 ~
 ~
 ```
+
+## 9.2.18 Paso 18
+
+Deshacer las dos últimas operaciones:
+
+`2u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~ 
+```
+
+## 9.2.19 Paso 19
+
+Eliminar dos líneas, la actual y la siguiente:
+
+`2dd`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+W
+elcome to the vi editor.
+~
+~
+```
+
+## 9.2.20 Paso 20
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+I
+t is a very powerful text editor.
+Especially for those who master it.
+~
+~ 
+```
+
+9.2.21 Paso 21
+Moverse a la cuarta palabra, y después eliminar desde la posición actual hasta el final de la línea **Shift+D**:
+
+```
+4w
+D
+```
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a very
+Especially for those who master it.
+~
+~
+```
+El comando `d$` también elimina el final de la línea. El carácter `$`, como vimos anteriormente, avanza al final de la línea. Así, `d$` elimina el final de la línea.

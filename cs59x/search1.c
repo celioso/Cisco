@@ -1,3 +1,4 @@
+#include <cs50.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -9,7 +10,7 @@ int main(void)
 
     for (int i = 0; i < sizeof(strings) / sizeof(strings[0]); i++)
     {
-        if (strings[i] == s)
+        if (strcmp(strings[i], s) == 0)
         {
             printf("Found\n");
             return 0;

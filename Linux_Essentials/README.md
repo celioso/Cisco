@@ -7925,3 +7925,59 @@ It is a very powerful text editor.  Especially for those who master it.
 ~
 ~
 ```
+
+## 9.2.24 Paso 24
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.25 Paso 25
+
+Copia (o «jala») la palabra actual:
+
+`yw`
+
+Cuando copias un texto, no se llevará a cabo ningún cambio en la pantalla.
+
+## 9.2.27 Paso 27
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.28 Paso 28
+
+Mover a la primera línea, y luego unir tres líneas:
+
+```bash
+1G
+3J
+```
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.  It is a very powerful text editor. Especially for those who master it.
+~
+~
+```

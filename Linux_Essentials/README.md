@@ -7875,7 +7875,8 @@ Especially for those who master it.
 ~ 
 ```
 
-9.2.21 Paso 21
+## 9.2.21 Paso 21
+
 Moverse a la cuarta palabra, y después eliminar desde la posición actual hasta el final de la línea **Shift+D**:
 
 ```
@@ -7892,3 +7893,35 @@ Especially for those who master it.
 ~
 ```
 El comando `d$` también elimina el final de la línea. El carácter `$`, como vimos anteriormente, avanza al final de la línea. Así, `d$` elimina el final de la línea.
+
+## 9.2.22 Paso 22
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.    
+It is a very p
+owerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.23 Paso 23
+
+Une dos líneas, la actual y la próxima escribiendo una J mayúscula (Shift+J):
+
+`J`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.
+It is a very powerful text editor.  Especially for those who master it.
+~
+~
+```

@@ -7981,3 +7981,79 @@ Welcome to the vi editor.  It is a very powerful text editor. Especially for tho
 ~
 ~
 ```
+
+## 9.2.29 Paso 29
+
+Deshacer la última operación:
+
+`u`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+W
+elcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.30 Paso 30
+
+Busca y elimina la palabra *text*(añade espacio después de la palabra *text*):
+
+`:%s/text //g`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Welcome to the vi editor.                                                     
+It is a very powerful text editor.                                           
+Especially for those who master it.
+~
+~ 
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+:%s/text //g
+```
+
+## 9.2.31 Paso 31
+
+Navega hasta el inicio del archivo, y luego presiona i para entrar en el modo de inserción para añadir el texto:
+
+| Teclas | Función |
+|---|---|
+| `1G` | Ir al inicio del archivo (**Shift+G**) |
+| `i` | Entrar al modo de inserción |
+| `Hello and` | Añadir texto al documento con un espacio después de la palabra «`and`» |
+
+```bash
+Hello and Welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.32 Paso 32
+
+Salir del modo de inserción y regresar al modo comando presionando la tecla **Esc**:
+
+`ESC`

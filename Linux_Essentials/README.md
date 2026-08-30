@@ -8057,3 +8057,22 @@ Especially for those who master it.
 Salir del modo de inserción y regresar al modo comando presionando la tecla **Esc**:
 
 `ESC`
+
+## 9.2.33 Paso 33
+
+Avanzar un espacio presionando la letra `l` minúscula para colocar el cursor en la `W` y cambiarla a minúscula presionando el tilde (`~`):
+
+| Teclas | Función |
+|---|---|
+| l | La «L» minúscula avanza un espacio |
+| ~ | **AltGr+** cambia la letra a minúscula |
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~
+```

@@ -4,4 +4,4 @@
 
 - [Curso de Linux Essentials](Linux_Essentials)
 
-- [class 3](12) 
+- [class 3]() 

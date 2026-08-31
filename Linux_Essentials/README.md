@@ -8022,15 +8022,6 @@ Especially for those who master it.
 ~
 ~
 ~
-~
-~
-~
-~
-~
-~
-~
-~
-~
 :%s/text //g
 ```
 
@@ -8076,3 +8067,268 @@ Especially for those who master it.
 ~
 ~
 ```
+
+## 9.2.34 Paso 34
+
+Guarda el archivo. Presiona la tecla **Esc** para asegurarte de que estás en el modo comando. A continuación, escribe `:w` y presiona la tecla **Entrar**:
+
+`:w`
+
+## 9.2.35 Paso 35
+
+Cuando presionas la tecla **Entrar** para confirmar el cambio, observa el mensaje en la parte inferior izquierda indicando que el archivo fue escrito:
+
+```bash
+~
+~
+"myfile" 3 lines, 102 characters written
+```
+
+## 9.2.36 Paso 36
+
+Navega hasta el espacio entre la palabra «*powerful*» y «*editor*» en la segunda línea, como se muestra en la siguiente imagen. Puedes presionar la letra *j* seguida por *10l* o utiliza las teclas de flecha:
+
+| Comando | Función/Teclas |
+|---|---|
+| j | Bajar a la segunda línea |
+| 10l | 10 seguido por la minúscula ‘L’ |
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.37 Paso 37
+
+Agregar texto a la derecha del cursor presionando la letra `a`. Esto mueve el cursor hacia la derecha y entra al modo de inserción. Escribe la palabra `text` seguida de un espacio, como se muestra en la siguiente imagen:
+
+| Comando | Función/Teclas |
+|---|---|
+| a | Entra al modo de inserción. |
+| text | texto seguido de un espacio |
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.38 Paso 38
+
+Salir del modo de inserción presionando la tecla **Esc**.
+
+## 9.2.39 Paso 39
+
+Abre una línea en blanco debajo de la línea actual escribiendo la letra `o` minúscula:
+
+`o`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+_
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.40 Paso 40
+
+Introduce el texto siguiente:
+
+`This line added by pressing lowercase o.`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.                                           
+It is a very powerful text editor.                                           
+This line was added by pressing lowercase o. 
+Especially for those who master it.
+~
+~ 
+```
+
+## 9.2.42 Paso 42
+
+Abre una línea en blanco encima de la línea actual presionando la `O` mayúscula:
+
+`O`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+
+This line was added by pressing lowercase o. 
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.43 Paso 43
+
+Introduce el texto siguiente:
+
+`You just pressed O to open a line above.`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+You just pressed O to open a line above.
+
+This line was added by pressing lowercase o.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.44 Paso 44
+
+Salir del modo de inserción presionando la tecla **Esc**.
+
+## 9.2.45 Paso 45
+
+Guarda el archivo y cierra el editor `vi` utilizando cualquiera de los siguientes métodos para guardar los cambios:
+
+| Comando	| Función/Teclas |
+|---|---|
+| `:x`	| Se guarda y cierra el archivo. |
+| `:wq`	| Escribe al archivo y se cierra. |
+| `:wq!`	| Escribe a un archivo de sólo lectura, si es posible, y se cierra. |
+| `ZZ` | Se guarda y se cierra. Observa que en este caso no se utilizan los dos puntos `:`. |
+| `:q!`	| Salir sin guardar los cambios. |
+| `:e!`	| Descartar los cambios y volver a cargar el archivo. |
+| `:w!`	| Escribir a sólo lectura, si es posible. |
+
+## 9.2.46 Paso 46
+
+Vuelve a abrir el `myfile` utilizando el editor `vi`:
+
+`vi myfile`
+
+## 9.2.47 Paso 47
+
+Navega hasta la tercer línea, borra la tercer y la cuarta línea:
+
+```test
+3G
+2dd
+```
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.48 Paso 48
+
+Presiona la tecla **Esc** para confirmar que estás en el modo comando.
+
+## 9.2.49 Paso 49
+
+Cierra el editor `vi` sin guardar los cambios:
+
+`:q!`
+
+## 9.2.50 Paso 50
+
+Abre `myfile` con el editor `vi`:
+
+`vi myfile`
+
+Observa que las líneas 3 y 4 todavía están presentes.
+
+## 9.2.51 Paso 51
+
+Buscar hacia adelante la palabra `line`. Verás que el cursor se mueve al inicio de la primera instancia de la palabra `line` tal como se muestra en la siguiente imagen:
+
+`/line`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+You just pressed O to open a line above.
+This line was added by pressing lowercase o.
+Especially for those who master it.
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~ 
+~
+~
+/ line
+```
+
+## 9.2.52 Paso 52
+Busca la siguiente instancia de la palabra *line* presionando la letra *n*:
+
+`n`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+You just pressed O to open a line above.
+This line was added by pressing lowercase o. 
+Especially for those who master it.
+~
+~
+~
+~
+~
+~
+/ line
+```
+
+## 9.2.53 Paso 53
+
+Busca la palabra *line* hacia atrás. Verás que el cursor se mueve al inicio de la instancia anterior de la palabra *line* tal como se muestra en la siguiente imagen:
+
+`?line`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+You just pressed O to open a line above.
+This line was added by pressing lowercase o.
+Especially for those who master it.
+~
+~
+~
+?line
+```
+

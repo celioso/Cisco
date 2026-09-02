@@ -8332,3 +8332,291 @@ Especially for those who master it.
 ?line
 ```
 
+## 9.2.54 Paso 54
+
+Busca la instancia anterior de la palabra line presionando la letra n. Puesto que no hay ninguna palabra line en esta dirección, vi ira alrededor del documento:
+
+`n`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.                                           
+It is a very powerful text editor.                                           
+You just pressed O to open a line above.
+This line was added by pressing lowercase o. 
+Especially for those who master it.
+~
+~ 
+~
+~
+~ 
+search hit TOP, continuing at BOTTOM
+```
+
+## 9.2.55 Paso 55
+
+Sustituirás la palabra *line* con la palabra *entry*. Cuando presionas *cw* la palabra line desaparecerá y estarás en el modo de inserción:
+
+```text
+cw
+entry
+```
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.                                           
+It is a very powerful text editor.                                           
+You just pressed O to open a line above.
+This entry was added by pressing lowercase o. 
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.56 Paso 56
+
+Presiona la tecla **Esc** para salir del modo de inserción.
+
+## 9.2.57 Paso 57
+
+Añade texto al inicio de una línea. Entra al modo de inserción de nuevo y añade una línea presionando la `i` mayúscula:
+
+`I`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor.
+You just pressed O to open a line above.
+This entry was added by pressing lowercase o.
+Especially for those who master it.
+~
+~
+```
+Los modos de inserción incluyen: *i*, *I*, *a*, *A*, *o*, y *O*.
+
+## 9.2.58 Paso 58
+
+Para volver al modo de comandos presiona la tecla *Esc*.
+
+## 9.2.59 Paso 59
+
+Añade texto al final de una línea (la *A* mayúscula). Primero pasa a la segunda línea y añade la frase *Indeed!*:
+
+```text
+2G
+A
+[Space]Indeed!
+```
+
+Para volver al modo de comandos presiona la tecla *Esc*.
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+Hello and welcome to the vi editor.
+It is a very powerful text editor. Indeed!
+You just pressed O to open a line above.
+This entry was added by pressing lowercase o.
+Especially for those who master it.
+~
+~
+```
+
+## 9.2.60 Paso 60
+
+Guarda los cambios y cierra `vi`:
+
+`:x`
+
+## 9.3 El Scripting de Shell Básico
+
+Shell scripting te permite tomar una compleja secuencia de comandos, colocarla en un archivo y luego ejecutar el archivo como un programa. Esto te ahorra tiempo de tener que escribir repetidamente una larga secuencia de comandos que utilizas de forma rutinaria.
+
+Este laboratorio se centrará en cómo crear shell scripts de comandos simples. A los efectos de esta práctica de laboratorio, se supone que ya sabes cómo usar un editor de texto. No dudes en utilizar el editor de tu elección: `vi`, `nano`, `gedit` o cualquier otro editor que te guste.
+
+## 9.3.1 Paso 1
+
+Para crear un script sencillo, sólo tienes que crear un archivo de texto y añadir los comandos. Crea un archivo llamado `sample.sh` y añade las siguientes líneas:
+
+```text
+echo "Hello there!  Here is the calendar for this month:"
+cal
+```
+O
+
+```text
+echo "¡Hola! Aquí está el calendario de este mes:"
+cal
+```
+```bash
+echo "Hello there! Here is the calendar for this month:"
+cal
+~
+~
+```
+
+9.3.2 Paso 2
+Para que quede claro que se trata de un script de shell bash, necesitas incluir una línea especial en la parte superior del archivo llamado «shebang». Esta línea comienza con `#!` y, a continuación contiene la ruta de acceso al archivo ejecutable shell BASH. Agrega la siguiente línea a la parte superior del archivo `sample.sh`:
+
+`#!/bin/bash`
+
+```bash
+#!/bin/bash
+echo "Hello there! Here is the calendar for this month:"
+cal
+~
+~
+```
+
+## 9.3.3 Paso 3
+
+Puedes ejecutar este programa introduciendo bash antes del nombre de archivo. Ejecuta lo siguiente:
+
+`bash sample.sh``
+
+```bash
+sysadmin@localhost:~$ bash sample.sh
+Hello there! Here is the calendar for this month:
+     April 2016           
+Su Mo Tu We Th Fr Sa
+                1  2                
+ 3  4  5  6  7  8  9     
+10 11 12 13 14 15 16  
+17 18 19 20 21 22 23
+24 25 26 27 28 29 30
+
+sysadmin@localhost:~$
+```
+
+9.3.4 Paso 4
+Puedes evitar tener que escribir bash delante del nombre de archivo, haciendo que el archivo sea «ejecutable» para todos los usuarios. Ejecuta los siguientes comandos:
+
+```text
+ls -l sample.sh
+chmod a+x sample.sh
+ls -l sample.sh
+./sample.sh
+```
+
+```bash
+sysadmin@localhost:~$ ls -l sample.sh
+-rw-rw-r-- 1 sysadmin sysadmin 73 Apr  9 22:44 sample.sh
+sysadmin@localhost:~$ chmod a+x sample.sh
+sysadmin@localhost:~$ ./sample.sh
+Hello there! Here is the calendar for this month:
+     April 2016           
+Su Mo Tu We Th Fr Sa
+                1  2              
+ 3  4  5  6  7  8  9
+10 11 12 13 14 15 16
+17 18 19 20 21 22 23
+24 25 26 27 28 29 30
+
+sysadmin@localhost:~$
+```
+
+El comando `chmod` se usa para cambiar los permisos en el archivo para que el archivo se pueda ejecutar.
+
+9.3.5 Paso 5
+Una característica común que se utiliza en el scripting es «backquoting». Con esta técnica puedes ejecutar un comando shell «dentro» de otro comando shell. El resultado del comando interno será devuelto como un argumento para el comando externo. Añade lo siguiente a la parte inferior del archivo `sample.sh`:
+
+echo "Today is" `date +%A`
+
+O
+
+echo "Hoy es" `date +%A`
+Ahora ejecutar lo siguiente:
+
+```text
+cat sample.sh
+./sample.sh
+```
+
+```bash
+sysadmin@localhost:~$ cat sample.sh
+#!/bin/bash
+echo "Hello there! Here is the calendar for this month:"
+cal
+echo "Today is" `date +%A`    
+sysadmin@localhost:~$ ./sample.sh
+Hello there! Here is the calendar for this month:
+     April 2016           
+Su Mo Tu We Th Fr Sa
+                1  2              
+ 3  4  5  6  7  8  9
+10 11 12 13 14 15 16
+17 18 19 20 21 22 23
+24 25 26 27 28 29 30
+
+Today is Friday
+sysadmin@localhost:~$
+```
+
+## 9.3.6 Paso 6
+
+Estuviste utilizando `./` en frente del nombre de archivo `sample.sh` para indicar que el archivo está en el directorio actual. Ejecuta lo siguiente para ver cómo el shell fracasaría en la búsqueda del archivo si no se utiliza el `./`:
+
+`sample.sh`
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+sysadmin@localhost:~$ sample.sh
+-bash: sample.sh: command not found
+sysadmin@localhost:~$
+```
+
+## 9.3.7 Paso 7
+
+Recuerda que la variable `$PATH` se utiliza para buscar los comandos que introduces. Ejecuta lo siguiente para ver la variable `$PATH` para la cuenta del administrador de sistemas:
+
+`echo $PATH`
+
+```bash
+sysadmin@localhost:~$ echo $PATH
+/home/sysadmin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+sysadmin@localhost:~$
+```
+
+## 9.3.8 Paso 8
+
+Ten en cuenta que `home/sysadmin/bin` es uno de los directorios de la variable `$PATH`. Este es un buen lugar para colocar tus scripts del shell:
+
+```text
+mkdir bin
+mv sample.sh bin
+sample.sh
+```
+
+```bash
+sysadmin@localhost:~$ mkdir bin
+sysadmin@localhost:~$ mv sample.sh bin
+sysadmin@localhost:~$ sample.sh
+Hello there! Here is the calendar for this month:
+     April 2016           
+Su Mo Tu We Th Fr Sa
+                1  2               
+ 3  4  5  6  7  8  9
+10 11 12 13 14 15 16
+17 18 19 20 21 22 23
+24 25 26 27 28 29 30
+
+Today is Friday
+sysadmin@localhost:~$
+```
+
+## 9.4 La Ejecución Condicional y Repetitiva
+
+Ten en cuenta que en esta sección se demostrarán ejemplos más complejos. Con tal fin, vas a utilizar una técnica para describir lo que está sucediendo en el programa. La técnica se verá como la siguiente:
+
+| Introduce esta columna al drive.sh | Esta columna describe el código (no introducir al archivo) |
+|---|---|
+| echo "Please enter your age" | # imprimir un prompt |
+| read age | # leer la entrada del usuario y colocar la variable $age |
+
+Al seguir las instrucciones proporcionadas, debes introducir el texto de la columna izquierda en el archivo especificado (`drive.sh` en el ejemplo anterior). La columna derecha se utiliza para describir las líneas específicas en el programa. El signo de gato `#` se utiliza debido a que en un script de shell puedes colocar comentarios dentro de tu programa mediante el uso del carácter `#`.
+

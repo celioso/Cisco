@@ -8620,3 +8620,45 @@ Ten en cuenta que en esta sección se demostrarán ejemplos más complejos. Con 
 
 Al seguir las instrucciones proporcionadas, debes introducir el texto de la columna izquierda en el archivo especificado (`drive.sh` en el ejemplo anterior). La columna derecha se utiliza para describir las líneas específicas en el programa. El signo de gato `#` se utiliza debido a que en un script de shell puedes colocar comentarios dentro de tu programa mediante el uso del carácter `#`.
 
+## 9.4.1 Paso 1
+
+Scipts («Secuencias de comandos») que son más complejas pueden hacer uso de la ejecución condicional. Una expresión condicional, como la instrucción `if` puede hacer uso de los resultados de un comando llamado `test`. La instrucción `test` compara dos números (o dos cadenas) para cosas como «igual a», «menor que», etc.
+
+Crea el siguiente archivo (drive.sh) y hazlo ejecutable para ver cómo las instrucciones `if` y `test` funcionan. Comienza por colocar lo siguiente en drive.sh:
+
+| Introduce esta columna al drive.sh | Esta columna describe el código (no introducir al archivo) |
+#!/bin/bash
+echo "Please enter your age"	# imprimir un prompt
+read age	# leer la entrada del usuario y colocar la variable $age
+if test $age -lt 16	# test $age -lt 16 devuelve «verdadero» si $age es numéricamente inferior a 16
+then
+  echo "You are not old enough to drive."	# se ejecuta cuando la prueba es verdadera
+else
+  echo "You can drive!"	# se ejecuta cuando la prueba es falsa
+fi	# esto pone fin a la instrucción if
+A continuación, haz que el archivo sea ejecutable y ejecútalo:
+
+cat drive.sh
+chmod a+x drive.sh
+./drive.sh
+Tu pantalla debe ser similar a la siguiente:
+
+sysadmin@localhost:~$ cat drive.sh                                            
+#!/bin/bash                                                                   
+echo "Please enter your age"                                                  
+read age                                                                      
+if test $age -lt 16                                                           
+then                                                                          
+   echo "You are not old enough to drive."                                    
+else                                                                          
+   echo "You can drive!"                                                      
+fi                                                                            
+sysadmin@localhost:~$ chmod a+x drive.sh                                      
+sysadmin@localhost:~$ ./drive.sh                                              
+Please enter your age                                                         
+14                                                                            
+You are not old enough to drive.                                              
+sysadmin@localhost:~$
+Verbalmente, podrías leer la instrucción if como "If $age is less than 16, then echo 'You are not old enough to drive', else echo 'You can drive!'" o «Si $ age es menor de 16, entonces echo 'No tienes edad suficiente para conducir', else echo 'Puedes conducir'» en español. El fi termina la instrucción if.
+
+Importante: $age debe ser un valor entero. Si no es así, el programa se bloqueará.

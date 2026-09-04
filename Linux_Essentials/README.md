@@ -8627,38 +8627,142 @@ Scipts («Secuencias de comandos») que son más complejas pueden hacer uso de l
 Crea el siguiente archivo (drive.sh) y hazlo ejecutable para ver cómo las instrucciones `if` y `test` funcionan. Comienza por colocar lo siguiente en drive.sh:
 
 | Introduce esta columna al drive.sh | Esta columna describe el código (no introducir al archivo) |
-#!/bin/bash
-echo "Please enter your age"	# imprimir un prompt
-read age	# leer la entrada del usuario y colocar la variable $age
-if test $age -lt 16	# test $age -lt 16 devuelve «verdadero» si $age es numéricamente inferior a 16
-then
-  echo "You are not old enough to drive."	# se ejecuta cuando la prueba es verdadera
-else
-  echo "You can drive!"	# se ejecuta cuando la prueba es falsa
-fi	# esto pone fin a la instrucción if
+|---|---|
+| #!/bin/bash| |
+|echo "Please enter your age" | # imprimir un prompt |
+| read age | # leer la entrada del usuario y colocar la variable $age |
+| if test $age -lt 16 | # test $age -lt 16 devuelve «verdadero» si $age es numéricamente inferior a 16 |
+| then | |
+| echo "You are not old enough to drive." | # se ejecuta cuando la prueba es verdadera |
+| else | |
+| echo "You can drive!" | # se ejecuta cuando la prueba es falsa |
+| fi | # esto pone fin a la instrucción if |
+
 A continuación, haz que el archivo sea ejecutable y ejecútalo:
 
+```text
 cat drive.sh
 chmod a+x drive.sh
 ./drive.sh
+```
+
 Tu pantalla debe ser similar a la siguiente:
 
-sysadmin@localhost:~$ cat drive.sh                                            
-#!/bin/bash                                                                   
-echo "Please enter your age"                                                  
-read age                                                                      
-if test $age -lt 16                                                           
-then                                                                          
-   echo "You are not old enough to drive."                                    
-else                                                                          
-   echo "You can drive!"                                                      
-fi                                                                            
-sysadmin@localhost:~$ chmod a+x drive.sh                                      
-sysadmin@localhost:~$ ./drive.sh                                              
-Please enter your age                                                         
-14                                                                            
-You are not old enough to drive.                                              
+```bash
+sysadmin@localhost:~$ cat drive.sh
+#!/bin/bash
+echo "Please enter your age"
+read age
+if test $age -lt 16
+then
+   echo "You are not old enough to drive."
+else
+   echo "You can drive!"
+fi
+sysadmin@localhost:~$ chmod a+x drive.sh
+sysadmin@localhost:~$ ./drive.sh
+Please enter your age
+14
+You are not old enough to drive.
 sysadmin@localhost:~$
-Verbalmente, podrías leer la instrucción if como "If $age is less than 16, then echo 'You are not old enough to drive', else echo 'You can drive!'" o «Si $ age es menor de 16, entonces echo 'No tienes edad suficiente para conducir', else echo 'Puedes conducir'» en español. El fi termina la instrucción if.
+```
 
-Importante: $age debe ser un valor entero. Si no es así, el programa se bloqueará.
+Verbalmente, podrías leer la instrucción `if` como "If $age is less than 16, then echo 'You are not old enough to drive', else echo 'You can drive!'" o «Si $ age es menor de 16, entonces echo 'No tienes edad suficiente para conducir', else echo 'Puedes conducir'» en español. El `fi` termina la instrucción `if`.
+
+**Importante**: `$age` debe ser un valor entero. Si no es así, el programa se bloqueará.
+
+## 9.4.2 Paso 2
+
+La instrucción de prueba se invoca automáticamente cuando colocas sus argumentos entre corchetes *[]* rodeados de espacios. Modifica la línea `if` de *drive.sh* para que se vea así:
+
+`if [ $age -lt 16 ]`
+
+A continuación, vuelve a ejecutar el programa:
+
+```text
+cat drive.sh
+./drive.sh
+```
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+sysadmin@localhost:~$ cat drive.sh                                            
+#!/bin/bash
+echo "Please enter your age"
+read age
+if [ $age -lt 16 ]
+then
+   echo "You are not old enough to drive."
+else
+   echo "You can drive!"
+fi
+sysadmin@localhost:~$ ./drive.sh
+Please enter your age
+21
+You can drive!
+sysadmin@localhost:~$
+```
+
+Para ver una lista completa de las condiciones de prueba, ejecuta el comando `man test`.
+
+**Importante**: Alrededor de los corchetes tiene que haber espacios.  *[$age -lt 16]* no funcionaría, pero *[ $age -lt 16 ]* sí.
+
+## 9.4.3 Paso 3
+
+También puedes utilizar el resultado de otros comandos, ya que todos regresan «éxito» o «fracaso». Por ejemplo, crea y ejecuta el programa siguiente, que se puede utilizar para determinar si una cuenta de usuario se encuentra en este sistema. Agrega lo siguiente a *check.sh*:
+
+```text
+#!/bin/bash
+echo "Enter a username to check: "
+read name
+if grep $name /etc/passwd > /dev/null
+then
+    echo "$name is on this system"
+else
+    echo "$name does not exist"
+fi
+```
+**Nota**: Versión traducida para comprehension (no introducir al archivo):
+
+```text
+#!/bin/bash
+echo "Ingrese un nombre de usuario para verificar: "
+leer nombre
+if grep $name /etc/passwd > /dev/null
+then
+    echo "$nombre está en el sistema"
+else
+    echo "$nombre no existe"
+fi
+```
+A continuación, ejecuta los siguientes comandos:
+
+```text
+chmod a+x check.sh
+./check.sh
+```
+Cuando recibes un prompt para introducir el nombre de usuario, proporciona el valor de «*root*». Vuelve a ejecutar el comando (*./check.sh*) y proporciona el valor de «*bobby*». Tu pantalla debe ser similar a la siguiente:
+
+```bash
+sysadmin@localhost:~$ cat check.sh
+#!/bin/bash
+echo "Enter a username to check: "
+read name
+if grep $name /etc/passwd > /dev/null
+then
+    echo "$name is on this system"
+else
+    echo "$name does not exist"
+fi
+sysadmin@localhost:~$ chmod a+x check.sh
+sysadmin@localhost:~$ ./check.sh
+Enter a username to check:
+root
+root is on this system
+sysadmin@localhost:~$ ./check.sh
+Enter a username to check:
+bobby
+bobby does not exist
+sysadmin@localhost:~$
+```

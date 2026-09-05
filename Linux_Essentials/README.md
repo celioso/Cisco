@@ -8766,3 +8766,62 @@ bobby
 bobby does not exist
 sysadmin@localhost:~$
 ```
+
+## 9.4.4 Paso 4
+
+Otra instrucción condicional común se llama el `while` loop. Esta instrucción se utiliza para ejecutar el código en varias ocasiones, siempre y cuando una comprobación condicional devuelva el valor «verdadero». Comienza colocando lo siguiente en un archivo denominado *num.sh*:
+
+| Introduce esta columna al drive.sh | Esta columna describe el código (no introducir al archivo) |
+|---|---|
+| #!/bin/bash ||
+| echo "Please enter a number greater than 100" | echo "Ingrese un número mayor que 100" |
+| read num | leer num |
+| while [ $num -le 100 ] | # ejecutar el código desde «do» hasta "hecho si la condición de prueba es verdadera |
+| do ||
+| echo "$num is NOT greater than 100." | echo "$num no es mayor que 100." |
+| echo "Please enter a number greater than 100" | echo "Ingrese un número mayor que 100" |
+| read num | leer num |
+| done | # Esto pone fin a la instrucción |
+| echo "Finally, $num is greater than 100" | echo "Finalmente, el número es mayor que 100" |
+
+A continuación, haz que el archivo sea ejecutable y ejecútalo:
+
+```text
+chmod a+x num.sh
+./num.sh
+```
+
+Cuando recibes un prompt para introducir un número, proporciona el número *25*. Cuando vuelves a recibir el prompt, introduce el número *99*. Por último, introduce *101* cuando recibas el prompt para introducir un número por tercera vez. Tu pantalla debe ser similar a la siguiente:
+
+```bash
+sysadmin@localhost:~$ cat num.sh
+#!/bin/bash
+echo "Please enter a number greater than 100"
+read num
+while [ $num -le 100 ]
+do
+    echo "$num is NOT greater than 100."
+    echo "Please enter a number greater than 100."
+    read num                       
+done
+echo "Finally, $num is greater than 100"                                      
+sysadmin@localhost:~$ chmod a+x num.sh
+sysadmin@localhost:~$ ./num.sh
+Please enter a number greater than 100
+25
+25 is NOT greater than 100.
+Please enter a number greater than 100.
+99
+99 is NOT greater than 100.
+Please enter a number greater than 100.
+101
+Finally, 101 is greater than 100
+sysadmin@localhost:~$
+```
+
+Si la prueba condicional para la instrucción `while`( *[ $num -le 100 ]* ) devuelve valor verdadero, entonces las instrucciones entre do y done serán ejecutadas.
+
+Una vez que esas instrucciones se acaben de ejecutar, la prueba condicional para la instrucción `while` se comprueba de nuevo. Si el valor es verdaderos otra vez, entonces las instrucciones entre `do` y `done` se vuelven a ejecutar.
+
+Esto seguirá repitiéndose hasta que la instrucción `while` devuelva valor falso, o cuando el valor sea superior a *100*.
+

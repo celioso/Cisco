@@ -8825,3 +8825,54 @@ Una vez que esas instrucciones se acaben de ejecutar, la prueba condicional para
 
 Esto seguirá repitiéndose hasta que la instrucción `while` devuelva valor falso, o cuando el valor sea superior a *100*.
 
+# 9.4.5 Paso 5
+
+El código de scripting es parte del shell BASH, lo que significa que puedes utilizar estas instrucciones en la línea de comandos al igual que los utilizas en un script de shell. Esto puede ser útil para una instrucción como la instrucción `for`, una instrucción que asignará una lista de valores de uno en uno a una variable. Esto te permite realizar un conjunto de operaciones para cada valor. Por ejemplo, ejecuta lo siguiente en la línea de comandos:
+
+```text
+for name in /etc/passwd /etc/hosts /etc/group
+do
+          wc $name
+done
+```
+
+Tu pantalla debe ser similar a la siguiente:
+
+```bash
+sysadmin@localhost:~$ for name in /etc/passwd /etc/hosts /etc/group
+> do
+>     wc $name
+> done
+  24   30 1001 /etc/passwd
+  7  15 161 /etc/hosts
+  46  46 561 /etc/group
+sysadmin@localhost:~$
+```
+
+Ten en cuenta que el comando `wc` se ha ejecutado tres veces: una vez para */etc/passwd*, una vez para */etc/hosts* a una para */etc/group*.
+
+## 9.4.6 Paso 6
+
+A menudo, el comando `seq` se utiliza en combinación con la instrucción `for`. El comando `seq` puede generar una lista de valores enteros, por ejemplo de 1 a 10. Por ejemplo, ejecuta lo siguiente en la línea de comandos para crear los archivos con el nombre *test1*, *test2*, *test3*, etc. (hasta *test12*):
+
+```bash
+ls
+for num in `seq 1 12`
+do
+          touch test$num
+done
+ls
+```
+
+```bash
+sysadmin@localhost:~$ ls
+Desktop    Downloads  Pictures  Templates  check.sh  num.sh
+Documents  Music      Public    Videos     drive.sh
+sysadmin@localhost:~$ for num in `seq 1 12`
+> do
+>     touch test$num
+> done
+sysadmin@localhost:~$ ls
+    Desktop    Music     Templates  drive.sh  test10  test2  test5  test8          Documents  Pictures  Videos     num.sh    test11  test3  test6  test9          Downloads  Public    check.sh   test1     test12  test4  test7
+sysadmin@localhost:~$
+```

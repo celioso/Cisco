@@ -9164,4 +9164,185 @@ HAL o «Hardware Abstraction Layer» en inglés, es la *Capa de Abstracción de 
 
 El comando `lshal` te permite ver los dispositivos detectados por HAL. Este comando produce una gran cantidad de salidas; a continuación se ofrece una pequeña muestra:
 
-![sysadmin@localhost](images/)
+![sysadmin@localhost](images/10.5_1.png)
+
+## 10.5 Los Dispositivos de Disco
+
+Los *Dispositivos de Disco*(también conocidos como discos duros) se pueden conectar al sistema de varias maneras; el controlador puede integrarse a la tarjeta madre, a una tarjeta PCI (Interconexión de Componente Periférico) o a un dispositivo USB.
+
+Los discos duros se dividen en *particiones*. Una partición es una división lógica de un disco duro, diseñada para tomar una gran cantidad de espacio de almacenamiento disponible y dividirlo en «trozos» más pequeños. Si bien en Microsoft Windows es común tener una única partición para cada disco duro, en las distribuciones de Linux lo común es tener varias particiones por disco duro.
+
+Algunos discos duros hacen uso de una partición llamada *Registro de Arranque Maestro*(MBR o «Master Boot Record» en inglés), mientras que otros hacen uso de un tipo de partición llamada **Tabla de Particiones GUID**(GPT o «GUID Partitioning Table» en inglés). El tipo MBR de la partición se ha utilizado desde los días tempranos de la computadora personal (PC o Personal Computer) y el tipo GPT ha estado disponible desde el año 2000.
+
+Un viejo término usado para describir un disco duro interno es «disco fijo», ya que el disco es fijo (no extraíble). Este término dio lugar a varios nombres de comando: los comandos `fdisk`, `cfdisk` y `sfdisk` son herramientas para trabajar con las particiones discos MBR.
+
+Los discos GPT usan un tipo de particionado más nuevo, que permite al usuario dividir el disco en más particiones de lo que soporta una MBR. La GPT también permite tener particiones que pueden ser más grandes que dos terabytes (MBR no lo permite). Las herramientas para gestionar los discos GPT se llaman de manera similar a las contrapartes de `fdisk`: `gdisk`, `cgdisk` y `sgdisk`.
+
+También existe una familia de herramientas que intenta apoyar ambos tipos de disco MBR y GPT. Este conjunto de herramientas incluye al comando `parted` y la herramienta gráfica `gparted`.
+
+Las unidades de disco duro están asociadas a los nombres de archivos (llamados archivos de dispositivo) que se almacenan en el directorio */dev*. Diferentes tipos de unidades de disco duros reciben nombres ligeramente diferentes: hd para los discos duros IDE (Intelligent Drive Electronics o «Unidad Electrónica Inteligente» en español) y sd para USB, SATA (Serial Advanced Technology Attachment o «Aditamento de Tecnología Serial Avanzada» en español) y los discos duros SCSI (Small Computer System **Interface** o «Interfaz Estándar de Equipos Pequeños» en español).
+
+A cada disco se le asigna una letra, por ejemplo, el primer disco duro IDE tendría un nombre de archivo de dispositivo */dev/hda* y el segundo disco duro IDE se asociaría al archivo de dispositivo */dev/hdb*.
+
+Las particiones reciben números únicos para cada dispositivo. Por ejemplo, si un disco duro USB tenía dos particiones, éstas pueden asociarse a los archivos de dispositivo */dev/sda1* y */dev/sda2*.
+
+En la salida siguiente puedes ver que este sistema tiene tres dispositivos sd: */dev/sda*, */dev/sdb* y */dev/sdc*. También puedes ver que hay dos particiones en el primer dispositivo (como lo demuestran los archivos */dev/sda1* y */dev/sda2*) y una partición en el segundo dispositivo (según lo visualiza el archivo */dev/sdb1*):
+
+```bash
+root@localhost:~$  ls /dev/sd*
+/dev/sda  /dev/sda1  /dev/sda2  /dev/sdb  /dev/sdb1  /dev/sdc
+root@localhost:~$
+```
+
+En el ejemplo siguiente se utiliza el comando fdisk para mostrar la información de la partición en el primer dispositivo de sd.
+
+**Nota**: El siguiente comando requiere acceso root
+
+```bash
+root@localhost:~# fdisk -l /dev/sda
+Disk /dev/sda: 21.5 GB, 21474836480 bytes   
+255 heads, 63 sectors/track, 2610 cylinders, total 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier:0x000571a2        
+                                                                
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048    39845887    19921920   83  Linux
+/dev/sda2        39847934    41940991     1046529    5  Extended
+/dev/sda5        39847936    41940991     1046528   82  Linux swap / Solaris
+root@localhost:~#
+```
+
+La creación y modificación de particiones está fuera del alcance de este curso.
+
+## 10.6 Los Discos Ópticos
+
+Los discos ópticos, referidos a menudo como CD-ROM, DVD o Blue-Ray son medios de almacenamiento extraíbles. Mientras que algunos dispositivos usados con discos ópticos son de sólo lectura, otros pueden ser grabados (escritos), cuando se utiliza un tipo de disco grabable. Hay varios estándares para los discos grabables y regrabables, como CD-R, CD+R, DVD+RW y DVD-RW. Estos estándares de soporte físico van más allá del alcance del plan de estudios.
+
+La ubicación de estos discos extraíbles en el sistema de archivos es una consideración importante para un administrador de Linux. Las distribuciones modernas a menudo montan los discos bajo la carpeta */media*, mientras que las distribuciones antiguas suelen montarlos en la carpeta */mnt*.
+
+Al insertar los discos, la mayoría de las interfaces GUI piden al usuario que tome una acción, así como abrir el contenido del disco en un explorador de archivos o iniciar un programa de multimedia. Cuando el usuario termina de usar el disco, conviene expulsarlo mediante el menú o con el comando `eject` (o «expulsar» en español). Mientras que presionar el botón de **expulsar** se abrirá la bandeja de disco, algunos programas no se darán cuenta que el disco ya no está en el sistema de archivos.
+
+## 10.7 Dispositivos de Visualización de Video
+
+Para visualizar un video (salida al monitor) la computadora debe tener un dispositivo de visualización de vídeo (también conocido como la *tarjeta de video*) y un monitor. Los dispositivos de visualización de video a menudo vienen unidos directamente a la tarjeta madre, aunque también pueden ser conectados a través de las ranuras de bus PCI en la tarjeta madre.
+
+Lamentablemente, desde los primeros días de la PC, los principales proveedores no han aprobado estándares de video, por lo que cada dispositivo de visualización de video generalmente requiere un controlador propietario suministrado por el proveedor. Los drivers o controladores son programas de software que permiten al sistema operativo comunicarse con el dispositivo.
+
+Los drivers deben estar escritos para el sistema operativo específico, algo que se hace comúnmente para Microsoft Windows, pero no siempre para Linux. Afortunadamente, los tres proveedores de visualización de video más grande ahora proporcionan al menos cierto nivel de soporte para Linux.
+
+Hay dos tipos de cables de vídeo de uso general: el cable analógico de 15 pines **Video Graphics Array (VGA)** y el de 29 pines *Digital Visual Interface (DVI)*.
+
+Para que los monitores trabajen correctamente con las tarjetas de video, deben ser capaces de soportar la misma resolución que la tarjeta de video. Normalmente, el software de la tarjeta de video (comúnmente el servidor X.org) normalmente será capaz de detectar automáticamente la máxima resolución que la tarjeta de vídeo y el monitor pueden soportar y establecer la resolución de pantalla a ese valor.
+
+Las herramientas gráficas normalmente sirven para cambiar tu resolución, así como el número máximo de colores que se pueden mostrar (conocido como la *profundidad de color*) con tu distribución de Linux. Para las distribuciones que utilizan el servidor X.org, se puede utilizar el archivo */etc/X11/xorg.conf* para cambiar la resolución, profundidad de color y otros ajustes.
+
+## 10.8 Gestionar los Dispositivos
+
+Para poder utilizar un dispositivo en Linux puede haber varios tipos de software que se requieren. El primero es el software de driver. El driver puede compilarse como parte del kernel de Linux, cargado al kernel como un módulo o cargado por un comando de usuario o una aplicación. La mayoría de los dispositivos tienen el driver incorporado en el kernel o lo tienen cargado al kernel, ya que el driver puede requerir una clase de acceso de nivel bajo que tiene el kernel con los dispositivos.
+
+Los dispositivos externos, como las impresoras y los escáneres normalmente tienen sus drivers cargados por una aplicación y estos drivers a su vez se comunican a través del dispositivo vía el kernel por una interfaz como USB.
+
+Para activar los dispositivos en Linux con éxito, es mejor consultar la distribución de Linux para ver si el dispositivo está certificado para trabajar con esa distribución. Las distribuciones comerciales como Red Hat y SUSE tienen páginas web con una lista de hardware certificado o aprobado para trabajar con su software.
+
+Consejos adicionales para conectar tus dispositivos de manera exitosa: evitar dispositivos nuevos o altamente especializados y consultar con el proveedor del dispositivo para ver si soportan Linux antes de hacer cualquier compra.
+
+## 10.9 Fuentes de Poder
+
+Las fuentes de poder son los dispositivos que convierten la corriente alterna (120v, 240v) a corriente directa la cual la computadora utiliza en varios voltajes (3.3v, 5v, 12v, etc.). Las fuentes de poder generalmente no son programables, sin embargo su funcionamiento tiene un impacto importante en el resto del sistema.
+
+Aunque no son supresores de picos, estos dispositivos a menudo protegen la computadora de las fluctuaciones en el voltaje que provienen del origen. Es aconsejable que el administrador de red elija una fuente de poder basada en la calidad más que en el precio, ya que una falla de la fuente de poder puede resultar en la destrucción de la computadora.
+
+## Practica
+
+## 10.1 Introducción
+
+Este es Lab 10: Comprendiendo el hardware de la computadora. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán acerca de los comandos para mostrar la información sobre el hardware del equipo.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+- Utiliza los comandos para listar el hardware.
+
+## 10.2 Listar el hardware de la computadora
+
+En esta tarea vas a ejecutar unos comandos y examinar algunos archivos para mostrar la configuración de tu hardware.
+
+## 10.2.1 Paso 1
+
+Con el fin de determinar el tipo de CPU ejecuta el comando `lscpu`:
+
+`lscpu`
+
+El resultado debe ser similar al siguiente:
+
+![similar](images/10.3.1_1.png)
+
+Saber mostrar la información de la CPU puede ser importante cuando quieres determinar si puedes utilizar características de Linux más avanzas en tu sistema. Para obtener aún más detalles acerca de tu CPU(s), puedes examinar el archivo */proc/cpuinfo*, en especial, las «opciones» que se enumeran para determinar si tu CPU tiene ciertas características.
+
+## 10.2.2 Paso 2
+
+Visualiza el archivo /proc/cpuinfo:
+
+`cat /proc/cpuinfo`
+
+![/proc/cpuinfo](images/10.3.2_1.png)
+
+## 10.2.3 Paso 3
+
+Para conocer el tamaño de RAM y el espacio de intercambio que está ocupado, utiliza el comando `free`:
+
+```text
+free -m
+free -g
+```
+La salida muestra la cantidad de memoria en megabytes cuando utilizas la opción `-m` y en gigabytes cuando utilizas la opción `-g`:
+
+![tamaño de RAM](images/10.3.2_1.png)
+
+En la salida anterior puedes ver que el sistema tiene *16049* megabytes (aproximadamente 15 gigabytes) de memoria física (RAM). De los cuáles sólo *1066* megabytes se están utilizando, una buena señal de que tienes suficiente memoria para las necesidades de su sistema.
+
+En el caso de que se agote la memoria, utiliza Swap. Swap es el espacio del disco físico que se utiliza para almacenar temporalmente los datos que se supone que deben ser almacenados en la memoria RAM.
+
+## 10.2.4 Paso 4
+
+Para ver qué dispositivos están conectados al bus PCI, utiliza el comando `lspci`:
+
+`lspci`
+
+Observa en la salida parcial a continuación, que se muestran muchos dispositivos conectados a la tarjeta madre:
+
+![dispositivos están conectados al bus PCI](images/10.3.4_1.png)
+
+La salida del comando `lspci` puede ser muy importante para identificar los dispositivos que no son compatibles con el kernel Linux. Algunos dispositivos como las tarjetas de vídeo sólo pueden proporcionar una funcionalidad básica sin necesidad de instalar software de controlador propietario.
+
+## 10.2.5 Paso 5
+
+Utiliza el comando lspci con la opción -k para mostrar los dispositivos junto con el controlador del kernel y los módulos utilizados:
+
+![comando lspci](images/10.3.5_1.png)
+
+## 10.2.6 Paso 6
+
+Trata de enumerar los dispositivos USB conectados:
+
+`lsusb`
+
+La salida de este comando es inusual ya que no se detectan los dispositivos USB:
+
+```bash
+sysadmin@localhost:~$ lsusb
+unable to initialize libusb: -99
+sysadmin@localhost:~$
+```    
+
+Debido a que este sistema es virtualizado, los dispositivos USB no aparecen como lo harían normalmente cuando se ejecuta el comando `lsusb`. Normalmente, si los dispositivos USB están presentes, se habría mostrado algo como esto:
+
+```bash
+sysadmin@localhost:~$ lsusb
+Bus 001 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+sysadmin@localhost:~$
+```
+
+HAL (Hardware Abstraction Layer) es la Capa de Abstracción de Hardware. El daemon de la HAL es hald, un proceso que recoge información sobre los dispositivos conectados al sistema. Cuando se producen eventos que de alguna manera cambian el estado de los dispositivos conectados, a continuación, Hald emite esta información a todos los procesos que se hayan registrado durante los eventos. En los sistemas que utilizan HAL, el comando `lshal` puede enumerar los dispositivos de ese sistema.
+

@@ -1274,7 +1274,7 @@ failed
 sysadmin@localhost:~$
 ```
 
-# Laboratorio
+## Laboratorio
 
 ## 4.1 Introducción
 
@@ -2407,7 +2407,7 @@ sysadmin@localhost:~$ locate -b "\passwd"
 sysadmin@localhost:~$
 ```
 
-# Laboratorio
+## Laboratorio
 
 ## 5.1 Introducción
 
@@ -3854,7 +3854,7 @@ Documents  Music      Public    sample.txt
 sysadmin@localhost:~$
 ```
 
-# Práctica 06
+## Práctica 06
 
 ## 6.1 Introducción
 
@@ -4748,7 +4748,7 @@ La tercera versión utiliza un comodín, que extrae los 4 archivos que coinciden
 
 Las páginas man del `zip` y `unzip` describen las otras cosas que puedes hacer con estas herramientas, tales como reemplazar los archivos dentro del archivo empaquetado, utilizar los diferentes niveles de compresión o incluso el cifrado.
 
-# Práctica 7
+## Práctica 7
 
 ## 7.1 Introducción
 
@@ -6207,7 +6207,7 @@ sysadmin@localhost:~/many$ ls | xargs rm
 sysadmin@localhost:~/many$
 ```
 
-# Práctica 08
+## Práctica 08
 
 ## 8.1 Introducción
 
@@ -7505,7 +7505,7 @@ El ejemplo anterior muestra un loop *while* que cuenta de 0 a 9. Un contador de 
 
 Dentro del loop *while* el valor actual de *i* es mostrado en pantalla, y luego se le añade *1* a través del comando *$((aritmética))* y se asigna de regreso al *i*. Una vez que *i* llega a 10, la instrucción *while* regresa falso y el proceso continuará después del loop.
 
-# 9 Practica
+## 9 Practica
 
 ## 9.1 Introducción
 
@@ -8825,7 +8825,7 @@ Una vez que esas instrucciones se acaben de ejecutar, la prueba condicional para
 
 Esto seguirá repitiéndose hasta que la instrucción `while` devuelva valor falso, o cuando el valor sea superior a *100*.
 
-# 9.4.5 Paso 5
+## 9.4.5 Paso 5
 
 El código de scripting es parte del shell BASH, lo que significa que puedes utilizar estas instrucciones en la línea de comandos al igual que los utilizas en un script de shell. Esto puede ser útil para una instrucción como la instrucción `for`, una instrucción que asignará una lista de valores de uno en uno a una variable. Esto te permite realizar un conjunto de operaciones para cada valor. Por ejemplo, ejecuta lo siguiente en la línea de comandos:
 
@@ -9346,3 +9346,109 @@ sysadmin@localhost:~$
 
 HAL (Hardware Abstraction Layer) es la Capa de Abstracción de Hardware. El daemon de la HAL es hald, un proceso que recoge información sobre los dispositivos conectados al sistema. Cuando se producen eventos que de alguna manera cambian el estado de los dispositivos conectados, a continuación, Hald emite esta información a todos los procesos que se hayan registrado durante los eventos. En los sistemas que utilizan HAL, el comando `lshal` puede enumerar los dispositivos de ese sistema.
 
+## 10.2.7 Paso 7
+
+Para que el hardware funcione, el kernel de Linux normalmente carga un controlador o módulo. Utiliza el comando `lsmod` para ver los módulos cargados actualmente:
+
+`lsmod`
+
+La salida parcial del comando se muestra a continuación. La primera columna es el nombre del módulo, y la segunda es la cantidad de memoria utilizada por el módulo. El número en la columna «*Used by*» indica cuántos otros módulos están utilizando el módulo. Los nombres de los otros módulos utilizando el módulo también se puede incluir en la columna "Used by", pero a menudo es incompleta:
+
+![comando lsmod](images/10.3.7_1.png)
+
+## 10.2.8 Paso 8
+
+La tarjeta madre de muchas computadoras contiene lo que se conoce como Basic Input and Output System (BIOS). System Management BIOS (SMBIOS) es el estándar que define las estructuras de datos y cómo se comunica la información acerca del hardware de la computadora. El comando `dmidecode` puede leer e imprimir la información del SMBIOS de muchos sistemas. No vamos a demostrar este comando aquí, ya que no funciona correctamente en un entorno virtual.
+
+El comando `fdisk` se puede utilizar de dos maneras: de forma interactiva y no interactiva.
+
+Cuando se utiliza la opción `-l` con `fdisk`, entonces el comando listará de manera no interactiva los dispositivos de bloque, que incluyen los discos (discos físicos) y los volúmenes lógicos.
+
+Sin la opción `-l` el comando `fdisk` entra en un modo interactivo que normalmente se utiliza para modificar las particiones en un dispositivo de disco.
+
+## 10.2.9 Paso 9
+
+Ejecuta el comando `fdisk` para listar los dispositivos de disco de forma no interactiva, en sectores, y sin advertencias de compatibilidad DOS:
+
+`fdisk -cul`
+
+La salida parcial de este comando muestra el primer par de discos, */dev/sda* y */dev/sd*, y sus particiones. El tercer disco, */dev/sdc*, y los volúmenes lógicos que lo siguieron se han omitido:
+
+![comando fdisk -cul](images/10.3.9_1.png)
+
+La opción `-u` opción hace que el comando `fdisk` muestre las unidades en sectores en vez de cilindros. La opción `-c` evita que el comando `fdisk` imprima las advertencias que afectan la compatibilidad con el sistema DOS.
+
+## 11.1 Introducción
+
+Un sistema típico de Linux tiene miles de archivos. El Filesystem Hierarchy Standard (o «estándar jerárquico del sistema de archivos» en español) (explicado en detalle en un capítulo posterior) proporciona una guía para las distribuciones en cómo organizar estos archivos. En este capítulo verás cómo los sistemas de administración de paquetes de software pueden proporcionar información sobre la ubicación de los archivos pertenecientes a un paquete.
+
+El *kernel* de Linux es el núcleo del sistema operativo GNU/Linux. Este capítulo explica el papel del kernel de Linux y cómo proporciona información acerca del sistema bajo los pseudo-sistemas de archivo */proc* y */sys*.
+
+Verás cómo cada comando que se ejecuta causa que se ejecute un proceso y podrás ver los procesos ejecutándose con el comando `ps`. También verás discusión sobre cómo el sistema graba o registra mensajes desde los *procesos en segundo plano* llamados *demonios* (o «daemons» en inglés).
+
+Finalmente, verás cómo visualizar el *ring buffer* del kernel con el comando `dmesg` para ver los mensajes que contiene.
+
+![LPI Graphics](images/9-LPI-Graphics.png)
+
+**Conociendo como Linux promueve carreras profesionales**. 86% de los profesionistas de Linux reportan que saber Linux les ha dado más oportunidades de carrera profesional. Y 64% dicen que seleccionaron trabajar con Linux por su omnipresencia en la infraestructura de tecnología del mundo moderno.
+
+## 11.2 Administración de Paquetes
+
+***Administración de Paquetes*** es un sistema que instala, actualiza, consulta o elimina software dentro de un sistema de archivos. En Linux hay muchos sistemas de administración de paquetes de software diferentes, pero los dos más populares son **Debian** y **Red Hat**.
+
+## 11.2.1 Administración de Paquetes Debian
+
+La distribución Debian y sus derivados como Ubuntu y Mint utilizan el sistema de gestión de paquetes Debian. En el centro de administración de paquetes de distribuciones derivadas de Debian están los paquetes de software que se distribuyen como archivos con terminación «*.deb*».
+
+La herramienta de nivel más bajo para administrar estos archivos es el comando `dpkg`. Este comando puede ser complicado para los usuarios de Linux principiantes, por lo que una herramienta de paquetes avanzada, `apt-get`, un programa front-end para la herramienta `dpkg`, facilita más la administración de los paquetes. Existen otras herramientas de la línea de comandos que sirven como front-end de `dpkg`, tales como aptitude, así como front-ends de GUI como `synaptic` y `software-center`(tal como se muestra abajo).
+
+![ubuntu software center](images/11.3.1_1.png)
+
+## 11.2.1.1 Debian - Agregando paquetes
+
+Los repositorios de Debian contienen más de 65,000 diferentes paquetes de software. Para obtener una lista actualizada de estos repositorios de Internet, puedes ejecutar el comando de `sudo apt-get update`.
+
+Para buscar palabras clave dentro de estos paquetes, puedes utilizar el comando `sudo apt-cache search keyword`.
+
+Cuando hayas encontrado el paquete que quieres instalar, puedes instalarlo con el comando `sudo apt-get install package`.
+
+**Importante**: Para ejecutar estos comandos tu sistema necesitará acceso a Internet. El comando `apt-cache` busca repositorios de estos programas de software en Internet.
+
+## 11.2.1.2 Debian - Actualización de Paquetes
+
+Si quieres actualizar un paquete individual vas a utilizar un comando que instala tal paquete: `sudo apt-get install package`.
+
+Si ya tienes instalada una versión anterior del paquete, entonces se actualizará. De lo contrario se ejecuta una nueva instalación.
+
+Si quieres actualizar todos los paquetes posibles, tienes que ejecutar el comando `sudo apt-get upgrade`.
+
+Los usuarios que inicien sesión con una interfaz gráfica pueden ver en el área de las notificaciones un mensaje del `update-manager`(«administrador de actualizaciones» en español) que indica que las actualizaciones están disponibles tal como se muestra a continuación:
+
+![ubpdate Manager](images/11.3.1.2_1.png)
+
+## 11.2.1.3 Debian - Eliminación de Paquetes
+
+Ten cuidado cuando elimines una paquete de software puede resultar en la eliminación de otros paquetes. Debido a las *dependencias* entre paquetes, si eliminas un paquete, entonces todos los paquetes que necesitan o dependen de ese paquete se eliminarán también.
+
+Si quieres eliminar todos los archivos de un paquete de software, excepto los archivos de configuración, puedes ejecutar el comando ``sudo apt-get remove package``.
+
+Si quieres eliminar todos los archivos de un paquete de software, incluyendo los archivos de configuración, puedes ejecutar el comando ``sudo apt-get --purge remove package``.
+
+Puede que quieras guardar los archivos de configuración en caso de que vuelvas a instalar el paquete de software en un momento posterior.
+
+## 11.2.1.4 Debian - Consultar Paquetes
+
+Hay varios tipos de consultas que los administradores necesitan utilizar. Para obtener una lista de todos los paquetes que están instalados actualmente en el sistema ejecuta el comando ``dpkg -l``.
+
+Para listar los archivos que componen un paquete especial, puedes ejecutar el comando de ``dpkg -L package``.
+
+Para consultar un paquete y obtener información o su estado usa el comando de ``dpkg - s package``.
+
+Para determinar si un determinado archivo fue puesto en el sistema de archivos como el resultado de la instalación de un paquete utiliza el comando ``dpkg -S /path/to/file``. Si el archivo era parte de un paquete, podría proporcionarse el nombre del paquete. Por ejemplo:
+
+```bash
+sysadmin@localhost:~$ dpkg -S /usr/bin/who
+coreutils: /usr/bin/who
+```
+
+En el ejemplo anterior se muestra que el archivo */usr/bin/who* es parte del paquete *coreutils*.

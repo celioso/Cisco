@@ -9452,3 +9452,120 @@ coreutils: /usr/bin/who
 ```
 
 En el ejemplo anterior se muestra que el archivo */usr/bin/who* es parte del paquete *coreutils*.
+
+## 11.2.2 Administración de Paquetes RPM
+
+**Linux Standards Base**(o «La Base de Estándares de Linux» en español) es un proyecto de Linux Foundation y está diseñada para especificar (a través de un consenso) un conjunto de normas que aumentan la compatibilidad entre los sistemas conformes de Linux. Según Linux Standards Base el administrador de paquetes estándar es RPM.
+
+RPM utiliza un archivo *.rpm* para cada paquete de software. Este sistema es el que usan las distribuciones derivadas de Red Hat (como Red Hat, Centos y Fedora) para administrar software. Además, varias otras distribuciones que no son derivadas de Red Hat (como SUSE, OpenSUSE y Mandriva) también utilizan RPM.
+
+**Nota**: Los comandos de RPM no están disponible dentro del entorno de la máquina virtual de este curso.
+Al igual que el sistema Debian, los sistemas de administración de paquetes RPM rastrean dependencias entre paquetes. Las dependencias rastreadas aseguran que cuando se instala un paquete, el sistema también instalará los paquetes que el paquete necesita para funcionar correctamente. Las dependencias también garantizan que las actualizaciones de software y las eliminaciones se realicen correctamente.
+
+La herramienta de back-end más comúnmente utilizada para la administración de paquetes RPM es el comando `rpm`. Mientras que el comando `rpm` puede instalar, actualizar, consultar y eliminar paquetes, las herramientas front-end de línea de comandos como `yum` y `up2date` automatizan el proceso de resolución de los problemas con las dependencias.
+
+Además, existen herramientas de front-end basadas en GUI tales como `yumex` y `gpk-application`(ver abajo) que también facilitan la administración de paquetes RPM.
+
+![add/Remove Software](images/11.3.2_1.png)
+
+Debes tener en cuenta que muchos de los comandos siguientes requieren privilegios de root. La regla es que si un comando afecta el estado de un paquete, necesitarás tener acceso administrativo. En otras palabras, un usuario normal puede realizar una consulta o una búsqueda, pero agregar, actualizar o eliminar un paquete requiere que el comando lo ejecute un usuario *root*.
+
+## 11.2.2.1 RPM - Agregando paquetes
+
+Para buscar un paquete desde los repositorios configurados, ejecuta el comando `yum search keyword`.
+
+Para instalar un paquete, junto con sus dependencias, ejecuta el comando `yum install package`.
+
+Los comandos RPM no están disponibles dentro del entorno de la máquina virtual de este curso.
+
+## 11.2.2.2 RPM - Actualización de Paquetes
+
+Si quieres actualizar un paquete de software individual, puedes ejecutar el comando `yum update package`.
+
+Si quieres actualizar todos los paquetes, puedes ejecutar el comando `yum update`.
+
+Si las actualizaciones están disponibles y el usuario está utilizando una GUI, entonces el `gpk-update-viewer` puede mostrar un mensaje en el área de las notificaciones de la pantalla indicando que las actualizaciones están disponibles.
+
+Los comandos RPM no están disponibles dentro del entorno de la máquina virtual de este curso.
+
+![Software update](images/11.3.2.2_1.png)
+
+## 11.2.2.3 RPM - Eliminación de los Paquetes
+
+Igual que en el caso de cualquier sistema de administración de paquetes que rastrea dependencias, si quieres eliminar un paquete, puedes terminar quitando más de uno debido a las dependencias. La forma más fácil de resolver automáticamente los problemas con las dependencias es utilizar el comando yum:
+
+`yum remove package`
+
+Mientras que puedes quitar los paquetes de software con el comando `rpm`, éste no eliminará automáticamente los paquetes de dependencia.
+
+Los comandos RPM no están disponibles dentro del entorno de la máquina virtual de este curso.
+
+## 11.2.2.4 RPM - Consultar Paquetes
+
+La administración de paquetes de Red Hat es similar a la administración de paquetes de Debian a la hora de realizar consultas. Es mejor utilizar la herramienta de back-end, `rpm`, en lugar de la herramienta front-end, `yum`. Mientras que las herramientas de front-end pueden realizar algunas de estas consultas, el rendimiento sufre porque normalmente estos comandos se conectan a múltiples repositorios en toda la red al ejecutar cualquier comando. El comando `rpm` realiza sus consultas mediante la conexión a una base de datos local de la máquina y no se conecta por la red a los repositorios.
+
+Los comandos RPM no están disponibles dentro del entorno de la máquina virtual de este curso.
+
+Para obtener una lista de todos los paquetes que están instalados actualmente en el sistema ejecuta el comando `rpm -qa`.
+
+Para listar los archivos que componen un paquete especial, puedes ejecutar el comando de `rpm -ql package`.
+
+El carácter después de *q* en la opción `-ql` es la letra *l* y no el número *1*.
+
+Para consultar un paquete y obtener información o su estado ejecuta el comando `rpm -qi package`.
+
+Para determinar si un archivo en particular fue puesto en el sistema de archivos como el resultado de la instalación de un paquete utiliza el comando `rpm -qf /path/to/file`.
+
+## 11.3 Kernel de Linux
+
+Cuando la mayoría de la gente se refiere a Linux, realmente se refiere al *GNU/Linux*, que define el sistema operativo. La parte de *Gnu's Not Unix*(GNU)de esta combinación viene proporcionada por un proyecto de la Free Software Foundation. GNU es lo que proporciona los equivalentes de código abierto de muchos comandos comunes del UNIX, la mayor parte de los comandos de línea de comandos esenciales. La parte de Linux de esta combinación es el *Kernel de Linux* que es el núcleo del sistema operativo. El kernel se carga al arrancar y se queda cargado para gestionar todos los aspectos del sistema en ejecución.
+
+La implementación del kernel de Linux incluye muchos subsistemas que forman parte del kernel y otros que se pueden cargar de manera modular cuando sea necesario. Algunas de las funciones principales del kernel de Linux incluyen una interfaz de invocación del sistema, administración de procesos, administración de memoria, sistema de archivos virtual, redes y controladores de dispositivos.
+
+En resumen, el kernel acepta comandos del usuario y gestiona los procesos que llevan a cabo los comandos, dándoles acceso a los dispositivos como memoria, discos, interfaces de red, teclados, ratones, monitores y mucho más.
+
+El kernel proporciona acceso a la información sobre la ejecución de los procesos a través de un **pseudo-sistema de archivos** que es visible bajo el directorio */proc*. Los dispositivos de hardware están a disposición a través de unos archivos especiales bajo el directorio */dev*, mientras que la información sobre tales dispositivos se encuentra en otro pseudo-sistema de archivos bajo el directorio */sys*.
+
+El directorio */proc* no sólo contiene la información sobre la ejecución de los procesos, como su nombre sugiere (proceso), sino también contiene la información sobre el hardware del sistema y la configuración actual del kernel. A continuación puedes ver un ejemplo de salida:
+
+Ten en cuenta que la información mostrada en los ejemplos siguientes será diferente de lo que puedes ver dentro del entorno de la máquina virtual de este curso.
+
+![/proc](images/11.4_1.png)
+
+La salida de la ejecución de `ls /proc` muestra más de cien directorios numerados. Hay un directorio numerado por cada proceso en ejecución en el sistema, donde el nombre del directorio coincide con el PID (ID del proceso) del proceso en ejecución.
+
+Como el proceso de */sbin/init* siempre es el primer proceso, tiene un PID de *1* y la información del proceso */sbin/init* se puede encontrar en el directorio */proc/*1 .Como verás después en este capítulo, hay varios comandos que te permiten ver información sobre procesos en ejecución, por lo que raramente es necesario para los usuarios tener que ver los archivos para cada proceso en ejecución directamente.
+
+Quizá también veas que hay un número de archivos regulares en el directorio */proc*, como */proc/cmdline*, */proc/meminfo* y */proc/modules*. Estos archivos proporcionan información sobre el kernel en ejecución:
+
+- El archivo */proc/cmdline* puede ser importante porque contiene toda la información que le fue pasada al kernel cuando fué iniciado.
+- El archivo */proc/meminfo* contiene información sobre el uso de memoria por el kernel.
+- El archivo */proc/modules* contiene una lista de módulos que están cargados actualmente en el kernel para agregar funcionalidad extra.
+
+De nuevo, raramente es necesario ver estos archivos directamente, ya que otros comandos ofrecen una salida más amigable para el usuario y una manera alternativa de ver esta información.
+
+Mientras que la mayoría de los “archivos” bajo el directorio */proc* no se pueden modificar, incluso por el usuario root, los “archivos” bajo el directorio */proc/sys* pueden modificarse por el usuario root. Modificar estos archivos cambiarán el comportamiento del kernel de Linux.
+
+Una modificación directa a estos archivos solo causa cambios temporales al kernel. Para hacer cambios permanentes, se le pueden agregar entradas al archivo */etc/sysctl.conf*.
+
+Por ejemplo, el directorio */proc/sys/net/ipv4* contiene un archivo llamado *icmp_echo_ignore_all*. Si ese archivo contiene un cero *0* , como lo hace normalmente, entonces el sistema responderá a solicitudes *icmp*. Si ese archivo contiene un uno *1*, entonces el sistema no responderá a solicitudes *icmp*: ”
+
+```bash
+[user@localhost ~]$ su -
+Password: 
+[root@localhost ~]# cat /proc/sys/net/ipv4/icmp_echo_ignore_all 
+0
+[root@localhost ~]# ping -c1 localhost
+PING localhost.localdomain (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost.localdomain (127.0.0.1): icmp_seq=1 ttl=64 time=0.026 ms
+
+--- localhost.localdomain ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.026/0.026/0.026/0.000 ms
+[root@localhost ~]# echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+[root@localhost ~]# ping -c1 localhost
+PING localhost.localdomain (127.0.0.1) 56(84) bytes of data.
+
+--- localhost.localdomain ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 10000ms
+```

@@ -9569,3 +9569,156 @@ PING localhost.localdomain (127.0.0.1) 56(84) bytes of data.
 --- localhost.localdomain ping statistics ---
 1 packets transmitted, 0 received, 100% packet loss, time 10000ms
 ```
+
+## 11.4 Jerarquía de Procesos
+
+Cuando el kernel termina de cargarse durante el proceso de arranque, se inicia el proceso */sbin/init* y le asigna un Id de proceso (PID) 1. Este proceso entonces arranca otros procesos del sistema y a cada proceso se le asigna un PID en orden secuencial.
+
+Como el proceso */sbin/init* inicia otros procesos, a su vez éstos pueden iniciar procesos, que pueden poner en marcha otros procesos, y así sucesivamente. Cuando un proceso inicia otro proceso, el proceso que lleva a cabo la puesta en marcha se llama ***proceso padre*** y el proceso que se inicia se denomina el proceso *hijo*. Al visualizar los procesos, el padre será marcado como PPID.
+
+Cuando el sistema ha estado funcionando durante mucho tiempo, eventualmente alcanzará el máximo valor de PID, que puedes ver y configurar a través del archivo */proc/sys/kernel/pid_max*. Una vez que se ha utilizado el PID más grande, el sistema se «volteará» y reanudará asignando valores de PID que están disponibles en la parte inferior de la gama.
+
+Los gráficos siguientes proporcionan un ejemplo y la explicación del comando `pstree`. La salida variará de los resultados que verás si introduces el comando en el entorno de la máquina virtual de este curso.
+
+Puedes acomodar los procesos en un árbol familiar de las parejas de padre e hijo. Si quieres ver este árbol, el comando `pstree` lo mostrará:
+
+![pstree](images/11.5_1.png)
+
+Si quieres examinar la relación de procesos padre e hijo, usando la salida del comando anterior, podrías considerar que es como:
+
+![Father and son](images/11.5_2.png) 
+
+## 11.5 El Comando ps (proceso)
+
+Otra forma de visualizar los procesos es con el comando `ps`. De forma predeterminada, el comando `ps` sólo mostrará los procesos actuales en el shell actual. Irónicamente, verás el `ps` ejecutándose cuando quieras ver qué otra cosa se está ejecutando en el shell:
+
+```bash
+sysadmin@localhost:~$ ps                                                        
+  PID TTY          TIME CMD
+ 6054 ?        00:00:00 bash
+ 6070 ?        00:00:01 xeyes
+ 6090 ?        00:00:01 firefox
+ 6146 ?        00:00:00 ps
+sysadmin@localhost:~$
+```
+De manera similar al comando `pstree`, si ejecutas `ps` con la opción `--forest`, verás las líneas indicando la relación de padre e hijo:
+
+```bash
+sysadmin@localhost:~$ ps --forest
+  PID TTY          TIME CMD
+ 6054 ?        00:00:00 bash
+ 6090 ?        00:00:02   \_ firefox
+ 6180 ?        00:00:00   \_ dash
+ 6181 ?        00:00:00        \_ xeyes
+ 6188 ?        00:00:00        \_ ps
+sysadmin@localhost:~$
+```
+
+Para poder ver todos los procesos del sistema, puedes ejecutar el comando `ps aux` o `ps -ef`:
+
+```bash
+sysadmin@localhost:~$ ps aux | head
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0  17872  2892 ?        Ss   08:06   0:00 /sbin?? /ini
+syslog      17  0.0  0.0 175744  2768 ?        Sl   08:06   0:00 /usr/sbin/rsyslogd-c5
+root        21  0.0  0.0  19124  2092 ?        Ss   08:06   0:00 /usr/sbin/cron
+root        23  0.0  0.0  50048  3460 ?        Ss   08:06   0:00 /usr/sbin/sshd
+bind        39  0.0  0.0 385988 19888 ?        Ssl  08:06   0:00 /usr/sbin/named -u bind
+root        48  0.0  0.0  54464  2680 ?        S    08:06   0:00 /bin/login -f
+sysadmin    60  0.0  0.0  18088  3260 ?        S    08:06   0:00 -bash
+sysadmin   122  0.0  0.0  15288  2164 ?        R+   16:26   0:00 ps aux
+sysadmin   123  0.0  0.0  18088   496 ?        D+   16:26   0:00 -bash
+sysadmin@localhost:~$ ps -ef | head
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 08:06 ?        00:00:00 /sbin?? /init
+syslog      17     1  0 08:06 ?        00:00:00 /usr/sbin/rsyslogd -c5
+root        21     1  0 08:06 ?        00:00:00 /usr/sbin/cron
+root        23     1  0 08:06 ?        00:00:00 /usr/sbin/sshd
+bind        39     1  0 08:06 ?        00:00:00 /usr/sbin/named -u bind
+root        48     1  0 08:06 ?        00:00:00 /bin/login -f
+sysadmin    60    48  0 08:06 ?        00:00:00 -bash
+sysadmin   124    60  0 16:46 ?        00:00:00 ps -ef
+sysadmin   125    60  0 16:46 ?        00:00:00 head
+sysadmin@localhost:~$
+```
+
+La salida de todos los procesos ejecutándose en un sistema sin duda puede ser abrumador. En el ejemplo la salida del comando `ps` se filtró por el comando `head`, por lo que se ven sólo los diez primeros procesos. Si no filtras la salida del comando `ps`, es probable que tengas que recorrer cientos de procesos para encontrar lo que te interesa.
+
+Una forma común de ejecutar el comando `ps` es utilizando el comando `grep` para filtrar la salida que muestre las líneas que coincidan con una palabra clave, como el nombre del proceso. Por ejemplo, si quieres ver la información sobre el proceso de `firefox`, puede ejecutar un comando como:
+
+```bash
+sysadmin@localhost:~$ ps -e | grep firefox
+ 6090 pts/0    00:00:07 firefox
+```
+
+Como usuario *root* te pueden interesar más los procesos de otro usuario que tus propios procesos. Debido a los varios estilos de opciones que soporta el comando `ps`, hay diferentes formas de ver los procesos de un usuario individual. Utilizando la opción tradicional de UNIX, para ver los procesos del *sysadmin*(o «administrador del sistema» en español), ejecuta el siguiente comando:
+
+`[root@localhost ~]# ps -u username`
+
+O utilice las opciones de estilo BSD y ejecute:
+
+`[root@localhost ~]# ps u U username`
+
+## 11.6 El Command top
+
+El comando `ps` ofrece una «foto» de los procesos que se ejecutan en el momento de introducir el comando, el comando `top` actualizará periódicamente la salida de los procesos en ejecución. El comando `top` se ejecuta de la siguiente manera:
+
+`sysadmin@localhost:~$ top`
+
+De forma predeterminada, la salida del comando `top` se ordena por el % del tiempo de CPU que cada proceso está utilizando actualmente, con los valores más altos en primer lugar. Esto significa los procesos que son los «CPU hogs» aparecen primero:
+
+```bash
+top - 16:58:13 up 26 days, 19:15,  1 user,  load average: 0.60, 0.74, 0.60      
+Tasks:   8 total,   1 running,   7 sleeping,   0 stopped,   0 zombie            
+Cpu(s):  6.0%us,  2.5%sy,  0.0%ni, 90.2%id,  0.0%wa,  1.1%hi,  0.2%si,  0.0%st  
+Mem:  32953528k total, 28126272k used,  4827256k free,     4136k buffers        
+Swap:        0k total,        0k used,        0k free, 22941192k cached         
+                                                                                
+  PID USER      PR   NI VIRT RES  SHR  S %CPU %MEM     TIME+ COMMAND            
+    1 root      20   0 17872 2892 2640 S    0  0.0   0:00.02 init               
+   17 syslog    20   0  171m 2768 2392 S    0  0.0   0:00.20 rsyslogd           
+   21 root      20   0 19124 2092 1884 S    0  0.0   0:00.02 cron               
+   23 root      20   0 50048 3460 2852 S    0  0.0   0:00.00 sshd               
+   39 bind      20   0  376m  19m 6100 S    0  0.1   0:00.12 named              
+   48 root      20   0 54464 2680 2268 S    0  0.0   0:00.00 login              
+   60 sysadmin  20   0 18088 3260 2764 S    0  0.0   0:00.01 bash               
+  127 sysadmin  20   0 17216 2308 2072 R    0  0.0   0:00.01 top
+```
+
+Hay una extensa lista de comandos que se pueden ejecutar dentro del top:
+
+| Teclas	| Significado |
+|---|---|
+| h o ?	| Ayuda |
+| l	| Alternar entre las estadísticas de carga |
+| t	| Alternar entre las estadísticas de tiempo |
+| m	| Alternar entre las estadísticas del uso de la memoria |
+| <	| Mover la columna ordenada hacia la izquierda |
+| >	| Mover la columna ordenada hacia la derecha |
+| F	| Elegir un campo ordenado |
+| R	| Alternar entre la dirección de la clasificación |
+| P	|| Ordenar por % CPU |
+| M	| Ordenar por % de la memoria usada |
+| k	| Terminar un proceso (o enviarle una señal) |
+| r	| Cambiar la prioridad de un proceso con el comando renice |
+
+Una de las ventajas del comando `top` es que se puede dejar correr para permanecer al «pendiente» de los procesos para propósitos de monitoreo. Si un proceso comienza a dominar o «huye» con el sistema, entonces por defecto aparecerá en la parte superior de la lista presentada por el comando `top`. Un administrador que está ejecutando el comando top puede entonces tomar una de dos acciones:
+
+1. Terminar el proceso «corrido»: Apretando la tecla **k** mientras se ejecuta el comando `top` pedirá al usuario que proporcione el PID y un número señal. Enviar la señal predeterminada le pedirá al proceso que termine, pero enviando el número 9 de la señal, la señal *KILL*, forzará el cierre del proceso.
+
+2. Ajustar la prioridad del proceso: Apretando la tecla **r** mientras se ejecuta el comando `top` pedirá al usuario que ejecute el `renice` del proceso seguido por el valor del discernimiento (o «niceness» en inglés). Los valores de niceness pueden ser del -20 al 19 y afectan la prioridad. Sólo el usuario root puede utilizar un «niceness» menor que el valor actual de niceness o un valor de niceness negativo, que hace que el proceso se ejecute con una prioridad mayor. Cualquier usuario puede proporcionar un valor de niceness que es mayor que el valor actual de niceness y hará que el proceso se ejecute con una prioridad baja.
+
+Otra ventaja del comando `top` es que puede darte una representación general de lo ocupado que está el sistema actualmente y la tendencia en el tiempo. Los *promedios de carga* se muestran en la primera línea de la salida del comando `top` e indican que tan ocupado ha estado el sistema durante los últimos uno, cinco y quince minutos. Esta información también puede verse ejecutando el comando `uptime` o directamente mostrando el contenido del archivo */proc/loadavg*:
+
+```bash
+sysadmin@localhost:~$ cat /proc/loadavg
+0.12 0.46 0.25 1/254 3052
+```
+Los tres primeros números de este archivo indican la carga media sobre los intervalos pasados uno, cinco y quince minutos. El cuarto valor es una fracción que muestra el número de los procesos ejecutando código actualmente en la CPU *1* y el número total de los procesos *254*. El quinto valor es el último valor de PID que ejecutó código en la CPU.
+
+El número reportado como un promedio de carga es proporcional al número de los núcleos de CPU capaces de ejecutar procesos. En una CPU de un solo núcleo un valor de uno significaría que el sistema está totalmente cargado. En una CPU de cuatro núcleos un valor de uno significaría que 1/4 o el 25% del sistema está cargado.
+
+Otra razón por la que los administradores mantienen ejecutado el comando `top` es la capacidad para monitorear el uso de la memoria en tiempo real. Ambos comandos el `top` y el `free` muestran las estadísticas del uso general de la memoria.
+
+El comando `top` también puede mostrar el porcentaje de memoria utilizado por cada proceso, así pues, se puede identificar rápidamente un proceso que está consumiendo una cantidad excesiva de memoria.
+

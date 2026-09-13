@@ -9722,3 +9722,84 @@ Otra razón por la que los administradores mantienen ejecutado el comando `top` 
 
 El comando `top` también puede mostrar el porcentaje de memoria utilizado por cada proceso, así pues, se puede identificar rápidamente un proceso que está consumiendo una cantidad excesiva de memoria.
 
+## 11.7 El Comando free
+
+Ejecutando el comando `free` sin opciones proporciona una foto de la memoria utilizada en ese momento.
+
+Si quieres supervisar el uso de la memoria en el tiempo con el comando `free`, puedes ejecutarlo con la opción `-s` y especificar el número de segundos. Por ejemplo, ejecutando `free -s 10` actualizaría la salida cada 10 segundos.
+
+Para hacer más fácil la interpretación de la salida del comando `free`, las opciones `-m` o `-g` pueden ser útiles para mostrar la salida en megabytes o gigabytes, respectivamente. Sin estas opciones, se muestra la salida en bytes:
+
+```bash
+sysadmin@localhost:~$ free
+             total       used       free     shared    buffers     cached
+Mem:      32953528   26171772    6781756          0       4136   22660364
+-/+ buffers/cache:    3507272   29446256
+Swap:            0          0          0
+sysadmin@localhost:~$
+```
+
+Cuando lees la salida del comando `free`:
+
+- La primera línea es un encabezado descriptivo.
+- La segunda línea con la etiqueta *Mem*: son las estadísticas de la memoria física del sistema.
+- La tercera línea representa la cantidad de memoria física después de ajustar esos valores sin tener en cuenta cualquier memoria utilizada por el kernel para los buffers y caché. Técnicamente, esta memoria «utilizada» podría ser «reclamada» si es necesario.
+- La cuarta línea de la salida se refiere a la memoria *Swap*, también conocida como la memoria virtual. Éste es el espacio en el disco duro que se utiliza como memoria física cuando se baja la cantidad de memoria física. De hecho, puede parecer que el sistema tiene más memoria de lo que realmente tiene, pero el uso del espacio swap puede también ralentizar el sistema.
+
+Si la cantidad de memoria y swap que está disponible es muy baja, el sistema comenzará automáticamente a cerrar los procesos. Esta es una razón por la que es importante supervisar el uso de la memoria del sistema. Un administrador que se da cuenta que el sistema se va quedando sin memoria libre, puede utilizar el comando `top` o `kill` para cerrar los procesos que quiere, en lugar de dejar que el sistema elija por él.
+
+## 11.8 Los Archivos de Registro
+
+A medida que el kernel y varios procesos se ejecutan en el sistema, producen una salida que describe cómo se están ejecutando. Parte de esta salida se muestra en la ventana de la terminal donde se ejecuta el proceso, algunos de estos datos no se envían a la pantalla, pero en cambio se escribe en varios archivos. Esto se llama «datos de registro» o «mensajes de registro».
+
+Estos archivos de registro son muy importantes por un número de razones; pueden ser útiles en la solución de los problemas y pueden ser utilizados para la determinación de si o no ha habido intentos de acceso no autorizado.
+
+Algunos procesos son capaces de «registrar» sus propios datos en estos archivos, otros procesos dependen de otro proceso (un demonio) para manejar estos archivos de registro de datos.
+
+Estos demonios de registro pueden variar de una distribución a otra. Por ejemplo, en algunas distribuciones, los demonios que se ejecutan en segundo plano para realizar el registro se llaman ``syslogd`` y ``klogd``. En otras distribuciones, un demonio como el ``rsyslogd`` en Red Hat y Centos o ``systemd journald`` en Fedora puede servir para esta función de registro.
+
+Independientemente del nombre del proceso de demonio, los archivos de registro se colocan casi siempre en la estructura del directorio */var/log*. Aunque algunos de los nombres de archivo pueden variar, aquí están algunos de los archivos más comunes en este directorio:
+
+| Archivo	| Contenido |
+|---|---|
+| boot.log	| Mensajes generados cuando servicios se inician durante el arranque del sistema. |
+| cron	| Mensajes generados por el demonio crond para las tareas que se deben ejecutar en forma recurrente. |
+| dmesg	| Mensajes generados por el kernel durante el arranque del sistema. |
+| maillog	| Mensajes producidos por el demonio de correo para mensajes de correo electrónico enviados o recibidos |
+| messages	| Mensajes del kernel y otros procesos que no pertenecen a ninguna otra parte. A veces se denomina dsyslog en lugar de messages cuando el demonio haya grabado este archivo. |
+| secure	| Mensajes de los procesos que requieren autorización o autenticación (por ejemplo, el proceso de inicio de sesión). |
+| Xorg.0.log	| Mensajes del servidor de ventanas X (GUI). |
+
+Los archivos de registro se rotan, lo que significa que los archivos de registro antiguos cambiaron de nombre y fueron reemplazados por nuevos archivos de registro. Los nombres de archivo que aparecen en la tabla anterior pueden tener un sufijo numérico o fecha añadida al nombre, por ejemplo: *secure.0* o *secure-20131103*
+
+La rotación de un archivo de registro por lo general se ocurre en forma programada, por ejemplo, una vez por semana. Cuando se rota un archivo de registro, el sistema deja de escribir en el archivo de registro y agrega un sufijo. Entonces se crea un nuevo archivo con el nombre original y el proceso de registro sigue usando este nuevo archivo.
+
+Con los demonios modernos normalmente se utiliza un sufijo de fecha. De esta manera, al final de la semana que termina el 03 de noviembre de 2013, el demonio de registro podría dejar de escribir en el archivo */var/log/messages*, lo podría renombrar a */var/log/messages-20131103* y comenzar a escribir en un nuevo archivo */var/log/messages*.
+
+Aunque la mayoría de los archivos de registro contienen texto como su contenido, que puede verse de forma segura con muchas herramientas, otros archivos como */var/log/btmp* y */var/log/wtmp* contienen un binario. Mediante el comando file (o «archivo» en español), puedes comprobar si el tipo de contenido del archivo es seguro para ver.
+
+Para los archivos que contienen datos binarios, normalmente hay comandos disponibles que leen los archivos, interpretan su contenido y luego muestran texto. Por ejemplo, los comandos `lastb` y `last` se pueden usar para ver los archivos */var/log/btmp* y */var/log/wtmp* respectivamente.
+
+Por razones de seguridad, la mayoría de los archivos encontrados no son legibles por los usuarios normales, así que asegúrate de ejecutar los comandos que interactúan con estos archivos teniendo los privilegios de root.
+
+## 11.9 El Comando dmesg
+
+El archivo */var/log/dmesg* contiene los mensajes del kernel que se produjeron durante el arranque del sistema. El archivo */var/log/messages* contiene mensajes del kernel que se producen mientras el sistema está corriendo, pero los mensajes se mezclarán con otros mensajes de demonios o procesos.
+
+Aunque el kernel normalmente no tiene su propio archivo de registro, se puede configurar uno para ellos por lo general mediante la modificación de los archivos /*etc/syslog.conf* o */etc/rsyslog.conf*. Además, el comando `dmesg` puede utilizarse para ver el ***kernel ring buffer***, que contendrá un gran número de mensajes generados por el kernel.
+
+En un sistema activo, o en uno que tiene muchos errores de kernel, es posible que se haya sobrepasado la capacidad de este búfer y podrían perderse algunos mensajes. El tamaño de este búfer se establece en el momento que el kernel es compilado, por lo que no es sencillo cambiarlo.
+
+Ejecutar el comando `dmesg` puede producir hasta 512 kilobytes de texto, así que se recomienda filtrar el comando con una barra vertical a otro comando como `less` o `grep`. Por ejemplo, si estuvieras resolviendo problemas con tu dispositivo USB, entonces buscando el texto «USB» con el comando `grep` siendo sensible a mayúsculas y minúsculas, puede ser de ayuda:
+
+```bash
+sysadmin@localhost:~$ dmesg | grep -i usb 
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+ohci_hcd 0000:00:06.0: new USB bus registered, assigned bus number 1
+usb usb1: New USB device found, idVendor=1d6b, idProduct=0001
+usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+```

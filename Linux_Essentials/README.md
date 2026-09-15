@@ -9803,3 +9803,125 @@ ohci_hcd 0000:00:06.0: new USB bus registered, assigned bus number 1
 usb usb1: New USB device found, idVendor=1d6b, idProduct=0001
 usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
 ```
+
+## laboratorio 11
+
+## 11.1 Introducción
+
+Este es Lab 11: Ubicaciones de los Datos de Linux. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán acerca de la ubicación de la información del kernel, información del proceso, las librerías, los archivos de registro, y los paquetes de software.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+- Investiga cómo el kernel utiliza al sistema de archivos */proc*
+- Utiliza el comando `ps` para ver la información del proceso
+- Aprende a gestionar los procesos al iniciarlos, detenerlos y continuarlos
+- Visualización de archivos de registro
+- Gestionar la capacidad de cargar las librerías compartidas
+
+## 11.2 El kernel y /proc
+
+En esta tarea explorarás el directorio /proc y los comandos que se comunican con el kernel de Linux. El directorio */proc* parece ser un directorio ordinario, como el */usr* o */etc*, pero no lo es. A diferencia de los directorios */usr* o */etc*, que por lo general se escriben en una unidad de disco, el directorio */proc* es un seudo sistema de archivos ubicado en la memoria de la computadora.
+
+El directorio */proc* contiene un subdirectorio para cada proceso presente en el sistema. Los programas tales como `pd` y `top` leen la información sobre los procesos en ejecución de estos directorios. El directorio */proc* también contiene la información acerca del sistema operativo y su hardware en los archivos como */proc/cpuinfo*, */proc/meminfo* y */proc/devices*.
+
+El subdirectorio */proc/sys* contiene los seudo archivos que se pueden utilizar para alterar la configuración del kernel en ejecución. Ya que estos archivos no son archivos «reales», no se debe utilizar el editor para modificarlos; en su lugar debes utilizar el comando `echo` o `sysctl` para sobrescribir el contenido de estos archivos. Por la misma razón, no intentes ver estos archivos en un editor, sino utiliza el comando `cat` o `sysctl` en lugar.
+
+Para los cambios de configuración permanentes, el kernel utiliza el archivo */etc/sysctl.conf*. Normalmente, el kernel utiliza este archivo para realizar cambios en los archivos */proc* al iniciar el sistema.
+
+## 11.2.1 Paso 1
+
+En esta tarea explorarás algunos de los archivos ubicados en el directorio */proc*:
+
+`ls /proc`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ls /proc
+1          cpuinfo      kallsyms    mpt           sysrq-trigger
+19         crypto       kcore       mtrr          sysvipc
+23         devices      key-users   net           thread-self
+25         diskstats    keys        pagetypeinfo  timer_list
+41         dma          kmsg        partitions    timer_stats
+50         driver       kpagecount  sched_debug   tty
+62         execdomains  kpageflags  schedstat     uptime
+74         fb           loadavg     scsi          version
+acpi       filesystems  locks       self          version_signature
+buddyinfo  fs           mdstat      slabinfo      vmallocinfo
+bus        interrupts   meminfo     softirqs      vmstat
+cgroups    iomem        misc        stat          zoneinfo
+cmdline    ioports      modules     swaps
+consoles   irq          mounts      sys
+sysadmin@localhost:~$
+```
+
+Recuerda que los directorios que tienen los números para los nombres representan procesos que se ejecutan en el sistema. El primer proceso es siempre */sbin/init*, po lo que el directorio */proc/1* contendrá los archivos con la información sobre el proceso init en ejecución.
+
+El archivo cmdline dentro del directorio del proceso (*/proc/1/cmdline*, por ejemplo) mostrará el comando que se ejecuta. El orden en que se inician otros procesos varía mucho de un sistema al otro. Dado que el contenido de este archivo no contiene un carácter de nueva línea, un comando `echo` se ejecutará para hacer que el prompt vaya a una nueva línea.
+
+## 11.2.2 Paso 2
+
+Utiliza `cat` y después `ps` para ver la información sobre el proceso /sbin/init (identificador de proceso (PID) de 1):
+
+```text
+cat /proc/1/cmdline; echo
+ps -p 1
+```
+
+El resultado debe ser algo como esto:
+
+```bash
+sysadmin@localhost:~$ cat /proc/1/cmdline; echo
+/sbin‌/init
+```
+**Nota**: El comando `echo` en este ejemplo se ejecuta inmediatamente después del comando `cat`. Ya que no tiene ningún argumento, funciona sólo para poner la siguiente línea de comandos en una nueva línea. Ejecuta sólo el comando `cat` para ver la diferencia.
+
+```bash
+sysadmin@localhost:~$ ps -p 1
+  PID TTY          TIME CMD
+    1 ?        00:00:00 init
+```
+
+Los otros archivos en el directorio */proc* contienen información sobre el sistema operativo. Las siguientes tareas servirán para ver y modificar estos archivos.
+
+## 11.2.3 Paso 3
+
+Visualiza el archivo */proc/cmdline* para ver qué argumentos pasan al kernel durante el arranque:
+
+`cat /proc/cmdline`
+
+La salida del comando debe ser similar a esto:
+
+```bash
+sysadmin@localhost:~$ cat /proc/cmdline
+BOOT_IMAGE=/vmlinuz-4.2.0-34-generic root=/dev/mapper/vlabs--vg-root ro cgroup_enable=memory swapaccount=1
+sysadmin@localhost:~$
+```
+
+## 11.3 Gestión de Procesos
+
+En esta tarea verás cómo iniciar y detener los procesos.
+
+## 11.3.1 Paso 1
+
+Desde la terminal, escribe el siguiente comando:
+
+`ping localhost > /dev/null`
+
+El resultado debe ser similar al siguiente:
+
+`sysadmin@localhost:~$ ping localhost > /dev/null``
+
+La salida del ping está siendo redirigida al archivo */dev/null*(que se conoce comúnmente como bit bucket).
+
+Observa que la terminal aparece que se cuelga con este comando. Esto se debe a la ejecución de este comando en el «primer plano». El sistema continuará procesando `ping` hasta que el proceso termine o lo suspenda el usuario.
+
+## 11.3.2 Paso 2
+
+Terminado el proceso en el primer plano presionando `Ctrl-C`.
+
+```bash
+sysadmin@localhost:~$ ping localhost > /dev/null
+^C
+sysadmin@localhost:~$
+```

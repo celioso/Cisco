@@ -9925,3 +9925,96 @@ sysadmin@localhost:~$ ping localhost > /dev/null
 ^C
 sysadmin@localhost:~$
 ```
+
+## 11.3.3 Paso 3
+
+A continuación, para iniciar el mismo proceso en el segundo plano, introduce:
+
+`ping localhost > /dev/null &`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ping localhost > /dev/null &
+[1] 158
+```
+
+Al añadir el signo *&* al final del comando, el proceso se inicia en el segundo plano y permite al usuario mantener el control de la terminal.
+
+Una forma más fácil de entrar al comando anterior sería aprovechar el historial de comandos. Podrías haber presionado la **tecla de flecha arriba** ↑ en el teclado, añadir un **Espacio** y *&* al final del comando y luego presionar la tecla **Entrar**. Esto te ahorra tiempo al introducir comandos similares.
+
+Observa que el comando anterior devuelve la siguiente información:
+
+`[1] 158`
+
+Esto significa que este proceso tiene un número de trabajo 1 (como lo muestra la salida *[1]*) y un identificador de proceso (PID) de *158*. Cada terminal/shell tendrá sus números de trabajo únicos. El PID vale para todo el sistema; cada proceso tiene un número de identificación único.
+
+Esta información es importante al realizar ciertas manipulaciones del proceso, tales como parar los procesos o cambiar su valor de prioridad.
+
+**Nota**: Tu ID de proceso probablemente será diferente de aquel en el ejemplo.
+
+## 11.3.4 Paso 4
+
+Para ver qué comandos se ejecutan en la terminal actual, escribe el siguiente comando:
+
+`jobs`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ jobs
+[1]+  Running                 ping localhost > /dev/null &
+```
+
+## 11.3.5 Paso 5
+
+A continuación, inicia otro comando *ping* en segundo plano escribiendo lo siguiente:
+
+`ping localhost > /dev/null &`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ping localhost > /dev/null &
+[2] 100
+```
+
+Observa el diferente número de trabajo y el ID de proceso para este nuevo comando.
+
+## 11.3.6 Paso 6
+
+Ahora, debe haber dos comandos *ping* ejecutándose en segundo plano. Para verificarlo, emite el comando jobs de nuevo:
+
+`jobs`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ jobs
+[1]-  Running                 ping localhost > /dev/null &
+[2]+  Running                 ping localhost > /dev/null &
+```
+
+## 11.3.7 Paso 7
+
+Una vez que hayas comprobado que dos comandos *ping* se ejecutan, lleva al primer comando al primer plano escribiendo lo siguiente:
+
+`fg %1`
+
+El resultado debe ser similar al siguiente:
+
+```Bash
+sysadmin@localhost:~$ fg %1
+ping localhost > /dev/null
+```
+
+## 11.3.8 Paso 8
+
+Observa que, una vez más, el comando `ping` ha tomado el control de la terminal. Para suspender (pausar) el proceso y recuperar el control de la terminal, escribe **Ctrl-Z**:
+
+```bash
+sysadmin@localhost:~$ fg %1
+ping localhost > /dev/null
+^Z
+[1]+  Stopped                 ping localhost > /dev/null
+```

@@ -10108,3 +10108,8 @@ sysadmin@localhost:~$ killall ping
 sysadmin@localhost:~$ jobs
 sysadmin@localhost:~$
 ```
+
+## 11.4 Uso del Comando Top para Ver los Procesos
+
+En esta tarea vas a utilizar el comando `top` para trabajar con los procesos. Por defecto, el programa `top` ordena los procesos en orden descendente del porcentaje de uso de la CPU, por lo que los programas de mayor actividad estarán en la parte superior de tu lista.
+

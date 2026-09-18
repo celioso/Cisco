@@ -10113,3 +10113,81 @@ sysadmin@localhost:~$
 
 En esta tarea vas a utilizar el comando `top` para trabajar con los procesos. Por defecto, el programa `top` ordena los procesos en orden descendente del porcentaje de uso de la CPU, por lo que los programas de mayor actividad estarán en la parte superior de tu lista.
 
+## 11.4.1 Paso 1
+
+Desde la ventana de la terminal, escribe los siguientes comandos:
+
+```bash
+ping localhost > /dev/null &
+ping localhost > /dev/null &
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ping localhost > /dev/null &
+[1] 112
+sysadmin@localhost:~$ ping localhost > /dev/null &
+[2] 113
+```
+
+**Toma nota de la salida PID según los comandos anteriores! Serán diferentes a los ejemplos que estamos proporcionando. Va a utilizar los PID en los pasos posteriores.**
+
+## 11.4.2 Paso 2
+
+A continuación, inicia el comando `top` escribiendo lo siguiente en la terminal:
+
+`top`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+top - 00:56:34 up  8:18,  1 user,  load average: 0.09, 0.14, 0.20             
+Tasks:  10 total,   1 running,   9 sleeping,   0 stopped,   0 zombie          
+Cpu(s):  2.1%us,  1.8%sy,  0.0%ni, 96.1%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st 
+Mem:  65969788k total,  7629004k used, 58340784k free,   266340k buffers      
+Swap:  2097148k total,        0k used,  2097148k free,   939076k cached       
+  PID USER      PR  NIVIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+    1 root      20   0 17868 2872 2624 S    0  0.0   0:00.14 init
+   19 syslog    20   0  171m 2796 2420 S    0  0.0   0:00.05 rsyslogd
+   23 root      20   0 19120 2020 1824 S    0  0.0   0:00.00 cron
+   25 root      20   0 50048 3416 2812 S    0  0.0   0:00.00 sshd
+   41 bind      20   0  376m  19m 5988 S    0  0.0   0:00.04 named
+   50 root      20   0 54460 2584 2176 S    0  0.0   0:00.00 login
+   62 sysadmin  20   0 18084 3200 2700 S    0  0.0   0:00.01 bash
+  112 sysadmin  20   0  6504 1824 1688 S    0  0.0   0:00.46 ping
+  113 sysadmin  20   0  6504 1788 1656 S    0  0.0   0:00.40 ping
+  114 sysadmin  20   0 17212 2240 2008 R    0  0.0   0:00.01 top
+```
+
+Nota: La salida del comando top cambia cada 2 segundos.
+
+## 11.4.3 Paso 3
+
+El comando `top` es un programa interactivo, lo que significa que puedes emitir comandos dentro del programa. Vas a utilizar el comando `top` para terminar los procesos `ping`. Primero introduce de la letra *k*. Observa que apareció un prompt debajo de *Swap*:
+
+```bash
+top - 01:52:14 up  9:13,  1 user,  load average: 0.04, 0.11, 0.19              
+Tasks:  10 total,   1 running,   9 sleeping,   0 stopped,   0 zombie           
+Cpu(s):  4.2%us,  2.6%sy,  0.0%ni, 93.0%id,  0.1%wa,  0.0%hi,  0.1%si,  0.0%st 
+Mem:  65969788k total,  8137188k used, 57832600k free,   286512k buffers       
+Swap:  2097148k total,        0k used,  2097148k free,  1110844k cached        
+PID to kill:                                                                   
+ PID USER       PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND          
+   1 root      20   0 17868 2872 2624 S    0  0.0   0:00.14 init              
+   19 syslog    20   0  171m 2796 2420 S    0  0.0   0:00.07 rsyslogd          
+   23 root      20   0 19120 2020 1824 S    0  0.0   0:00.00 cron              
+   25 root      20   0 50048 3416 2812 S    0  0.0   0:00.00 sshd              
+   41 bind      20   0  376m  19m 5988 S    0  0.0   0:00.07 named             
+   50 root      20   0 54460 2584 2176 S    0  0.0   0:00.00 login             
+   62 sysadmin  20   0 18084 3200 2700 S    0  0.0   0:00.01 bash              
+  103 sysadmin  20   0  6504 1824 1688 S    0  0.0   0:00.96 ping              
+  104 sysadmin  20   0  6504 1788 1656 S    0  0.0   0:00.85 ping              
+  108 sysadmin  20   0 17212 2240 2008 R    0  0.0   0:01.03 top 
+```
+
+## 11.4.4 Paso 4
+
+En el prompt *PID to kill:* escribe el PID del primer proceso `ping` en ejecución, y a continuación, presiona **Entrar**. Observa que el prompt cambia como a continuación:
+
+![](images/)

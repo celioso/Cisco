@@ -10018,3 +10018,93 @@ ping localhost > /dev/null
 ^Z
 [1]+  Stopped                 ping localhost > /dev/null
 ```
+
+## 11.3.9 Paso 9
+
+Para que este proceso continúe ejecutándose en segundo plano, ejecuta el siguiente comando:
+
+`bg %1`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ bg %1     
+[1]+ ping localhost > /dev/null &
+```
+
+## 11.3.10 Paso 10
+
+Emite el comando `jobs` de nuevo para verificar dos procesos en ejecución:
+
+`jobs`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ jobs
+[1]-  Running                 ping localhost > /dev/null &
+[2]+  Running                 ping localhost > /dev/null &
+```
+
+## 11.3.11 Paso 11
+
+A continuación, inicia el comando `ping` escribiendo lo siguiente:
+
+`ping localhost > /dev/null &`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ping localhost > /dev/null &
+[3] 101
+```
+
+## 11.3.12 Paso 12
+
+Emite el comando `jobs` de nuevo para verificar tres procesos en ejecución:
+
+`jobs`
+
+```bash
+sysadmin@localhost:~$ jobs
+[1]   Running                 ping localhost > /dev/null &
+[2]-  Running                 ping localhost > /dev/null &
+[3]+  Running                 ping localhost > /dev/null &
+```
+
+## 11.3.13 Paso 13
+
+Utilizando el número de trabajo, detenga el último comando `ping` con el comando `kill` y verifica que se haya detenido la ejecución del comando `jobs`:
+
+```text
+kill %3
+jobs
+```
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ kill %3
+sysadmin@localhost:~$ jobs
+[1]   Running                 ping localhost > /dev/null &
+[2]-  Running                 ping localhost > /dev/null &
+[3]+  Terminated              ping localhost > /dev/null
+```
+
+## 11.3.14 Paso 14
+
+Por último, puedes detener todos los comandos `ping` con el comando `killall`. Después de ejecutar el comando `killall`, espera unos instantes, y luego ejecuta el comando `jobs` para comprobar que todos los procesos se hayan detenido:
+
+```bash
+killall ping
+jobs
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ killall ping           
+[1]-  Terminated              ping localhost > /dev/null
+[2]+  Terminated              ping localhost > /dev/null
+sysadmin@localhost:~$ jobs
+sysadmin@localhost:~$
+```

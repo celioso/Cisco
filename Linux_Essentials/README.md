@@ -10232,3 +10232,85 @@ Introduce *q* para salir del comando `top`. La siguiente pantalla refleja que am
 [1]-  Terminated              ping localhost > /dev/null
 [2]+  Killed                  ping localhost > /dev/null
 ```
+
+## 11.5 Uso pkill y kill para terminar los procesos
+
+En esta tarea, vamos a seguir trabajando con los procesos. Vas a utilizar `pkill` y `kill` para terminar los procesos.
+
+## 11.5.1 Paso 1
+
+Para empezar, escribe los siguientes comandos en la terminal:
+
+```text
+sleep 888888 &
+sleep 888888 &
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ sleep 888888 &
+[1] 85
+sysadmin@localhost:~$ sleep 888888 &
+[2] 86
+sysadmin@localhost:~$
+```
+
+El comando `sleep` se utiliza normalmente para hacer una pausa en un programa (script shell) por un período de tiempo específico. En este caso se utiliza sólo para proporcionar un comando que se tarda mucho tiempo en ejecutarse.
+
+Asegúrate de tener en cuenta los PID en el sistema de los procesos `sleep` para los siguientes pasos! Tus PID serán diferentes a los demostrados en el laboratorio.
+
+## 11.5.2 Paso 2
+
+A continuación, determina qué trabajos se están ejecutando actualmente escribiendo:
+
+`jobs``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ jobs
+[1]-  Running                 sleep 888888 &
+[2]+  Running                 sleep 888888 &
+sysadmin@localhost:~$
+```
+
+## 11.5.3 Paso 3
+
+Ahora, utiliza el comando `kill` para detener la primera instancia del comando `sleep` escribiendo lo siguiente (sustituye PID con el ID de proceso de tu primer comando `sleep`). También, ejecuta el comando `jobs` para verificar que el proceso se haya detenido:
+
+```text
+kill PID
+jobs
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ps                               PID TTY          TIME CMD             
+   62 ?        00:00:00 bash
+   89 ?        00:00:00 sleep
+   90 ?        00:00:00 sleep
+   91 ?        00:00:00 ps
+sysadmin@localhost:~$ kill 89
+sysadmin@localhost:~$ jobs
+[1]-  Terminated              sleep 888888
+[2]+  Running                 sleep 888888 &
+sysadmin@localhost:~$
+```
+
+**Consejo útil**: Si recuerdas el PID del primer proceso, sólo tienes que introducir el comando `ps` (proceso) tal como se muestra arriba.
+
+## 11.5.4 Paso 4
+
+A continuación, utiliza el comando `pkill` para terminar el comando `sleep` restante, utilizando el nombre del programa en lugar del PID:
+
+`pkill -15 sleep``
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ pkill -15 sleep
+[2]+  Terminated              sleep 888888
+sysadmin@localhost:~$
+```

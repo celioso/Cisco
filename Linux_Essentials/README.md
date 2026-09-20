@@ -10190,4 +10190,45 @@ PID to kill:
 
 En el prompt *PID to kill:* escribe el PID del primer proceso `ping` en ejecución, y a continuación, presiona **Entrar**. Observa que el prompt cambia como a continuación:
 
-![](images/)
+![pid kill](images/lab11_1.gif)
+
+## 11.4.5 Paso 5
+
+En el prompt *Kill PID with signal [15]*: introduce la señal para enviar a este proceso. En este caso, solamente presiona la tecla **Entrar** para utilizar la señal por defecto. Ten en cuenta que el primer comando `ping` se elimina y sólo un comando `ping` permanece en el listado (es posible que tengas que esperar unos segundos mientras el comando `top` actualiza):
+
+![kill PID sognal](images/lab11_2.gif)
+
+**Para considerar**
+
+Existen diferentes tipos de valores numéricos que se pueden enviar a un proceso. Estos son los valores predefinidos, cada uno con un significado diferente. Si quieres obtener más información sobre estos valores, teclea `man kill` en la ventana de la terminal.
+
+El símbolo indica que la señal por defecto es la señal indicada por la terminar *SIGTERM* o el número *15*.
+
+## 11.4.6 Paso 6
+
+A continuación, termina los procesos restantes `ping` como antes, excepto que esta vez, en el prompt de la señal *Kill PID with signal [15]*: utiliza el valor de *9* en lugar de aceptar el valor predeterminado *15*. Presiona **Entrar** para aceptar y entrar.
+
+![kill PID 113](images/lab11_3.gif)
+
+**Para considerar**
+
+La señal de matar *9* o *SIGKILL* es una señal «contundente» que no puede ser ignorada, a diferencia del valor por defecto de 15. Observa que todas las referencias al comando `ping` se han eliminado del `top`.
+
+## 11.4.6 Paso 6
+
+A continuación, termina los procesos restantes `ping` como antes, excepto que esta vez, en el prompt de la señal *Kill PID with signal [15]*: utiliza el valor de *9* en lugar de aceptar el valor predeterminado *15*. Presiona Entrar para aceptar y entrar.
+
+![kill PID paso 6](images/lab11_3 (1).gif)
+
+**Para considerar**
+
+La señal de matar *9* o *SIGKILL* es una señal «contundente» que no puede ser ignorada, a diferencia del valor por defecto de *15*. Observa que todas las referencias al comando `ping` se han eliminado del `top`.
+
+## 11.4.7 Paso 7
+
+Introduce *q* para salir del comando `top`. La siguiente pantalla refleja que ambos comandos `ping` fueron terminados:
+
+```bash
+[1]-  Terminated              ping localhost > /dev/null
+[2]+  Killed                  ping localhost > /dev/null
+```

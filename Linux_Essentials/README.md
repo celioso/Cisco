@@ -10305,7 +10305,7 @@ sysadmin@localhost:~$
 
 A continuación, utiliza el comando `pkill` para terminar el comando `sleep` restante, utilizando el nombre del programa en lugar del PID:
 
-`pkill -15 sleep``
+`pkill -15 sleep`
 
 El resultado debe ser similar al siguiente:
 
@@ -10314,3 +10314,135 @@ sysadmin@localhost:~$ pkill -15 sleep
 [2]+  Terminated              sleep 888888
 sysadmin@localhost:~$
 ```
+
+## 11.6 Usando ps para Seleccionar y Ordenar los procesos
+
+Puedes utilizar el comando `ps` para ver los procesos. De forma predeterminada, el comando `ps` sólo mostrará los procesos ejecutados en el shell actual.
+
+## 11.6.1 Paso 1
+
+Inicia un proceso en segundo plano utilizando `ping` y visualiza los procesos actuales utilizando el comando `ps`:
+
+```text
+ping localhost > /dev/null &
+ps
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ping localhost > /dev/null &
+[1] 98
+sysadmin@localhost:~$ ps
+  PID TTY          TIME CMD
+   62 ?        00:00:00 bash
+   98 ?        00:00:00 ping
+   99 ?        00:00:00 ps
+```
+**Anota el PID del `ping`, ya va a utilizar el PID en un paso posterior.**
+
+## 11.6.2 Paso 2
+
+Ejecuta el comando `ps` usando la opción `-e`, para que se muestren todos los procesos.
+
+`ps -e`
+ 
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ps -e      
+  PID TTY          TIME CMD
+    1 ?        00:00:00 init
+   19 ?        00:00:00 rsyslogd
+   23 ?        00:00:00 cron
+   25 ?        00:00:00 sshd
+   41 ?        00:00:00 named
+   50 ?        00:00:00 login
+   62 ?        00:00:00 bash
+   98 ?        00:00:00 ping
+  100 ?        00:00:00 ps
+```
+
+Debido a que este entorno es de un sistema operativo virtualizado, hay muchos menos procesos que lo que normalmente se muestra con Linux corriendo directamente en el hardware.
+
+## 11.6.3 Paso 3
+
+Utiliza el comando `ps` con la opción `-o` para especificar las columnas de salida.
+
+`ps -o pid,tty,time,%cpu,cmd`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ps -o pid,tty,time,%cpu,cmd
+ PID TT           TIME %CPU CMD
+   62 ?        00:00:00  0.0 -bash
+   98 ?        00:00:00  0.0 ping localhost
+  102 ?        00:00:00  0.0 ps -o pid,tty,time,%cpu,cmd
+```
+
+## 11.6.4 Paso 4
+
+Utilizar la opción `--sort` para especificar el orden de la(s) columna(s). De manera predeterminada, una columna especificada para la clasificación se ordenará de manera ascendente, esto puede ser forzado colocando el símbolo plus *+* que aparece delante del nombre de la columna. Para especificar un orden descendente, utiliza el signo menos *-* delante del nombre de columna.
+
+Ordena la salida del `ps` por *%mem*:
+
+`ps -o pid,tty,time,%mem,cmd --sort %mem`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ps -o pid,tty,time,%mem,cmd --sort %mem
+  PID TT           TIME %MEM CMD
+  103 ?        00:00:00  0.0 ps -o pid,tty,time,%mem,cmd --sort %mem
+   98 ?        00:00:00  0.0 ping localhost
+   62 ?        00:00:00  0.0 -bash 
+```
+
+## 11.6.5 Paso 5
+
+Mientras que el comando `ps` puede mostrar el porcentaje de memoria utilizado por el proceso, el comando `free` mostrará el uso total de la memoria del sistema:
+
+`free`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ free
+             total       used       free     sha    red    buffers     cached
+Mem:      65969788    6242744   59727044          0     300852    1062284
+-/+ buffers/cache:    4879608   6109018                  
+Swap:      2097148          0    2097148
+```
+
+## 11.6.6 Paso 6
+
+Detén el comando `ping` con el siguiente comando `kill` y verifica con el comando `jobs`:
+
+```text
+kill PID
+jobs
+```
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ kill 98
+sysadmin@localhost:~$ jobs
+[1]+  Terminated              ping localhost > /dev/null
+```
+
+## 11.7 Visualización de los Registros del Sistema
+
+Los registros del sistema son críticos para muchas tareas, incluyendo la solución de problemas del sistema operativo y para garantizar que tu sistema es seguro. Saber dónde se almacenan los archivos de registro del sistema y la forma de mantenerlos es importante para un administrador de sistemas.
+
+Hay dos daemons que manejan los mensajes de registro: el daemon `syslogd` y el daemon `klogd`. Normalmente, no tienes que preocuparte por el `klogd`; éste sólo se ocupa de los mensajes de registro del kernel y envía su información de registro al daemon `syslogd`.
+
+Los mensajes generados por el kernel en tiempo de arranque se almacenan en el archivo */var/log/dmesg*. El comando *dmesg* permite la visualización de los mensajes actuales del kernel, así como proporcionar el control de si estos mensajes aparecerán en una ventana de la terminal de la consola.
+
+El archivo de registro principal que se escribe por `syslogd` es */var/log/messages*.
+
+Además del registro realizado por `syslogd`, muchos otros procesos realizan su propio registro. Algunos ejemplos de procesos que hacen su propio registro incluyen el servidor web Apache (el archivo de registro se encuentra en el directorio */var/log/httpd*), el Sistema de Impresión Común de Unix (*/var/log/cups*) y el daemon auditd (*/var/log/audit*).
+
+Nota: En los sistemas de CentOS, el `syslogd` se llama *rsyslogd*.
+

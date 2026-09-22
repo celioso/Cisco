@@ -10444,5 +10444,221 @@ El archivo de registro principal que se escribe por `syslogd` es */var/log/messa
 
 Además del registro realizado por `syslogd`, muchos otros procesos realizan su propio registro. Algunos ejemplos de procesos que hacen su propio registro incluyen el servidor web Apache (el archivo de registro se encuentra en el directorio */var/log/httpd*), el Sistema de Impresión Común de Unix (*/var/log/cups*) y el daemon auditd (*/var/log/audit*).
 
-Nota: En los sistemas de CentOS, el `syslogd` se llama *rsyslogd*.
+Nota: En los sistemas de CentOS, el `syslogd` se llama `rsyslogd`.
 
+## 11.7.1 Paso 1
+
+Debido a que los próximos comandos que se ejecutarán en este laboratorio requieren derechos de superusuario, utiliza el comando `su` para cambiar a la cuenta de root:
+
+```text
+su - root
+{Introduce la contraseña: netlab123}
+```
+
+```bash
+sysadmin@localhost:~$ su - root
+Password:
+root@localhost:~#
+```
+
+## 11.7.2 Paso 2
+
+Los registros del sistema se almacenan en el directorio */var/log*. Lista los archivos en este directorio:
+
+`ls /var/log``
+
+```bash
+root@localhost:~# ls /var/log
+alternatives.log  boot           cron.log  faillog   lastlog   news     wtmp
+apt               bootstrap.log  dmesg     fsck      mail.err  syslog
+auth.log          btmp           dpkg.log  kern.log  mail.log  upstart
+root@localhost:~#
+```
+
+## 11.7.3 Paso 3
+
+Cada archivo de registro representa un servicio o función. Por ejemplo, el archivo *auth.log* muestra información sobre la autorización o la autenticación, tal como los intentos de inicio de sesión del usuario. Los nuevos datos se almacena en la parte inferior del archivo. Ejecuta los siguientes comandos para ver un ejemplo:
+
+```text
+ssh localhost
+{En el primer prompt, introduce yes}
+{En el segundo prompt, introduce abc}
+{En el tercer prompt, introduce abc}
+{En el cuarto prompt, introduce abc}
+tail -5 /var/log/auth.log
+```
+
+```bash
+root@localhost:~# ssh localhost
+The authenticity of host 'localhost (::1)' can't be established.
+ECDSA key fingerprint is 5f:e2:43:0f:f9:26:e5:d5:77:ba:9e:95:72:9e:ee:64.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'localhost' (ECDSA) to the list of known hosts.
+root@localhost's password:
+Permission denied, please try again.
+root@localhost's password:
+Permission denied, please try again.
+root@localhost's password:
+Permission denied (publickey,password).
+root@localhost:~# tail -5 /var/log/auth.log
+Apr  8 20:25:13 localhost sshd[117]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=localhost  user=root
+Apr  8 20:25:16 localhost sshd[117]: Failed password for root from ::1 port 58940 ssh2
+Apr  8 20:25:28  sshd[117]: last message repeated 2 times
+Apr  8 20:25:28 localhost sshd[117]: Connection closed by ::1 [preauth]
+Apr  8 20:25:28 localhost sshd[117]: PAM 2 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=localhost  user=root
+root@localhost:~#
+```
+
+El comando `ssh` se utiliza para los datos generados en el archivo */var/log/auth.log*. Ten en cuenta que los intentos fallidos de conexión se registran en el archivo */var/log/auth.log*.
+
+## 11.7.4 Paso 4
+
+Para ver otro ejemplo de las entradas de registro, ejecuta los siguientes comandos:
+
+`crontab -e``
+
+A continuación, agrega la siguiente línea al documento (recuerda que i te permitirá entrar al modo de inserción) y luego guardálo y salir con **ESC**, *:wq*, **Enter**:
+
+`0 2 * * 0 who >> /tmp/whothere`
+
+Después de haber completado los cambios, visualiza el archivo de registro para el servicio `crontab`:
+
+```bash
+crontab -l | tail -2
+tail /var/log/cron.log
+```
+
+```bash
+root@localhost:~# crontab -l | tail -2
+# m h  dom mon dow   command
+  0 2   *   *   0    who >> /tmp/whothere
+root@localhost:~#   tail /var/log/cron.log
+Apr  8 17:33:32 localhost /usr/sbin/cron[22]: (CRON) INFO (pidfile fd = 3)
+Apr  8 17:33:32 localhost /usr/sbin/cron[23]: (CRON) STARTUP (fork ok)
+Apr  8 17:33:32 localhost /usr/sbin/cron[23]: (CRON) INFO (Running @reboot jobs)
+Apr  8 18:17:01 localhost /USR/SBIN/CRON[79]: (root) CMD (   cd / && run-parts -
+-report /etc/cron.hourly)
+Apr  8 19:17:02 localhost /USR/SBIN/CRON[82]: (root) CMD (   cd / && run-parts -
+-report /etc/cron.hourly)
+Apr  8 20:17:01 localhost /USR/SBIN/CRON[99]: (root) CMD (   cd / && run-parts -
+-report /etc/cron.hourly)
+Apr  8 20:31:18 localhost crontab[121]: (root) BEGIN EDIT (root)
+Apr  8 20:32:42 localhost crontab[121]: (root) REPLACE (root)
+Apr  8 20:32:42 localhost crontab[121]: (root) END EDIT (root)
+Apr  8 20:33:19 localhost crontab[132]: (root) LIST (root)
+root@localhost:~#
+```
+
+## 11.7.5 Paso 5
+
+Visualiza las últimas cinco líneas del archivo */var/log/dmesg* para ver los mensajes del kernel desde el momento del arranque y ejecuta el comando `dmesg` canalizado al comando `tail` para ver los cinco últimos mensajes del kernel:
+
+```text
+tail -5 /var/log/dmesg
+dmesg | tail -5
+```
+
+```bash
+root@localhost:~# tail -5 /var/log/dmesg
+[    2.922003] type=1400 audit(1386098331.347:10): apparmor="STATUS" operation="profile_load" name="/usr/sbin/tcpdump" pid=848 comm="apparmor_parser"
+[    2.989112] Bridge firewalling registered
+[    3.007035] ip_tables: (C) 2000-2006 Netfilter Core Team
+[    3.010733] nf_conntrack version 0.5.0 (16384 buckets, 65536 max)
+[    3.020096] input: ImPS/2 Generic Wheel Mouse as /devices/platform/i8042/serio1/input/input2
+root@localhost:~# dmesg | tail -5
+[279447.718341] device veth0pl17180 left promiscuous mode
+[279447.718408] br998ad950-b830: port 1(veth0pl17180) entered disabled state
+[279448.519497] bre2e72298-4b5e: port 1(veth0pl17664) entered disabled state
+[279448.525087] device veth0pl17664 left promiscuous mode
+[279448.525091] bre2e72298-4b5e: port 1(veth0pl17664) entered disabled state
+root@localhost:~#
+```
+
+En este momento probablemente estarás pensando «¿Qué realmente significan todos estos mensajes?». La respuesta a esa pregunta no es simple, sin embargo lo importante de esta lección no es explicar el significado de todos los mensajes del registro, sino más enseñar dónde encontrar los mensajes de registro.
+
+A medida que adquieras más experiencia en Linux, comenzarás a solucionar los problemas. En la mayoría de los casos primero buscarás es los archivos de registro.
+
+Con el fin de proporcionar un ejemplo de solución de los problemas realistas, sigue el siguiente conjunto de tareas.
+
+## 11.7.6 Paso 6
+
+Introduce el siguiente comando para deshabilitar la posibilidad de que el administrador pueda crear las entradas `crontab` y regresa al usuario administrador del sistema:
+
+```bash
+echo "sysadmin" > /etc/cron.deny
+exit
+```
+
+```bash
+root@localhost:~# echo "sysadmin" > /etc/cron.deny                            
+root@localhost:~# exit                                                        
+logout                                                                        
+sysadmin@localhost:~$
+```
+
+## 11.7.7 Paso 7
+Intenta a ejecutar el siguiente comando `crontab`:
+
+`crontab -e`
+
+```bash
+sysadmin@localhost:~$ crontab -e 
+You (sysadmin) are not allowed to use this program (crontab)
+See crontab(1) for more information
+sysadmin@localhost:~$
+```
+
+**Nota**: Este comando produce un error debido a la entrada en el */etc/cron.deny*. Si existe un nombre de usuario en este archivo, entonces ese usuario no puede utilizar el comando `crontab`.
+
+## 11.7.8 Paso 8
+
+En lugar de cambiar de usuario al root con el comando `su`, utiliza sudo para ejecutar el siguiente comando con los privilegios de root:
+
+```text
+sudo tail -5 /var/log/cron.log
+{Introduce la contraseña: netlab123}
+```
+```bash
+sysadmin@localhost:~$ sudo tail -5 /var/log/cron.log
+[sudo] password for sysadmin:
+Apr  8 20:31:18 localhost crontab[121]: (root) BEGIN EDIT (root)
+Apr  8 20:32:42 localhost crontab[121]: (root) REPLACE (root)
+Apr  8 20:32:42 localhost crontab[121]: (root) END EDIT (root)
+Apr  8 20:33:19 localhost crontab[132]: (root) LIST (root)
+Apr  8 20:47:06 localhost crontab[139]: (sysadmin) AUTH (crontab command not allowed)
+sysadmin@localhost:~$
+```
+
+Como puedes ver en la última línea de la salida del comando `tail`, el usuario administrador del sistema no tiene permiso para utilizar el comando `crontab`.
+
+## 11.8 La Bibliotecas Compartidas
+
+Las librerías compartidas son archivos que contienen código que los programan ejecutables pueden enlazar con el fin de utilizar ese código. Debido a que los múltiples programas a menudo enlazan con un único archivo de la librería, esto ayuda a reducir la cantidad del espacio necesario para este código ya que cada programa no tiene que tener su propia copia del código de la librería.
+
+Estos archivos de la librería se almacenan con más frecuencia en los directorios */lib* y */usr/lib*. Los directorios adicionales se pueden añadir mediante la edición del archivo de configuración, */etc/ld.so.conf*. También puedes crear archivos con nombres que terminan en *.conf* y colocarlos en el directorio */etc/ld.so.conf.d*. Por último, también puedes configurar la variable de entorno *LD_LIBRARY_PATH*.
+
+## 11.8.1 Paso 1
+
+Cuando se ejecuta como usuario root, el comando `ldconfig` se puede utilizar para actualizar el caché y los enlaces simbólicos para las librerías compartidas en el sistema. Como un usuario normal, vas a ejecutar el comando `ldconfig` para imprimir la lista de las librerías compartidas:
+
+`ldconfig -p | less`
+
+Recuerda presionar **q** para salir del paginador `less`.
+
+## 11.8.2 Paso 2
+
+Con el fin de ver qué librerías están vinculadas a un ejecutable, tal como */bin/bash*, ejecuta el comando `ldd`:
+
+`ldd /bin/bash`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ldd /bin/bash
+        linux-vdso.so.1 =>  (0x00007ffce6fbd000)
+        libtinfo.so.5 => /lib/x86_64-linux-gnu/libtinfo.so.5 (0x00007fb32ae94000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fb32ac90000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb32a8d1000)
+        /lib64/ld-linux-x86-64.so.2 (0x0000563ddfa4e000)
+sysadmin@localhost:~$
+``

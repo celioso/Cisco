@@ -10744,3 +10744,13 @@ Principalmente, hay dos razones:
 - **Cuestiones de Portabilidad**: La Portabilidad es el cambio de una tecnología a otra. IPv6 tiene muchas grandes novedades, pero todos los hosts tienen que ser capaces de utilizar estas características. Conseguir que todos en Internet (o incluso sólo algunos) hagan estos cambios supone un reto.
 
 La mayoría de los expertos están de acuerdo en que IPv6 reemplazará IPv4, así que entender los fundamentos de ambos es importante para las personas que trabajan en la industria de TI.
+
+## 12.5 Configurando los Dispositivos de Red
+
+Cuando estás configurando los dispositivos de red, hay dos preguntas iniciales que debes considerar:
+
+- **¿Configuración por cable o inalámbrica?** La manera de configurar un dispositivo inalámbrico será ligeramente diferente a un dispositivo por cable debido a algunas de las características adicionales que se encuentran normalmente en los dispositivos inalámbricos (así como la seguridad).
+
+- **¿DHCP o dirección estática?** Hay que recordar que un servidor DHCP proporciona información de la red, tal como tu dirección IP y la máscara de subred. Si tú no haces uso de un servidor DHCP, entonces tendrás que proporcionar manualmente esta información a tu host. Esto se llama utilizar una dirección IP estática.
+
+En términos generales, una máquina de escritorio utilizará la red por cable, mientras que una computadora portátil utilizará una red inalámbrica. Normalmente una máquina por cable utiliza una dirección IP estática, pero éstas pueden asignarse también a menudo a través de un servidor DHCP. En casi todos los casos, las máquinas inalámbricas utilizan DHCP ya que son casi siempre móviles y conectadas a diferentes redes.

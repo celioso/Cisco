@@ -10877,3 +10877,141 @@ La tabla siguiente describe los archivos de configuración de red adicionales qu
 | */etc/hosts* | Este archivo contiene una tabla de nombres de host para las direcciones IP. Puede utilizarse para complementar un servidor DNS. |
 | */etc/sysconfig/network* | Este archivo tiene dos configuraciones. La configuración de *NETWORK* (o «red» en español) puede determinar si la red está activada (*yes*) o desactivada (*no*). La configuración de *HOSTNAME* (O «nombre de host» en español) define un nombre de host de la máquina local. |
 | /etc/nsswitch.conf	| Este archivo se puede utilizar para modificar dónde se producen las búsquedas de nombre de host. Por ejemplo, la configuración *hosts : files dns* buscaría los nombres de host primero en el archivo */etc/hosts* y después en el servidor DNS. Si cambias a *hosts: dns files*, la búsqueda se lleva a cabo primero en el servidor DNS. |
+
+## 12.5.2.5 Reiniciar la Red
+
+Después de cambiar un archivo de configuración de red (por ejemplo, el archivo */etc/sysconfig/network-scripts/ifcfg-eth0* o el archivo */etc/resolv.conf* ), necesitarás reiniciar la máquina o ejecutar un comando como administrador para que los cambios tomen efecto. A continuación se muestra el comando que tienes que ejecutar en un sistema CentOS:
+
+![reiniciar la red](images/12.6.2.5_1.png)
+
+## 12.6 Las Herramientas de Red
+
+Hay varios comandos que puedes utilizar para ver la información de la red. Estas herramientas también pueden ser útiles cuando quieras solucionar problemas de la red.
+
+## 12.6.1 El Comando ifconfig
+
+El comando ifconfig significa «interface configuration» (o «configuración de la interfaz» en español) y se utiliza para mostrar la información de configuración de red. No todas las configuraciones de red se verán en este curso, pero es importante observar en la salida de abajo que la dirección IP del dispositivo de red principal (eth0) es 192.168.1.2 y que el dispositivo está activo (UP):
+
+```bash
+root@localhost:~# ifconfig                                     
+eth0      Link encap:Ethernet  HWaddr b6:84:ab:e9:8f:0a    
+          inet addr:192.168.1.2  Bcast:0.0.0.0  Mask:255.255.255.0
+          inet6 addr: fe80::b484:abff:fee9:8f0a/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:95 errors:0 dropped:4 overruns:0 frame:0
+          TX packets:9 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:25306 (25.3 KB)  TX bytes:690 (690.0 B)
+lo        Link encap:Local Loopback                               
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host                           
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:6 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:460 (460.0 B)  TX bytes:460 (460.0 B)
+root@localhost:~#
+```
+El dispositivo *lo* se conoce como el dispositivo de **loopback** (o «bucle invertido» en español). Es un dispositivo de red especial utilizado por el sistema cuando éste envía datos basados en red a sí mismo.
+
+El comando `ifconfig` también puede ser utilizado para modificar temporalmente la configuración de red. Normalmente estos cambios deben ser permanentes, por lo que utilizar el comando `ifconfig` para hacer tales cambios es algo bastante raro.
+
+El comando `ifconfig` se está convirtiendo obsoleto en algunas distribuciones de Linux (en desuso) y está siendo reemplazado por una forma del comando `ip`, específicamente `ip addr show`. Observa que también puedes encontrar la misma información destacada anteriormente utilizando este comando:
+
+```bash
+root@localhost:~# ip addr show                                      
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00          
+    inet 127.0.0.1/8 scope host lo
+    valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+    valid_lft forever preferred_lft forever                        
+6476: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codelstate UP qlen 1000
+    link/ether b6:84:ab:e9:8f:0a brd ff:ff:ff:ff:ff:ff             
+    inet 192.168.1.2/24 scope global eth0
+    valid_lft forever preferred_lft forever                        
+    inet6 fe80::b484:abff:fee9:8f0a/64 scope link
+    valid_lft forever preferred_lft forever
+root@localhost:~#
+```
+
+## 12.6.2 El Comando route
+
+Hay que recordar que un router (o puerta de enlace) es una máquina que permitirá que los hosts de una red se comuniquen con otra red. Para ver una tabla que describe donde se envían los paquetes de red utiliza el comando `route`:
+
+```bash
+root@localhost:~# route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.1.0     *               255.255.255.0   U     0      0        0 eth0
+default         192.168.1.1     0.0.0.0        UG     0      0        0 eth0
+root@localhost:~#
+```
+
+El primer cuadro amarillo en el ejemplo anterior indica que cualquier paquete de red enviado a una máquina en la red *192.168.1* no se envía a una puerta de enlace (el * indica «no hay puerta de enlace»). El segundo cuadro amarillo indica que todos los otros paquetes de red se envían al host con la dirección IP de *192.168.1.1* (el router).
+
+Algunos usuarios prefieren visualizar esta información con sólo datos numéricos, usando la opción `-n` para el comando `route`. Por ejemplo, mira el siguiente ejemplo y enfócate en dónde la salida mostraba *default*:
+
+```bash
+root@localhost:~# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+0.0.0.0        192.168.1.1     0.0.0.0         UG    0      0        0 eth0
+root@localhost:~#
+```
+
+El *0.0.0.0* se refiere a «todas las otras máquinas», o lo mismo que «default».
+
+El comando route se está volviendo obsoleto en algunas distribuciones de Linux (en desuso) y está siendo reemplazado por una forma del comando *ip*, específicamente *ip route show*. Observa que también puedes encontrar la misma información destacada anteriormente utilizando este comando:
+
+```bash
+root@localhost:~# ip route show
+default via 192.168.1.254 dev eth0 proto static
+192.168.1.0/24 dev eth0  proto kernel  scope link  src 192.168.1.2
+root@localhost:~#
+```
+
+## 12.6.3 El Comando ping
+
+El comando `ping` se puede utilizar para determinar si otra máquina es «accesible». Si el comando `ping` puede enviar un paquete de red a otra máquina y recibir una respuesta, entonces te deberías poder conectar a esa máquina.
+
+De forma predeterminada, el comando ``ping`` continuará enviando paquetes una y otra vez. Para limitar cuántos pings se deben enviar, utiliza la opción `-c`.
+
+Si el comando `ping` se realiza correctamente, verás una salida como la siguiente:
+
+```bash
+root@localhost:~# ping -c 4 192.168.1.2
+PING 192.168.1.2 (192.168.1.2) 56(84) bytes of data.
+64 bytes from 192.168.1.2: icmp_req=1 ttl=64 time=0.051 ms
+64 bytes from 192.168.1.2: icmp_req=2 ttl=64 time=0.064 ms
+64 bytes from 192.168.1.2: icmp_req=3 ttl=64 time=0.050 ms
+64 bytes from 192.168.1.2: icmp_req=4 ttl=64 time=0.043 ms
+  
+--- 192.168.1.2 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 2999ms
+rtt min/avg/max/mdev = 0.043/0.052/0.064/0.007 ms
+root@localhost:~#
+```
+
+Si el comando `ping` falla, recibirás un mensaje que dice *Destination Host Unreachable* (o «Host de destino inalcanzable» en español):
+
+```bash
+root@localhost:~# ping -c 4 192.168.1.1
+PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+From 192.168.1.2 icmp_seq=1 Destination Host Unreachable
+From 192.168.1.2 icmp_seq=2 Destination Host Unreachable
+From 192.168.1.2 icmp_seq=3 Destination Host Unreachable
+From 192.168.1.2 icmp_seq=4 Destination Host Unreachable
+
+--- 192.168.1.1 ping statistics ---
+4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 2999ms
+pipe 4
+root@localhost:~#
+```
+
+Es importante tener en cuenta que sólo porque el comando `ping` falle, no significa que el sistema remoto sea realmente inalcanzable. Algunos administradores configuran sus máquinas para no responder a las solicitudes de `ping`.
+
+Esto suele pasar, porque un servidor puede ser atacado por algo que se llama ***ataque por denegación de servicio***. En este tipo de ataque, un servidor es saturado con un número masivo de paquetes de red. Al ignorar las peticiones de `ping`, el servidor es menos vulnerable.
+
+Como resultado, el comando `ping` puede ser útil para comprobar la disponibilidad de máquinas locales, pero no siempre para máquinas fuera de tu propia red.

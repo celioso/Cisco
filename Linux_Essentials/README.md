@@ -10794,3 +10794,86 @@ Ten en cuenta que si eliges **Automatic (DHCP)**, la ubicación de las **Direcci
 La mayoría de los cambios realizados con las herramientas basadas en GUI surten efecto inmediatamente después de que se guardan. Sin embargo, en algunos casos, tendrás que reiniciar el equipo o ejecutar un comando como administrador para que los cambios tomen efecto. A continuación se muestra el comando que debe ejecutarse en un sistema CentOS:
 
 ![root](images/12.6.1_8.png)
+
+## 12.5.2 Configurar la Red usando el Archivo de Configuración
+
+Habrá momentos cuando no haya herramienta gráfica disponible. En esos casos, es útil conocer los archivos de configuración que se utilizan para almacenar y modificar los datos de la red.
+
+Estos archivos pueden variar según la distribución que estés utilizando. Los ejemplos siguientes se proporcionan para sistemas CENTOS.
+
+## 12.5.2.1 El Archivo Primario de Configuración de IPv4
+
+El archivo primario de configuración para una interfaz de red IPv4 es el archivo /etc/sysconfig/network-scripts/ifcfg-eth0 . El siguiente ejemplo muestra como se ve un archivo cuando se configura para una dirección IP estática:
+
+```bash
+root@localhost:~# cat /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE="eth0"
+BOOTPROTO=none
+NM_CONTROLLED="yes"
+ONBOOT=yes
+TYPE="Ethernet"
+UUID="98cf38bf-d91c-49b3-bb1b-f48ae7f2d3b5"
+DEFROUTE=yes
+IPV4 _FAILURE_FATAL=yes
+IPV6INOT=no
+NAME="System eth0"
+IPADDR=192.168.1.1
+PREFIX=24
+GATEWAY=192.168.1.1
+DNS1=192.168.1.2
+HWADDR=00:50:56:90:18:18
+LAST_CONNECT=1376319928
+root@localhost:~#
+```
+
+Si el dispositivo estuviera configurado para ser un cliente DHCP, entonces los valores *IPADDR*, *GATEWAY* y *DNS1* no se establecerían. Además, el valor *BOOTPROTO* se establecería a *dhcp*.
+
+## 12.5.2.2 El Archivo Primario de Configuración de IPv6
+
+En un sistema CentOS, el archivo primario de configuración de IPv6 es el mismo archivo donde se almacena la configuración de IPv4: */etc/sysconfig/network-scripts/ifcfg-eth0*. Si quieres que tu sistema tenga una dirección IPv6 estática, agrega lo siguiente al archivo de configuración:
+
+```text
+IPV6INIT=yes
+IPV6ADDR=<IPv6 IP Address>
+IPV6_DEFAULTGW=<IPv6 IP Gateway Address>
+```
+
+Si quieres que tu sistema sea un cliente DHCP IPv6, agrega la siguiente configuración:
+
+`DHCPV6C=yes`
+
+También tienes que ajustar el archivo */etc/sysconfig/network* de la siguiente manera:
+
+`NETWORKING_IPV6=yes`
+
+## 12.5.2.3 Domain Name Service (DNS) (o «Servicio de Nombres de Dominio» en español)
+
+Cuando a una computadora se le pide que acceda a una página web, como www.example.com, no necesariamente sabe qué dirección IP utilizar. Para que la computadora asocie una dirección IP con la solicitud de URL o nombre de host, la computadora depende del servicio DNS de otro equipo. A menudo, la dirección IP del servidor DNS se hace visible durante la solicitud de DHCP, mientras que una computadora recibe información importante para comunicar en la red.
+
+La dirección del servidor DNS se almacena en el archivo */etc/resolv.conf*. Un archivo */etc/resolv*.conf típico se genera automáticamente y se ve así:
+
+```bash
+sysadmin@localhost:~$ cat /etc/resolv.conf
+nameserver 127.0.0.1
+sysadmin@localhost:~$
+```
+ 
+La configuración del servidor de nombres se establece a menudo en la dirección IP del servidor DNS. En el ejemplo siguiente se utiliza el comando `host` que vamos a ver más adelante en este capítulo. Ten en cuenta que el servidor de ejemplo se asocia con la dirección IP *192.168.1.2* por el servidor DNS:
+
+```bash
+sysadmin@localhost:~$ host example.com
+example.com has address 192.168.1.2
+sysadmin@localhost:~$
+```
+
+También es común tener varias opciones de servidor de nombres, si un servidor DNS no responde.
+
+## 12.5.2.4 Los Archivos Adicionales de Configuración de Red
+
+La tabla siguiente describe los archivos de configuración de red adicionales que debes conocer. Aunque no figuran específicamente en los objetivos del examen, los objetivos incluyen el término general de **Configuración de Red**, por lo que estos archivos pueden aparecer en el examen:
+
+| Comando | Explicación |
+|---|---|
+| */etc/hosts* | Este archivo contiene una tabla de nombres de host para las direcciones IP. Puede utilizarse para complementar un servidor DNS. |
+| */etc/sysconfig/network* | Este archivo tiene dos configuraciones. La configuración de *NETWORK* (o «red» en español) puede determinar si la red está activada (*yes*) o desactivada (*no*). La configuración de *HOSTNAME* (O «nombre de host» en español) define un nombre de host de la máquina local. |
+| /etc/nsswitch.conf	| Este archivo se puede utilizar para modificar dónde se producen las búsquedas de nombre de host. Por ejemplo, la configuración *hosts : files dns* buscaría los nombres de host primero en el archivo */etc/hosts* y después en el servidor DNS. Si cambias a *hosts: dns files*, la búsqueda se lleva a cabo primero en el servidor DNS. |

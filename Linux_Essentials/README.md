@@ -10754,3 +10754,43 @@ Cuando estás configurando los dispositivos de red, hay dos preguntas iniciales 
 - **¿DHCP o dirección estática?** Hay que recordar que un servidor DHCP proporciona información de la red, tal como tu dirección IP y la máscara de subred. Si tú no haces uso de un servidor DHCP, entonces tendrás que proporcionar manualmente esta información a tu host. Esto se llama utilizar una dirección IP estática.
 
 En términos generales, una máquina de escritorio utilizará la red por cable, mientras que una computadora portátil utilizará una red inalámbrica. Normalmente una máquina por cable utiliza una dirección IP estática, pero éstas pueden asignarse también a menudo a través de un servidor DHCP. En casi todos los casos, las máquinas inalámbricas utilizan DHCP ya que son casi siempre móviles y conectadas a diferentes redes.
+
+## 12.5.1 Configurar la Red usando una GUI
+
+Si tienes acceso a un entorno GUI (interfaz gráfica de usuario), probablemente también tendrás acceso a una herramienta basada en GUI que te permitirá configurar tu red. Estas herramientas pueden variar de una distribución a otra. Los ejemplos siguientes se realizaron en una máquina CentOS.
+
+Para iniciar la herramienta de configuración de red, haz clic en **System** (o «sistema» en español) en la barra de menú, luego **Preferences >** (o «preferencias» en español) y **Network Connections** (o «conexiones de red» en español):
+
+![System](images/12.6.1_1.png)
+
+La herramienta primero enlista todos los dispositivos de red actuales. En el ejemplo siguiente, hay sólo un dispositivo **Wired** (o «conectado por cable» en español):
+
+![Network connections](images/12.6.1_2.png)
+
+El dispositivo de red es *eth0*. Los dispositivos de red se denominan *eth0*, *eth1*, etc. Para modificar este dispositivo de red, haz clic en el nombre del dispositivo y haz clic en el botón **Edit** (o «editar» en español):
+
+![Editing System etho](images/12.6.1_3.png)
+
+El tema completo sobre todas las características de red está fuera del alcance de este curso. Esta sección se centrará en cambiar los componentes claves de la red.
+
+Si haces clic en la pestaña **IPv4 Settings **(o «ajustes de IPv4» en español) vas a ver esto:
+
+![Editing System etho setting](images/12.6.1_4.png)
+
+Recuerda que puedes asignar una dirección IP estática o utilizar un servidor DHCP (si está disponible). Este cambio se puede hacer haciendo clic en la lista desplegable situada junto a **Method** (o «método» en español):
+
+![method](images/12.6.1_5.png)
+
+Si seleccionas **Manual**, puedes cambiar la dirección actual haciendo clic en el área donde actualmente se especifica la dirección:
+
+![address](images/12.6.1_6.png)
+
+Ten en cuenta que si eliges **Automatic (DHCP)**, la ubicación de las **Direcciones** se verá en gris y no se podrá modificar:
+
+![Automatic (DHCP)](images/12.6.1_7.png)
+
+**Importante**: Si cambias del automático (DHCP) a manual, todos los datos anteriores «desaparecen». Haciendo clic en el botón **Cancelar** y editando de nuevo el dispositivo eth0, volverán a aparecer los datos.
+
+La mayoría de los cambios realizados con las herramientas basadas en GUI surten efecto inmediatamente después de que se guardan. Sin embargo, en algunos casos, tendrás que reiniciar el equipo o ejecutar un comando como administrador para que los cambios tomen efecto. A continuación se muestra el comando que debe ejecutarse en un sistema CentOS:
+
+![root](images/12.6.1_8.png)

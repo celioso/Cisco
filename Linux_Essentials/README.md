@@ -11015,3 +11015,262 @@ Es importante tener en cuenta que sólo porque el comando `ping` falle, no signi
 Esto suele pasar, porque un servidor puede ser atacado por algo que se llama ***ataque por denegación de servicio***. En este tipo de ataque, un servidor es saturado con un número masivo de paquetes de red. Al ignorar las peticiones de `ping`, el servidor es menos vulnerable.
 
 Como resultado, el comando `ping` puede ser útil para comprobar la disponibilidad de máquinas locales, pero no siempre para máquinas fuera de tu propia red.
+
+## 12.6.4 El Comando netstat
+
+El comando `netstat` es una poderosa herramienta que proporciona una gran cantidad de información de la red. Puede utilizarse para mostrar información acerca de conexiones de red, así como para mostrar la tabla de enrutamiento similar al comando `route`.
+
+Por ejemplo, puedes querer mostrar estadísticas acerca del tráfico de red. Esto puede lograrse mediante el uso de la opción ``-i`` del comando `netstat`:
+
+```bash
+root@localhost:~# netstat -i
+Kernel Interface table
+Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+eth0       1500 0       137      0      4 0        12      0      0      0 BMRU
+lo        65536 0        18      0      0 0        18      0      0      0 LRU
+root@localhost:~#
+```
+
+Las estadísticas más importantes de la salida anterior son *TX-OK* y *TX-ERR*. Un alto porcentaje de *TX-ERR* puede indicar un problema en la red, tal como mucho tráfico de red.
+
+Si quieres utilizar el comando `netstat` para mostrar la información de enrutamiento, utiliza la opción `-r`:
+
+```bash
+root@localhost:~# netstat -r
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+192.168.1.0     *               255.255.255.0   U         0 0          0 eth0
+default         192.168.1.1     0.0.0.0        UG         0 0          0 eth0
+root@localhost:~#
+```
+
+El comando `netstat` se utiliza comúnmente para mostrar *puertos* abiertos. Un puerto es un número único que está asociado con un servicio proporcionado por un host. Si el puerto está abierto, el servicio está disponible para otros hosts.
+
+Por ejemplo, puedes iniciar sesión en un host desde otro host utilizando un servicio llamado *SSH*. El servicio SSH tiene asignado el puerto #22. Si el puerto #22 está abierto, el servicio está disponible para otros hosts.
+
+Es importante tener en cuenta que el host mismo también debe tener los servicios en ejecución; esto significa que debe iniciarse el programa que permite a los usuarios remotos conectarse (que por lo general está iniciado en la mayoría de las distribuciones de Linux).
+
+Para ver una lista de todos los puertos actualmente abiertos, puedes utilizar el siguiente comando:
+
+```bash
+root@localhost:~# netstat -tln
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 192.168.1.2:53          0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.1:953           0.0.0.0:*               LISTEN
+tcp6       0      0 :::53                   :::*                    LISTEN
+tcp6       0      0 :::22                  :::*                    LISTEN
+tcp6       0      0 ::1:953                 :::*                    LISTEN
+root@localhost:~#
+```
+
+Como se puede ver en la salida anterior, el puerto #22 está "escuchando (LISTEN)", los que significa que está abierto.
+
+En el ejemplo anterior, la `-t` se refiere a TCP (recuerda que este protocolo lo vimos de anteriormente en este capítulo), `-l` significa «listening» (o «escuchando» en español) (cuáles de los puertos están escuchando) y `-n` significa «mostrar números, no nombres».
+
+A veces, mostrar los nombres puede ser más útil. Sólo elimina la opción `-n`:
+
+```bash
+root@localhost:~# netstat -tl
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address          State
+tcp        0      0 cserver.example.:domain *:*                     LISTEN
+tcp        0      0 localhost:domain        *:*                     LISTEN
+tcp        0      0 *:ssh                   *:*                     LISTEN
+tcp        0      0 localhost:953           *:*                     LISTEN
+tcp6       0      0 [::]:domain             [::]:*                  LISTEN
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN
+tcp6       0      0 localhost:953           [::]:*                  LISTEN
+root@localhost:~#
+```
+
+En algunas distribuciones se puede ver el siguiente mensaje en la página man del comando `netstat`:
+
+```bash
+NOTE
+     This program is obsolete. Replacement for netstat is ss. Replacement for 
+     netstat -r is ip route. Replacement for netstat -i is ip -s link. 
+     Replacement for netstat -g is ip maddr.
+```
+
+Aunque el comando `netstat` no se sigue desarrollando, sigue siendo una excelente herramienta para visualizar información de la red. El objetivo es eventualmente reemplazar el comando `netstat` por comandos como `ss` e `ip`. Sin embargo, es importante tener en cuenta que esto puede tomar algún tiempo.
+
+El comando ``netstat`` viene en este curso ya que está disponible en todas las distribuciones de Linux, todavía es ampliamente utilizado y es un objetivo del examen de Linux Essentials (los comandos `ss` e `ip` no lo son).
+
+## 12.6.5 El Comando dig
+
+Puede haber ocasiones cuando necesites probar la funcionalidad del servidor DNS que tu host está utilizando. Una forma de hacerlo es utilizar el comando `dig`. Este comando realizará consultas en el servidor DNS para determinar si la información necesaria está disponible en el servidor.
+
+En el ejemplo siguiente, se utiliza el comando `dig` para determinar la dirección IP del host *example.com*:
+
+```bash
+root@localhost:~# dig example.com
+; <<>> DiG 9.8.1-P1 <<>> example.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 45155
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
+;; QUESTION SECTION:
+;example.com.                   IN      A
+
+;; ANSWER SECTION:
+example.com.            86400   IN      A       192.168.1.2
+;; AUTHORITY SECTION:
+example.com.            86400   IN      NS      example.com.
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Tue Dec  8 17:54:41 2015
+;; MSG SIZE  rcvd: 59
+root@localhost:~#
+```
+
+Observa que la respuesta incluye la dirección IP de *192.168.1.2*, lo que significa que el servidor DNS tiene la dirección IP asociada a la información de traducción del nombre de host en su base de datos.
+
+Si el servidor DNS no tiene la información solicitada, está configurado para mandar solicitud a otros servidores DNS. Si ninguno de ellos tiene la información solicitada, recibirás un mensaje de error:
+
+```bash
+root@localhost:~# dig sample.com
+
+; <<>> DiG 9.8.1-P1 <<>> sample.com
+;; global options: +cmd
+;; connection timed out; no servers could be reached
+root@localhost:~#
+```
+
+## 12.6.6 El Comando host
+
+En su forma más simple, el comando `host` trabaja con DNS para asociar un nombre de host a una dirección IP. Tal como en el ejemplo anterior, ejemplo.com se asocia a la dirección IP *192.168.1.2*:
+
+```bash
+root@localhost:~# host example.com
+example.com has address 192.168.1.2
+root@localhost:~#
+```
+
+El comando `host` se puede utilizar también en sentido inverso si se conoce una dirección IP, pero no el nombre del dominio.
+
+```bash
+root@localhost:~# host 192.168.1.2
+2.1.168.192.in-addr.arpa domain name pointer example.com.
+2.1.168.192.in-addr.arpa domain name pointer cserver.example.com.
+root@localhost:~#
+```
+
+Existen otras opciones para consultar los diferentes aspectos de un DNS, así como la `CNAME`(nombre canónico -alias):
+
+```bash
+root@localhost:~# host -t CNAME example.com
+example.com has no CNAME record
+root@localhost:~#
+```
+
+Puesto que muchos servidores DNS guardan una copia de example.com, los registros SOA (Start of Authority) indican el servidor principal para el dominio:
+
+```bash
+root@localhost:~# host -t SOA example.com
+example.com has SOA record example.com. cserver.example.com. 2 604800 86400 2419200 604800  
+root@localhost:~#
+```
+
+Puedes encontrar una lista completa de información sobre DNS en relación con el *example.com* usando la opción `-a`(«all» o «todo» en español):
+
+```bash
+root@localhost:~# host -a example.com
+Trying "example.com"
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3549
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;example.com.                   IN      ANY
+
+;; ANSWER SECTION:
+example.com.            86400   IN      SOA     example.com. cserver.example.com. 2 604800 86400 2419200 604800
+example.com.            86400   IN      NS      example.com.
+example.com.            86400   IN      A       192.168.1.2
+
+;; ADDITIONAL SECTION:
+example.com.            86400   IN      A       192.168.1.2
+
+Received 119 bytes from 127.0.0.1#53 in 0 ms
+root@localhost:~#
+```
+
+## 12.6.7 El Comando ssh
+
+El comando ``ssh`` te permitirá conectarte a otra máquina a través de la red, iniciar sesión y luego realizar tareas en el equipo remoto.
+
+Si utilizas el comando ``ssh`` y sólo proporcionas el nombre de la máquina o la dirección IP para iniciar la sesión, el comando asumirá que quieres iniciar la sesión con el mismo nombre con el que actualmente estás registrado. Si quieres utilizar un nombre de usuario distinto, utiliza la sintaxis:
+
+`username@hostname (o «NombreDeUsuario@NombreDelHostlocal» en español)`
+
+```bash
+root@localhost:~# ssh bob@test
+The authenticity of host ‘test (127.0.0.1)’ can’t be established.
+RSA key fingerprint is c2:0d:ff:27:4c:f8:69:a9:c6:3e:13:da:2f:47:e4:c9.
+Are you sure you want to continue connection (yes/no)? yes
+Warning: Permanently added ‘test’ (RSA) to the list of known hosts.
+bob@test’s password:
+bob@test:~$
+Fri Oct   4 16:14:43 CDT 2013
+bob@test:~$
+```
+
+## 12.6.7.1 Algoritmo RSA de Clave Pública
+
+El primer prompt te pide que verifiques la identidad de la máquina en la que inicias sesión. En la mayoría de los casos vas a responder *yes*(o «sí» en español). Aunque puedas validar con administrador de la máquina remota para asegurarte de que la clave RSA es correcta, este no es realmente el propósito de esta consulta. Realmente está diseñado para futuros inicios de sesión.
+
+Después de que respondas *yes*, la clave RSA de la máquina remota se almacena en tu sistema local. Cuando intentes hacer un `ssh` a esta misma máquina en el futuro, la clave RSA proporcionada por el equipo remoto se compara con la copia almacenada en el equipo local. Si coinciden, entonces aparece el prompt del nombre de usuario. Si no coinciden, verás un error similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ ssh bob@test
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@   WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!   @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that the RSA host key has just been changed.
+The fingerprint for the RSA key sent by the remote host is
+c2:0d:ff:27:4c:f8:69:a9:c6:3e:13:da:2f:47:e4:c9.
+Please contact your system administrator.
+Add correct host key in /home/sysadmin/.ssh/known_hosts to get rid of this message.
+Offending key in /home/sysadmin/.ssh/known_hosts:1
+RSA host key for test has changed and you have requested strict checking.
+Host key verification failed.
+sysadmin@localhost:~$
+```
+
+Este error puede indicar que un host no autorizado ha reemplazado al host correcto. Consulta con el administrador del sistema remoto. Si el sistema fuese recientemente reinstalado, tendría una nueva clave RSA, lo podría estar causando este error.
+
+En caso de que este mensaje de error es debido a que una máquina remota fue reinstalada, puedes eliminar el archivo *~/.ssh/known_hosts* de tu sistema local (o solo quitar la entrada para esa máquina en específico) e intentar a conectarte de nuevo:
+
+```bash
+sysadmin@localhost:~$ cat ~/.ssh/known_hosts
+test ssh-rsa AAAAB3NzaC1yc2EAAAAmIwAAAQEAklOUpkDHrfHY17SbrmTIp/RZ0V4DTxgq9wzd+ohy006SWDSGPA+nafzlHDPOW7vdI4mZ5ew18KL4JW9jbhUFrviQzM7xlELEVf4h9lFX5QVkbPppSrg0cda3Pbv7kOdJ/MTyBlWXFCRH+Cv3FXRitBqxiX1nKhXpHAZsMciLq8V6RjsNAQwdsdMFvSlVK/7BA
+t5FaiKoAfncM1Q8x3+2V0Ww71/eIFmb1zuUFljHYTprrX88XypNDvjYNby6vw/Pb0rwprz/Tn
+mZAW3UX+PnTPI89ZPmNBLuxyrD2cE86Z/il8b+gw3r3+1nJotmIkjn2so1d01QraTlMqVSsbx
+NrRFi9wrf+ghw==
+sysadmin@localhost:~$ rm ~/.ssh/known_hosts
+sysadmin@localhost:~$ ssh bob@test
+The authenticity of host ‘test (127.0.0.1)’ can’t be established.
+RSA key fingerprint is c2:0d:ff:27:4c:f8:69:a9:c6:3e:13:da:2f:47:e4:c9.
+Are you sure you want to continue connection (yes/no)? yes
+Warning: Permanently added ‘test’ (RSA) to the list of known hosts.
+bob@test’s password:
+Last login: Fri Oct   4 16:14:39 CDT 2013  from localhost
+bob@test:~$
+```
+
+## 12.6.7.2 Regresar a la Máquina Local
+Para volver a la máquina local utiliza el comando de *exit*(o «salir» en español):
+
+```bash
+bob@test:~$ exit
+logout
+Connection to test closed.
+sysadmin@localhost:~#
+```
+
+**Advertencia**: ¡Ten cuidado al utilizar el comando `exit` muchas veces, ya que se cerrará la ventana de la terminal en la que estás trabajando!

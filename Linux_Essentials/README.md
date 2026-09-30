@@ -11274,3 +11274,51 @@ sysadmin@localhost:~#
 ```
 
 **Advertencia**: ¡Ten cuidado al utilizar el comando `exit` muchas veces, ya que se cerrará la ventana de la terminal en la que estás trabajando!
+
+## Práctica 12
+
+## 12.1 Introducción
+
+Este es Lab 12: Configuración de la red. Mediante la realización de esta práctica de laboratorio los estudiantes aprenderán acerca de la configuración de su equipo en la red.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+- Examinar la información acerca de la configuración de red
+
+## 12.2 Exploración de la Red
+
+En esta tarea vas a ejecutar algunos comandos y examinar algunos archivos para mostrar la configuración de red.
+
+## 12.2.1 Paso 1
+
+Con el fin de determinar tu dirección del protocolo de Internet (IP), ejecuta el comando `ifconfig`:
+
+```bash
+sysadmin@localhost:~$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 3a:3b:65:10:f6:43 
+          inet addr:192.168.1.2  Bcast:0.0.0.0  Mask:255.255.255.0
+          inet6 addr: fe80::383b:65ff:fe10:f643/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:15 errors:0 dropped:0 overruns:0 frame:0       
+          TX packets:9 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:1206 (1.2 KB)  TX bytes:690 (690.0 B)
+                                                                
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0        
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+sysadmin@localhost:~$
+```
+
+La salida muestra dos grandes bloques de información. El primer bloque, encabezado por *eth0*, refleja la información acerca de tu primera tarjeta de red Ethernet. El segundo bloque, encabezado por *lo*, refleja la información sobre loopback o la interfaz de la red interna.
+
+La segunda línea de cada bloque contiene la información pertinente para la versión 4 del protocolo de Internet (llamada IPv4), mientras que la tercera línea contiene la información para la versión 6 del Protocolo de Internet (IPv6). IPv4 es un método más antiguo de identificación de las máquinas con una serie de números. Sigue siendo ampliamente utilizado hoy en día a pesar de que el método mejorado de IPv6 lleva disponible desde hace muchos años.
+
+Las direcciones IPv4 se muestran como cuatro números decimales que van desde *0* a *255* separados por puntos.
+
+Las direcciones IPv6 son números de **128 bits** que aparecen como dígitos hexadecimales que van desde *0* a *f*. Los dígitos hexadecimales se organizan generalmente en grupos de cuatro dígitos separados por dos puntos. Si un número de dígitos hexadecimales consecutivos tiene el valor de cero, entonces se reemplazan por dos puntos dobles.

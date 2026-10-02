@@ -11322,3 +11322,30 @@ La segunda línea de cada bloque contiene la información pertinente para la ver
 Las direcciones IPv4 se muestran como cuatro números decimales que van desde *0* a *255* separados por puntos.
 
 Las direcciones IPv6 son números de **128 bits** que aparecen como dígitos hexadecimales que van desde *0* a *f*. Los dígitos hexadecimales se organizan generalmente en grupos de cuatro dígitos separados por dos puntos. Si un número de dígitos hexadecimales consecutivos tiene el valor de cero, entonces se reemplazan por dos puntos dobles.
+
+## 12.2.2 Paso 2
+
+Tener una dirección IP permitirá que el sistema se comunique con otros sistemas de la misma red. Con los *dispositivos de enrutamiento* te puedes comunicar con los sistemas de otras redes. Para ver la tabla de información de enrutamiento, utiliza el comando `route`:
+
+```yexy
+route
+route -n
+```
+
+```bash
+sysadmin@localhost:~$ route                                               
+Kernel IP routing table                                                   
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface  
+192.168.1.0     *               255.255.255.0   U     0      0        0 eth0  
+sysadmin@localhost:~$ route -n                                            
+Kernel IP routing table                                                   
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface 
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0  
+sysadmin@localhost:~$
+```
+
+Observa que en la salida del primer comando de la ruta, se proporcionaron los nombres de algunos elementos (como *). En la salida del segundo comando `route`, los números se proporcionan en lugar de los nombres, el resultado de utilizar la opción `-n` del comando `route`.
+
+Cuando te conectas a otros equipos, puedes utilizar ya sea una dirección IP o un nombre de host. Los nombres de host se pueden utilizar si se introducen al archivo */etc/hosts* junto con su dirección IP asociada o si un nombre de dominio (DNS) proporciona la dirección IP con la traslación del nombre de host.
+
+Un par de nombres que están comúnmente en el archivo */etc/hosts* son *localhost* y *localhost.localdomain*, y ambos se utilizan para referirse a la máquina actual.

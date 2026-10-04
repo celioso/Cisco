@@ -11327,7 +11327,7 @@ Las direcciones IPv6 son números de **128 bits** que aparecen como dígitos hex
 
 Tener una dirección IP permitirá que el sistema se comunique con otros sistemas de la misma red. Con los *dispositivos de enrutamiento* te puedes comunicar con los sistemas de otras redes. Para ver la tabla de información de enrutamiento, utiliza el comando `route`:
 
-```yexy
+```text
 route
 route -n
 ```
@@ -11349,3 +11349,249 @@ Observa que en la salida del primer comando de la ruta, se proporcionaron los no
 Cuando te conectas a otros equipos, puedes utilizar ya sea una dirección IP o un nombre de host. Los nombres de host se pueden utilizar si se introducen al archivo */etc/hosts* junto con su dirección IP asociada o si un nombre de dominio (DNS) proporciona la dirección IP con la traslación del nombre de host.
 
 Un par de nombres que están comúnmente en el archivo */etc/hosts* son *localhost* y *localhost.localdomain*, y ambos se utilizan para referirse a la máquina actual.
+
+## 12.2.3 Paso 3
+
+Compruebe que la dirección IP *127.0.0.1* tiene una entrada en el archivo */etc/hosts*:
+
+`grep 127.0.0.1 /etc/hosts`
+
+La salida debe aparecer como la siguiente con la definición de los nombres *localhost*:
+
+```bash
+sysadmin@localhost:~$ grep 127.0.0.1 /etc/hosts                           
+127.0.0.1       localhost                                                 
+sysadmin@localhost:~$
+```
+
+El comando `ping` se puede utilizar para saber si un sistema está conectado actualmente a una red.
+
+A veces, un sistema puede estar configurado para no responder a peticiones del `ping`. Por lo tanto, la falta de una respuesta a un comando `ping` no significa que un sistema no esté conectado a una red. Una respuesta rápida a un comando `ping` no indica, sin embargo, que un sistema está conectado a una red.
+
+## 12.2.4 Paso 4
+
+Haz una prueba para ver si la máquina **localhost* responderá a cuatro peticiones del `ping`:
+
+`ping -c4 localhost`
+
+```bash
+sysadmin@localhost:~$ ping -c4 localhost
+PING localhost (127.0.0.1) 56(84) bytes of data.
+64 bytes from localhost (127.0.0.1): icmp_req=1 ttl=64 time=0.045 ms
+64 bytes from localhost (127.0.0.1): icmp_req=2 ttl=64 time=0.028 ms
+64 bytes from localhost (127.0.0.1): icmp_req=3 ttl=64 time=0.032 ms
+64 bytes from localhost (127.0.0.1): icmp_req=4 ttl=64 time=0.040 ms
+
+--- localhost ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 2998ms
+rtt min/avg/max/mdev = 0.028/0.036/0.045/0.007 ms
+sysadmin@localhost:~$
+```
+
+A diferencia del comando `ping` que está disponible en el sistema operativo Microsoft Windows, el comando `ping` de Linux no deja de hacer *peticiones* por defecto. Si no especificas la opción `-c` opción, tendrás que detener manualmente el comando manteniendo presionada la tecla **Control** y presionar la **C(CTRL+C)**.
+
+Los nombres de host también se pueden utilizar si están registrados con un servidor de nombres de dominio (DNS). Si el sistema está conectado a una red con servidores DNS, entonces la entrada de *nameserver* (o «nombre del servidor» en español) en el archivo */etc/resolv.conf* configura tu sistema para utilizar estos servidores para resolver los nombres de host en direcciones IP.
+
+## 12.2.5 Paso 5
+
+Visualiza el archivo */etc/resolv.conf* para ver si alguna de las entradas del *nameserver* existe:
+
+`cat /etc/resolv.conf`
+
+La salida debería mostrar una entrada del *nameserver*:
+
+```bash
+sysadmin@localhost:~$ cat /etc/resolv.conf
+nameserver 127.0.0.1
+sysadmin@localhost:~$
+```
+
+## 12.2.6 Paso 6
+
+Utiliza el comando *dig* para resolver el nombre *localhost.localdomain* a una dirección IP:
+
+`dig localhost.localdomain`
+
+
+```bash
+sysadmin@localhost:~$ dig localhost.localdomain
+
+; <<>> DiG 9.8.1-P1 <<>> localhost.localdomain
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 35943
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;localhost.localdomain.         IN      A
+
+;; ANSWER SECTION:
+localhost.localdomain.  86400   IN      A       127.0.0.1
+
+;; AUTHORITY SECTION:
+localdomain.            86400   IN      NS      localhost.localdomain.
+
+;; Query time: 803 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Mon Apr 11 13:33:03 2016
+;; MSG SIZE  rcvd: 69
+
+sysadmin@localhost:~$
+```
+
+Observa que la salida muestra da que el primer *nameserver* listado en el archivo */etc/resolv.conf* es el que respondió con la respuesta en la salida *ANSWER SECTION*.
+
+## 12.2.7 Paso 7
+
+Puede utilizar el comando `dig` para resolver otros *nombres de dominio completos*. Utiliza el comando `dig` para resolver el nombre de host *cserver.example.com* a una dirección IP:
+
+`dig cserver.example.com`
+
+```bash
+sysadmin@localhost:~$ dig cserver.example.com
+; <<>> DiG 9.8.1-P1 <<>> cserver.example.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 57203
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+;; QUESTION SECTION:
+;cserver.example.com.           IN      A
+;; ANSWER SECTION:
+cserver.example.com.    86400   IN      A       192.168.1.2
+;; AUTHORITY SECTION:
+example.com.            86400   IN      NS      example.com.
+;; ADDITIONAL SECTION:
+example.com.            86400   IN      A       192.168.1.2
+;; Query time: 990 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Mon Apr 11 13:45:38 2016
+;; MSG SIZE  rcvd: 83
+sysadmin@localhost:~$
+```
+
+Un nombre de dominio completo (FQDN) incluye no sólo el nombre de host, sino también el dominio «en» el que se encuentra el nombre de host . Para el FQDN *cserver.example.com*, cserver es el nombre de host y el domino *example.com*.
+
+## 12.2.8 Paso 8
+
+Utiliza el comando `dig` para resolver la dirección IP *192.168.1.2* a un nombre de host:
+
+`dig -x 192.168.1.2`
+
+```bash
+sysadmin@localhost:~$ dig -x 192.168.1.2
+; <<>> DiG 9.8.1-P1 <<>> -x 192.168.1.2
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 26791
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 1, ADDITIONAL: 1
+;; QUESTION SECTION:
+;2.1.168.192.in-addr.arpa.      IN      PTR
+;; ANSWER SECTION:
+2.1.168.192.in-addr.arpa. 86400 IN      PTR     cserver.example.com.
+2.1.168.192.in-addr.arpa. 86400 IN      PTR     example.com.
+;; AUTHORITY SECTION:
+1.168.192.in-addr.arpa. 86400   IN      NS      example.com.
+;; ADDITIONAL SECTION:
+example.com.            86400   IN      A       192.168.1.2
+;; Query time: 0 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Mon Apr 11 13:57:50 2016
+;; MSG SIZE  rcvd: 119
+
+sysadmin@localhost:~$
+```
+
+## 12.2.9 Paso 9
+
+El comando `netstat` realiza una gran variedad de tareas relacionadas con el funcionamiento de la red. Para tener una idea de algunas de sus capacidades, ejecuta el comando con la opción `--help`:
+
+`netstat --help`
+
+```bash
+sysadmin@localhost:~$ netstat --help
+usage: netstat [-vWeenNcCF] [<Af>] -r         netstat {-V|--version|-h|--help
+       netstat [-vWnNcaeol] [<Socket> ...]                                        netstat { [-vWeenNac] -i | [-cWnNe] -M | -s }
+
+        -r, --route              display routing table  
+        -i, --interfaces         display interface table
+        -g, --groups             display multicast group memberships
+        -s, --statistics         display networking statistics (like SNMP
+        -M, --masquerade         display masqueraded connections
+
+        -v, --verbose            be verbose
+        -W, --wide               don't truncate IP addresses
+        -n, --numeric            don't resolve names
+        --numeric-hosts          don't resolve host names
+        --numeric-ports          don't resolve port names
+        --numeric-users          don't resolve user names
+        -N, --symbolic           resolve hardware names
+        -e, --extend             display other/more information
+        -p, --programs           display PID/Program name for sockets
+```
+
+Uno de los usos comunes de `netstat` es determinar cuáles de los servicios están escuchandoo están en espera de una conexión entrante. Por ejemplo, un servicio que se utiliza para permitir a los usuarios realizar conexiones remotas o de red se denomina Secure Shell o *SSH*. SSH normalmente ***escucha*** al puerto TCP 22.
+
+Los *puertos conocidos* son los números de puerto en el rango de 0-1023, normalmente utilizados por los procesos del sistema para proporcionar los servicios de red. Una lista de los nombres de servicio y números de puerto asociados se puede encontrar en el archivo */etc/services*.
+
+## 12.2.10 Paso 10
+
+Utiliza el comando `netstat` para ver si el puerto TCP para *ssh*, 22, tiene un proceso escuchando:
+
+```text
+netstat -tl
+netstat -tln
+```
+
+```bash
+sysadmin@localhost:~$ netstat -tl                                         
+Active Internet connections (only servers)                                
+Proto Recv-Q Send-Q Local Address           Foreign Address         State 
+tcp        0      0 example.com:domain      *:*                     LISTEN
+tcp        0      0 localhost:domain        *:*                     LISTEN 
+tcp        0      0 *:ssh                   *:*                     LISTEN
+tcp        0      0 localhost:953           *:*                     LISTEN
+tcp6       0      0 [::]:domain             [::]:*                  LISTEN 
+tcp6       0      0 [::]:ssh                [::]:*                  LISTEN
+tcp6       0      0 localhost:953           [::]:*                  LISTEN 
+sysadmin@localhost:~$
+```
+
+## 12.2.11 Paso 11
+
+Al opción -t del comando netstat limita el proceso de escuchar a los puertos TCP; la opción -l limita la salida a los puertos con los servicios de escucha; la -n muestra las direcciones de red numéricamente:
+
+```bash
+sysadmin@localhost:~$ netstat -ltn
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 192.168.1.2:53          0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.1:953           0.0.0.0:*               LISTEN
+tcp6       0      0 :::53                   :::*                    LISTEN
+tcp6       0      0 :::22                   :::*                    LISTEN
+tcp6       0      0 ::1:953                 :::*                    LISTEN
+sysadmin@localhost:~$
+```
+
+## 13.1 Introducción
+
+Las cuentas de usuario están diseñadas para proporcionar seguridad en un sistema operativo Linux. Cada persona en el sistema debe iniciar la sesión utilizando una cuenta de usuario y la cuenta de usuario permite a la persona ya sea acceder a un directorio de archivos específico o niega dicho acceso. Esto se logra mediante los permisos de archivo, un tema del que hablaremos en un capítulo posterior.
+
+Las cuentas de usuario también pertenecen a los grupos que también pueden utilizarse para proporcionar acceso a los archivos o directorios. Cada usuario pertenece al menos a un grupo (a menudo muchos) para permitir más fácilmente que los usuarios compartan los datos almacenados en los archivos con otros usuarios.
+
+Los datos de la cuenta de usuario y de grupo se almacenan en archivos de base de datos. Conocer el contenido de estos archivos es importante, ya que te permitirá entender mejor cuáles de lo usuarios tienen acceso a los archivos y directorios en el sistema. Estos archivos de base de datos también contienen información de seguridad vital que puede afectar la capacidad de un usuario a acceder al sistema (login).
+
+Hay varios comandos que te proporcionarán la capacidad de ver información de la cuenta de grupo y usuario, así como te permiten cambiar de una cuenta de usuario a otra (siempre que tengas la autorización para ello). Estos comandos son valiosos para revisar el uso del sistema, solucionar los problemas de sistema y controlar el acceso no autorizado al sistema.
+
+![i Don´t have any Linux work experience](images/11-LPI-Graphics.png)
+
+**“No tengo ninguna experiencia de trabajo en Linux, entonces ¿ Cómo obtengo un trabajo?** Constatando tus habilidades obteniendo un certificado reconocido por la industria que demuestra a los empleadores que tienes las habilidades de hacer el trabajo.
+
+Puede ser un gran forma de entrar a la primera compañía para que puedas ganar valor con la experiencia en el trabajo.
+
+## 13.2 Las Cuentas de Usuario
+
+Hay varios archivos de texto en el directorio */etc* que contienen los datos de la cuenta de los usuarios y grupos definidos en el sistema. Por ejemplo, si quisieras ver si está definida una cuenta de usuario específica en el sistema, el lugar para comprobar es el archivo */etc/passwd*.
+
+El archivo */etc/passwd* define parte de la información de la cuenta para las cuentas de usuario. Curiosamente, las contraseñas para las cuentas no se almacenan en el archivo */etc/passwd*, tal como lo indica el nombre del archivo, sino más bien el archivo */etc/shadow*.

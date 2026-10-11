@@ -11662,6 +11662,7 @@ La siguiente tabla describe los campos del archivo */etc/shadow* con más detall
 `sysadmin:$6$lS6WJ9O/fNmEzrIi$kO9NKRBjLJJTlZD.L1Dc2xwcuUYaYwCTS.gt4elijSQW8ZDp6GLYAx.TRNNpUdAgUXUrzDuAPsYs5YHZNAorI1:15020:5:30:7:60:15050:`
 
 | Campo | Ejemplo | Descripción |
+|---|---|---|
 | name | sysadmin | Este es el nombre de la cuenta, que coincide con el nombre de cuenta en el archivo */etc/passwd*. |
 | password | $6$.........rI1 | El campo `passwd` contiene la contraseña cifrada de la cuenta. Esta cadena muy larga (que está truncada en el ejemplo a la izquierda de esta celda) es un cifrado unidireccional, lo que significa que no puede "revertirse" para determinar la contraseña original.<br>Mientras que los usuarios habituales tienen contraseñas encriptadas en este campo, las cuentas del sistema tendrán un carácter de * en este campo. Verás más detalles sobre las cuentas de sistema más adelante en este capítulo. |
 | last change	| 15020	| Este campo contiene un número que representa la última vez que la contraseña fue cambiada. El número 15020 es el número de días desde el 01 de enero de 1970 (llamada la Época) y el último día en el que la contraseña de la cuenta fue cambiada.<br>Este valor se genera automáticamente cuando se modifica la contraseña del usuario. Este valor es importante ya que se utiliza por característica de envejecimiento de la contraseña proporcionado por el resto de los campos de este archivo. |
@@ -11674,3 +11675,23 @@ La siguiente tabla describe los campos del archivo */etc/shadow* con más detall
 
 Los usuarios regulares no pueden ver el contenido del archivo */etc/shadow* por razones de seguridad. Para ver el contenido de este archivo, debes iniciar la sesión como administrador (la cuenta *root*).
 
+## 13.2.3 Visualizar la Información de la Cuenta
+
+Una buena manera de visualizar la información de la cuenta del archivo */etc/passwd* es usar el comando `gre` para dar salida solamente a la línea que contiene la cuenta que te interesa ver. Por ejemplo, para ver la información de la cuenta del nombre de usuario llamado *sysadmin*, utiliza el comando `grep sysadmin /etc/passwd`:
+
+
+```bash
+sysadmin@localhost:~$ grep sysadmin /etc/passwd
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
+sysadmin@localhost:~$
+```
+
+Otra técnica para recuperar la información del usuario que se encuentra normalmente en los archivos */etc/passwd* y */etc/shadow* es utilizar el comando `getent`. Una ventaja de usar el comando `getent` es que puede recuperar la información de la cuenta definida localmente (/etc/passwd y /etc/shadow) o en un servidor de directorio en la red.
+
+La sintaxis general de un comando `getent` es: *getent database record* «**o getent registro de base de datos**» . Por ejemplo, el comando `getent passwd sysadmin` recuperaría la información *passwd* de la cuenta para el usuario *sysadmin*:
+
+```bash
+sysadmin@localhost:~$ getent passwd sysadmin
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
+sysadmin@localhost:~$
+```

@@ -11809,3 +11809,138 @@ adm:x:4:sysadmin
 sudo:x:27:sysadmin
 sysadmin:x:1001:
 ```
+
+## 13.3.3 Cambiando la Propiedad de Grupo de un Archivo Existente
+
+Para cambiar al grupo propietario de un archivo existente se puede utilizar el comando `chgrp group_name file` «o *chgrp nombre_de_grupo archivo*». Los usuarios sólo pueden cambiar la propiedad de los archivos que poseen. El nuevo grupo propietario del archivo también debe ser un grupo al que pertenece el usuario:
+
+```bash
+sysadmin@localhost:~$ touch sample
+sysadmin@localhost:~$ ls -l sample
+-rw-rw-r-- 1 sysadmin sysadmin 0 Dec 10 00:44 sample
+sysadmin@localhost:~$ chgrp games sample
+-rw-rw-r--. 1 sysadmin games 0 Oct 23 22:12 sample
+sysadmin@localhost:~$
+```
+
+Para cambiar el grupo propietario de todos los archivos en una estructura de directorios, utiliza la opción `-R` para el comando `chgrp`. Por ejemplo, el comando `chgrp -R games test_dir` cambiaría la propiedad del grupo en el directorio *test_dir* y de todos los archivos y subdirectorios del directorio *test_dir*.
+
+También existe un comando `chown` que se puede utilizar para cambiar al usuario propietario de un archivo o directorio. Sin embargo, este comando lo puede utilizar solamente el usuario root. Los usuarios normales no pueden «dar» sus archivos a otro usuario.
+
+## 13.4 Iniciar Sesión como Root
+
+Hay muchas formas de ejecutar un comando que requiere privilegios de administrador o root. Como ya se mencionó, iniciar sesión en el sistema como usuario root te permite ejecutar los comandos como administrador. Esto es potencialmente peligroso porque se te puede olvidar que estás registrado como root y ejecutar un comando que podría causar problemas en el sistema. Como resultado, se recomienda no iniciar sesión como usuario root directamente.
+
+Porque usar la cuenta root es potencialmente peligrosa, sólo debe ejecutar comandos como root si se necesitan privilegios administrativos. Si la cuenta root está desactivada, tal como sucede en la distribución de Ubuntu, entonces los comandos administrativos pueden ser ejecutados utilizando el comando `sudo`. Si la cuenta de root está activada, un usuario normal puede ejecutar el comando `su` para cambiar a la cuenta root.
+
+Cuando inicias sesión en el sistema directamente como root para ejecutar comandos, todo acerca de tu sesión se ejecuta como usuario root. Si utilizas el entorno gráfico, esto es especialmente peligroso ya que el proceso de inicio de sesión gráfico se compone de muchos ejecutables diferentes (programas que se ejecutan durante el inicio de sesión). Cada programa que se ejecuta como usuario root representa una amenaza mayor que un proceso ejecutado como un usuario estándar, ya que tales programas tendrían permisos para hacer casi cualquier cosa, mientras que los programas de usuario estándar son muy restringidos en lo que pueden hacer.
+
+El otro peligro potencial con el inicio de sesión en el sistema como root es que una persona que hace esto puede olvidarse cerrar la sesión para hacer su trabajo no administrativo. Esto significa que los programas como navegadores, clientes de correo electrónico, etc. se ejecutarían como usuario root sin restricciones en lo que podrían hacer. El hecho de que varias distribuciones de Linux, particularmente Ubuntu, no permiten a los usuarios iniciar sesión como usuario root debe ser una implicación suficiente que ésta no es la forma preferida para realizar las tareas administrativas.
+
+## 13.5 Usando el Comando su
+
+El comando `su` te permite ejecutar el shell como un usuario diferente. Por defecto, si no se especifica una cuenta de usuario, el comando `su` abre un nuevo shell como usuario root. Aunque el comando `su` es más frecuentemente usado para cambiar al usuario root, también puede cambiar a otros usuarios.
+
+Una opción común que se utiliza con el comando `su` es la opción `-l`, que hace que el nuevo shell sea un shell de inicio de sesión. Utilizando el comando `su` con una opción de shell de inicio de sesión es a menudo importante para asegurar que cualquier comando ejecutado se ejecute correctamente, ya que el shell del inicio de sesión configura totalmente el nuevo shell con la configuración del nuevo usuario. Un non-login shell sólo cambia el UID, pero no conecta al usuario completamente. La opción `-l` puede ser abreviada simplemente como - o deletreada como `--login`.
+
+Ya que la cuenta root se utiliza de forma predeterminada con el comando su, los siguientes dos comandos son maneras equivalentes de iniciar un shell como usuario root:
+
+```text
+su - root
+su -
+```
+
+Después de presionar **Entrar** para ejecutar uno de estos comandos, el usuario debe proporcionar la contraseña del usuario root para iniciar el shell como usuario root. Si no sabes la contraseña de la cuenta a la que te estás moviendo, entonces el comando `su` fallará.
+
+Después de usar el shell iniciado con el comando `su` para realizar las tareas administrativas necesarias, vuelve a tu shell original (y a la cuenta de usuario original) mediante el comando `exit`.
+
+```bash
+sysadmin@localhost:~$ su -
+Password:
+root@localhost:~# id
+uid=0(root) gid=0(root) groups=0(root)
+root@localhost:~# exit
+logout
+sysadmin@localhost:~$ id
+uid=1001(sysadmin) gid=1001(sysadmin) groups=1001(sysadmin),4(adm),27(sudo)
+sysadmin@localhost:~$
+```
+
+## 13.6 Utilizando el comando sudo
+
+En las distribuciones que no permiten que el usuario root acceda directamente o a través del comando `su`, el proceso de instalación configura automáticamente una cuenta de usuario para poder utilizar el comando ``sudo` para ejecutar los comandos como si fueran ejecutados por el usuario root.
+
+Igual que el comando `su`, el comando `sudo` asume por defecto que la cuenta del usuario root debe utilizarse para ejecutar comandos; para especificar una cuenta de usuario diferente, utiliza la opción `-u`.
+
+Cuando utilizas el comando `sudo` para ejecutar un comando como usuario root, el comando pedirá la contraseña del usuario (no la del usuario root). Esta es una característica de seguridad que impide el acceso root no autorizados si el usuario deja su computadora desatendido. El prompt de la contraseña no aparecerá de nuevo mientras el usuario continúa ejecutando comandos `sudo` con menos de cinco minutos de diferencia.
+
+Utilizar el comando `sudo` para ejecutar un comando de administración resultará en una entrada en un archivo de registro. Esta entrada incluye el nombre de usuario que ejecuta el comando, el comando ejecutado y la fecha y hora cuando se ejecutó el comando. Esto permite mayor rendición de cuentas en comparación con un sistema donde muchos usuarios saben la contraseña de root y pueden entrar directamente como root o usar el comando `su` para ejecutar los comandos como el usuario root.
+
+Puedes utilizar el comando `sudo` para ejecutar un comando que requiera privilegios de root. Por ejemplo, es necesario ser un usuario root para poder ver el archivo */etc/shadow*. El comando `sudo head /etc/shadow` ejecuta el comando `head` como un usuario root:
+
+```bash
+sysadmin@localhost:~$ head /etc/shadow
+head: cannot open `/etc/shadow' for reading: Permission denied
+sysadmin@localhost:~$ sudo head /etc/shadow
+[sudo] password for sysadmin:
+root:$6$4Yga95H9$8HbxqsMEIBTZ0YomlMffYCV9VE1SQ4T2H3SHXw41M02SQtfAdDVE9mqGp2hr20q
+.ZuncJpLyWkYwQdKlSJyS8.:16464:0:99999:7:::
+daemon:*:16463:0:99999:7:::
+bin:*:16463:0:99999:7:::
+sys:*:16463:0:99999:7:::
+sync:*:16463:0:99999:7:::
+games:*:16463:0:99999:7:::
+man:*:16463:0:99999:7:::
+lp:*:16463:0:99999:7:::
+mail:*:16463:0:99999:7:::
+news:*:16463:0:99999:7:::
+sysadmin@localhost:~$
+```
+
+Una gran ventaja por `usar` sudo para ejecutar los comandos administrativos es que reduce el riesgo de que un usuario accidentalmente ejecute un comando como root. La intención de ejecutar un comando es clara; el comando se ejecuta como root si tiene como prefijo el comando `sudo`. De lo contrario, se ejecuta el comando como un usuario normal.
+
+## 13.6.1 Configurar el Comando sudo
+
+Si el comando `sudo` no es configurado automáticamente durante la instalación, se puede configurar manualmente después de la instalación. Inicialmente, esto requerirá iniciar sesión como usuario root (o usando el comando `su` para cambiar a la cuenta de root), pero después de su configuración, los usuarios especificados podrán ejecutar los comandos `sudo`. Puedes configurar el acceso al comando `sudo` ejecutando el comando `visudo`.
+
+El comando `visudo` te pasa al programa editor, por defecto el editor `vi` (o `vim`) en la mayoría de los sistemas, el que puede ser un reto para los usuarios principiantes Linux. Para configurar otro editor, exporta la variable *EDITOR* con el valor del editor que prefieres. Por ejemplo, para usar el editor gedit en vez de vi/vim, ejecutarías el comando `export EDITOR=gedit` antes de ejecutar el comando `visudo`.
+
+Utilizando el comando `visudo` se abrirá el archivo de configuración `/etc/sudoers` para editar. Configuraciones avanzadas del comando `sudo` se pueden realizar a través de este archivo, pero están más allá del alcance de este curso. Básicamente, en este archivo se realizan las entradas para especificar qué usuario (usuarios) y en cuáles de las máquinas pueden utilizar el comando `sudo` para ejecutar los comandos como otro usuario.
+
+Esta entrada predeterminada...
+
+`root	ALL=(ALL) 	ALL`
+
+...se puede leer como, «el usuario root puede actuar como TODOS los usuarios en TODAS las máquina para ejecutar TODOS los comandos.» Para que un usuario como el *sysadmin* ejecute todos los comandos como todos los usuarios utilizando el comando `sudo`, podría añadirse una entrada similar a la siguiente:
+
+`sysadmin ALL=(ALL) ALL`
+
+## 13.7 Utilizando el Comando who
+
+El comando `who` muestra una lista de usuarios que están conectados actualmente en el sistema, desde dónde están conectados y cuándo iniciaron sesión. Mediante el uso de opciones este comando puede mostrar información como el *nivel de ejecución* actual (un estado funcional de la computadora) y la hora del arranque del sistema.
+
+Por ejemplo:
+
+```bash
+sysadmin@localhost:~$ who
+root     	tty2        2013-10-11 10:00
+sysadmin	tty1        2013-10-11 09:58 (:0)
+sysadmin 	pts/0       2013-10-11 09:59 (:0.0)
+sysadmin 	pts/1       2013-10-11 10:00 (example.com)
+```
+
+La tabla siguiente describe la salida del comando who:
+
+| Columna	| Ejemplo	| Descripción |
+|---|---|---|
+| username	| *root*	| Esta columna indica el nombre del usuario que inició la sesión. Ten en cuenta que por "sesión" nos referimos a «cualquier proceso de inicio de sesión y cualquier ventana de la terminal abierta». |
+| terminal | *tty2* |	Esta columna indica en qué ventana de terminal está trabajando el usuario.<br>Si el nombre de la terminal inicia con *tty*, entonces esto es una indicación de un inicio de sesión local, está es una terminal de línea de comandos regular.<br>Si el nombre de la terminal inicia con *pts*, entonces esto indica que el usuario está usando una pseudo terminal o corriendo un proceso que actúa como la terminal. Esto puede significar que el usuario tiene una aplicación de terminal corriendo en X Windows, como `gnome-terminal` o `xterm` o pueden haber usado un protocolo de red para conectarse al sistema, como `ssh` o `telnet`. |
+| date | 2013-10-11 10:00 (example.com) | `Barra vertical`<br>Esto indica cuándo inició sesión el usuario.<br>Después de la fecha y la hora en que el usuario inició sesión en el sistema, puede aparecer alguna información de localización.<br>Si la información de localización contiene un nombre de host, nombre de dominio o dirección IP, entonces el usuario inició sesión remotamente.<br>Si hay dos puntos y un número, entonces esto indica que han hecho un inicio de sesión gráfico local.<br>Si no se muestra información de localización en la última columna, entonces esto significa que el usuario inició sesión mediante un proceso de línea de comandos local. |
+
+Si quieres visualizar la información sobre el estado del sistema, el comando ``who`` puede hacerlo utilizando varias opciones. Por ejemplo, la opción ``-b`` mostrará la última vez que el sistema se inició (fue arrancado) y la opción ``-r`` mostrará el tiempo en el cual el sistema haya alcanzado un cierto nivel ejecución:
+
+```bash
+sysadmin@localhost:~$ who -b -r
+         system boot  	2013-10-11 09:54
+         run-level 5    2013-10-11 09:54
+```

@@ -11695,3 +11695,117 @@ sysadmin@localhost:~$ getent passwd sysadmin
 sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
 sysadmin@localhost:~$
 ```
+
+## 13.2.4 Visualización de la Información del Inicio de sesión
+
+Si inicias sesión con diferentes cuentas, puede ser confuso saber cómo quién estás conectado. Para verificar tu identidad (ver qué cuenta estás usando actualmente) puedes ejecutar el comando `id`.
+
+El comando `id` informará la identidad actual, tanto por nombre del usuario como por el identificador de usuario. Además de proporcionar la información de la cuenta de usuario, también se muestra la pertenencia a un grupo. Sin argumentos, el comando `id` mostrará tu identidad. Cuando un nombre de usuario viene como argumento, tal como `id root`, el comando muestra otra información de cuenta:
+
+```bash
+sysadmin@localhost:~$ id
+uid=1001(sysadmin) gid=1001(sysadmin) groups=1001(sysadmin),4(adm),27(sudo) context=unconfined_u:unconfined_r:unconfined t:s0-s0:c0.c1023
+sysadmin@localhost:~$
+sysadmin@localhost:~$ id  root
+uid=0(root) gid=0(root) groups=0(root)
+sysadmin@localhost:~$
+```
+
+La salida incluye un contexto Linux mejorado de seguridad (SELinux), la parte *context* = de la salida, un tema que está fuera del alcance de este curso.
+
+## 13.2.5 Las Cuentas de Sistema
+
+Los usuarios iniciarán sesión en el sistema utilizando cuentas de usuario regulares. Normalmente, estas cuentas tienen valores UID superiores a 500 (en algunos sistemas 1000).
+
+El usuario *root* tiene acceso especial al sistema. Como se mencionó anteriormente, este acceso especial en realidad se proporciona a la cuenta con el UID de 0.
+
+Hay cuentas adicionales que no están diseñadas para que los usuarios inicien sesión. Estas cuentas, normalmente de UID 1 al UID 499 se llaman cuentas del sistema y están diseñadas para proporcionar cuentas para los servicios que se ejecutan en el sistema.
+
+Las cuentas del sistema tienen algunos campos en los archivos */etc/passwd* y */etc/shadow* que son diferentes a otras cuentas. Por ejemplo, en el archivo */etc/passwd*, las cuentas de sistema tendrán un programa de no iniciar sesión en el campo del «login shell»:
+
+`bin:x:1:1:bin:/bin:/sbin:/sbin/nologin`
+
+En el archivo */etc/shadow*, las cuentas del sistema tendrán típicamente el carácter * en lugar del campo de contraseña:
+
+`bin:*:15513:0:99999:7:::`
+
+Hay algunas cosas importantes que debes recordar sobre las cuentas de sistema:
+
+- La mayoría son necesarias para que el sistema funcione correctamente.
+
+- No debes eliminar una cuenta del sistema a menos que estés absolutamente seguro de que eliminando la cuenta no causará problemas.
+
+- Según vayas teniendo más experiencia, debes aprender lo que hace cada cuenta del sistema. Los administradores del sistema tienen la tarea de garantizar la seguridad en el sistema esto incluye correctamente asegurar las cuentas del sistema.
+
+## 13.3 Cuentas de Grupo
+
+Tu nivel de acceso a un sistema no está determinado únicamente por tu cuenta de usuario. Cada usuario puede ser miembro de uno o más grupos, lo que también puede afectar tu nivel de acceso al sistema.
+
+Tradicionalmente, los sistemas UNIX limitaban a los usuarios para que pertenecieran a no más de un total de dieciséis grupos, pero los últimos núcleos de Linux soportan usuarios con más de sesenta y cinco mil membresías .
+
+Como ya hemos visto, el archivo */etc/passwd* define la pertenencia al grupo primario de un usuario. La pertenencia a un grupo suplementario (o pertenencia a un grupo secundario), así como los propios grupos, se definen en el archivo */etc/group*.
+
+Para ver la información sobre un grupo específico, puede utilizarse el comando `grep` o `getent`. Por ejemplo, los siguientes comandos mostrarán la información de cuenta de grupo *mail*:
+
+```bash
+sysadmin@localhost:~$ grep mail /etc/group
+mail:x:12:mail,postfix
+sysadmin@localhost:~$ getent group mail
+mail:x:12:mail,postfix
+```
+
+## 13.3.1 El Archivo /etc/group
+
+El archivo */etc/group* es un archivo delimitado por dos puntos con los siguientes campos:
+
+`group_name:password_placeholder:GID:user_list`
+
+La siguiente tabla describe los campos del archivo /etc/group con más detalle, utilizando una línea que describe a una cuenta de grupo típica:
+
+`mail:x:12:mail,postfix`
+
+| Campo | Ejemplo | Descripción |
+|---|---|---|
+| group_name	| mail	| Este campo contiene el nombre del grupo. Igual que en el caso de los nombres de usuario, para las personas es más fácil recordar los nombres de grupo. El sistema utiliza típicamente IDs de grupos (GID) en lugar de nombres de grupo. |
+| password_placeholder | x	| Aunque hay contraseñas para grupos, raramente se utilizan en Linux. Si el administrador creará una contraseña de grupo, se almacenaría en un archivo diferente (*/etc/gshadow*) ya que la contraseña de grupo ya no se almacena en el archivo */etc/group*. La *x* en este campo se utiliza para indicar que la contraseña no se almacena en este archivo. Las contraseñas de grupo están más allá del alcance de este curso. |
+| GID | 12	| Cada grupo está asociado con un ID de grupo único (GID) que se coloca en este campo. |
+| user_list	| mail,postfix | Este último campo se utiliza para indicar quién es un miembro del grupo. Mientras que la pertenencia a un grupo primario se define en el archivo */etc/passwd*, los usuarios que se asignan a los grupos adicionales tendrían su nombre de usuario en este campo del archivo */etc/group*.<br>En este caso, los usuarios *mail* y *postfix* son miembros secundarios del grupo *mail*.<br>Es muy común para un nombre de usuario aparecer también como un nombre del grupo. También es común que un usuario pertenezca a un grupo con el mismo nombre. |
+
+## 13.3.2 Visualizando la Información del Grupo
+
+Los grupos se utilizan principalmente para controlar el acceso a los archivos. De forma predeterminada, cualquier nuevo archivo que un usuario crea, será propiedad del grupo primario del usuario. El comando `id` se puede utilizar para verificar el grupo primario del usuario:
+
+```bash
+sysadmin@localhost:~$ id -g
+1001
+```
+
+Los usuarios también pueden acceder a los archivos y dispositivos si son miembros de los grupos secundarios. El comando `id` se puede utilizar también para verificar la pertenencia a los grupos secundarios del usuario:
+
+```bash
+sysadmin@localhost:~$ id -G
+1001 4 27
+```
+
+Sin pasar opciones al comando, `id` listará tanto la pertenencia a los grupos primarios como a los grupos secundarios:
+
+```bash
+sysadmin@localhost:~$ id
+uid=1001(sysadmin) gid=1001(sysadmin) groups=1001(sysadmin),4(adm),27(sudo)
+```
+
+Se puede agregar un nombre de usuario para determinar los grupos de un usuario específico:
+
+```bash
+sysadmin@localhost:~$ id sysadmin
+uid=1001(sysadmin) gid=1001(sysadmin) groups=1001(sysadmin),4(adm),27(sudo)
+```
+
+Esto se alinea con el contenido del archivo */etc/group*, cuando se revela la búsqueda para el *sysadmin*:
+
+```bash
+sysadmin@localhost:~$ cat /etc/group | grep sysadmin
+adm:x:4:sysadmin
+sudo:x:27:sysadmin
+sysadmin:x:1001:
+```

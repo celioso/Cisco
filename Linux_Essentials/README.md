@@ -11929,7 +11929,7 @@ sysadmin 	pts/0       2013-10-11 09:59 (:0.0)
 sysadmin 	pts/1       2013-10-11 10:00 (example.com)
 ```
 
-La tabla siguiente describe la salida del comando who:
+La tabla siguiente describe la salida del comando `who`:
 
 | Columna	| Ejemplo	| Descripción |
 |---|---|---|
@@ -11944,3 +11944,77 @@ sysadmin@localhost:~$ who -b -r
          system boot  	2013-10-11 09:54
          run-level 5    2013-10-11 09:54
 ```
+
+## 13.8 Usando el Comando w
+
+El comando `w` proporciona una lista más detallada sobre los usuarios que actualmente están en el sistema que el comando `who`. También proporciona un resumen del estado del sistema. Por ejemplo:
+
+```bash
+sysadmin@localhost:~$ w
+ 10:44:03 up 50 min,  4 users,  load average: 0.78, 0.44, 0.19
+USER     	TTY     FROM	    LOGIN@   IDLE  	JCPU   	PCPU    WHAT
+root     	tty2    -           10:00    43:44 	0.01s  	0.01s   -bash
+sysadmin 	tty1    :0          09:58    50:02	5.68s 	0.16s   pam: gdm-password
+sysadmin	pts/0   :0.0        09:59    0.00s      0.14s  	0.13s   ssh 192.168.1.2
+sysadmin 	pts/1   example.com 10:00    0.00s  	0.03s  	0.01s   w
+```
+
+La primera línea de la salida del comando `w` es idéntica a la comando `uptime`. Muestra la hora actual, cuánto tiempo el sistema ha estado funcionando, el número total de inicios de sesión actuales (usuarios) y el promedio de la carga en el sistema en los últimos 1, 5 y 15 minutos. El *promedio de carga* es el uso de la CPU donde un valor de 100 significaría un uso completo de la CPU durante ese periodo de tiempo.
+
+La tabla siguiente describe el resto de la salida del comando `w`:
+
+| Column	| Ejemplo	| Descipción |
+|---|---|---|
+| USER | root | Esta columna indica el nombre del usuario que inició la sesión. |
+| TTY	| tty2	| Esta columna indica en qué ventana de terminal el usuario está trabajando. |
+| FROM	| example.com	| Desde dónde inició sesión el usuario. |
+| LOGIN@	| 10:00	| Cuándo inició sesión el usuario. |
+| IDLE	| 43:44	| Cuánto tiempo el usuario ha estado inactivo desde la ejecución del último comando. |
+| JCPU	| 0.01s	| El tiempo total de cpu (*s*=segundos) utilizado por todos los procesos (programas) ejecutados desde el inicio de sesión. |
+| PCPU	| 0.01s	| El tiempo total de cpu para el proceso actual. |
+| WHAT	| -bash	| El proceso actual que está ejecutando el usuario. |
+
+## 13.1 Introducción
+
+Este es Lab 13: Ve Quién está en tu Sistema. Mediante la realización de esta práctica de laboratorio, los estudiantes serán capaces de monitorear quién ha estado tratando de iniciar sesión en el sistema, y ​​ver cualquiera de sus procesos en ejecución.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+- Aprender la diferencia entre la cuenta de superusuario y cuentas de usuario normales.
+- Ver información de la cuenta de usuario.
+
+## 13.2 Cuentas de Usuario y de Grupo
+
+En esta tarea aprenderás acerca de las cuentas de usuario y de los archivos y los comandos que despliegan la información de la cuenta del usuario en la pantalla.
+
+## 13.2.1 Paso 1
+
+Las cuentas del usuario y del sistema se definen en los archivos */etc/passwd* y */etc/shadow*. Ver las primeras diez líneas del archivo */etc/passwd*:
+
+`head /etc/passwd`
+
+El resultado debe ser similar al siguiente:
+
+```bash
+sysadmin@localhost:~$ head /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/bin/sh
+man:x:6:12:man:/var/cache/man:/bin/sh
+lp:x:7:7:lp:/var/spool/lpd:/bin/sh
+mail:x:8:8:mail:/var/mail:/bin/sh
+news:x:9:9:news:/var/spool/news:/bin/sh
+sysadmin@localhost:~$
+```
+
+Observa que este archivo contiene una base de datos delimitada por dos puntos de todas las cuentas de usuario y de sistema disponibles en este sistema.
+
+Las cuentas de usuario se asignan a los usuarios para permitirles el acceso al sistema operativo. La cuenta *sysadmin* que utilizaste para iniciar la sesión en el sistema es una cuenta de usuario normal.
+
+La cuenta *root* es una cuenta de usuario especial que tiene acceso prácticamente ilimitado y control sobre el sistema. A veces se denomina cuenta de «superusuario».
+
+Las cuentas del sistema son utilizadas por el sistema operativo o los servicios de procesos que se ejecutan en él. Al no tener estos archivos ejecutádose como usuario root , el sistema se mantiene más seguro mediante la limitación del daño que una cuenta de servicio compuesta podría causar. Las cuentas del sistema no son utilizadas directamente por los usuarios regulares.
+

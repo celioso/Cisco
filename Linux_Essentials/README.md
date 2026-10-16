@@ -12018,3 +12018,18 @@ La cuenta *root* es una cuenta de usuario especial que tiene acceso prácticamen
 
 Las cuentas del sistema son utilizadas por el sistema operativo o los servicios de procesos que se ejecutan en él. Al no tener estos archivos ejecutádose como usuario root , el sistema se mantiene más seguro mediante la limitación del daño que una cuenta de servicio compuesta podría causar. Las cuentas del sistema no son utilizadas directamente por los usuarios regulares.
 
+## 13.2.2 Paso 2
+
+Utiliza el comando `grep` para ver el registro de tu cuenta *sysadmin*:
+
+`grep sysadmin /etc/passwd`
+
+```bash
+sysadmin@localhost:~$ grep sysadmin /etc/passwd
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
+sysadmin@localhost:~$
+```
+
+Mediante el uso del comando `grep`, la salida sólo incluye información de la cuenta para ese único nombre de usuario.
+
+Otra forma de recuperar la información de la cuenta de un usuario es ejecutando el siguiente comando: `getent passwd username`. El comando `getent` tiene la ventaja sobre el comando `grep`, ya que también puede acceder a las cuentas de usuario que no están definidas localmente. En otras palabras, el comando `getent` puede obtener información sobre el usuario para los usuarios que se pueden definir en los servidores de directorio de red, tales como LDAP, NIS, el dominio de Windows, o los servidores de dominio de Active Directory.

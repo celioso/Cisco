@@ -12033,3 +12033,38 @@ sysadmin@localhost:~$
 Mediante el uso del comando `grep`, la salida sólo incluye información de la cuenta para ese único nombre de usuario.
 
 Otra forma de recuperar la información de la cuenta de un usuario es ejecutando el siguiente comando: `getent passwd username`. El comando `getent` tiene la ventaja sobre el comando `grep`, ya que también puede acceder a las cuentas de usuario que no están definidas localmente. En otras palabras, el comando `getent` puede obtener información sobre el usuario para los usuarios que se pueden definir en los servidores de directorio de red, tales como LDAP, NIS, el dominio de Windows, o los servidores de dominio de Active Directory.
+
+## 13.2.3 Paso 3
+
+Utiliza el comando `getent` para recuperar la información acerca del administrador de sistemas:
+
+`getent passwd sysadmin`
+
+```bash
+sysadmin@localhost:~$ getent passwd sysadmin
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash 
+sysadmin@localhost:~$
+```
+Nota: En este caso no tenemos ninguna cuenta de red, por lo que el resultado mostrado es como ver el archivo */etc/passwd*.
+
+## 13.2.4 Paso 4
+
+Puedes ver la documentación de los campos en el archivo */etc/passwd* con el siguiente comando:
+
+`man 5 passwd`
+
+Recuerda que mientras visualizas una página man, puedes presionar la tecla **Entrar** para moverte hacia adelante línea por línea, **Espacio** página por página y **q** para salir.
+
+El archivo */etc/passwd* tiene los siguientes campos delimitados por los dos puntos:
+
+`account:password:UID:GID:GECOS:directory:shell`
+
+Desglose de estos campos:
+
+a. El campo de la cuenta es el nombre de usuario.
+b. Este campo se utilizó originalmente para almacenar la contraseña, sin embargo, ahora normalmente la contraseña se almacena en el archivo *etc/shadow*. La *x* sirve como un indicador.
+c. UID es el número de identificación del usuario.
+d. GID es el número de identificación de grupo principal del usuario.
+e. GECOS es el campo que normalmente se utiliza para almacenar el nombre completo del usuario.
+f. El directorio es el directorio inicial («home») del usuario, donde se colocan después del primer registro en el sistema.
+g. El campo shell define el shell tal como */bin/bash* para un usuario normal, o */sbin/nologin* para una cuenta que utiliza el sistema o un servicio.

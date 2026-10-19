@@ -12068,3 +12068,28 @@ d. GID es el número de identificación de grupo principal del usuario.
 e. GECOS es el campo que normalmente se utiliza para almacenar el nombre completo del usuario.
 f. El directorio es el directorio inicial («home») del usuario, donde se colocan después del primer registro en el sistema.
 g. El campo shell define el shell tal como */bin/bash* para un usuario normal, o */sbin/nologin* para una cuenta que utiliza el sistema o un servicio.
+
+## 13.2.5 Paso 5
+
+Puedes consultar la información de la cuenta para tu cuenta, o una cuenta de usuario especificado, utilizando el comando `id`:
+
+```bash
+id
+id root
+```
+
+```bash
+sysadmin@localhost:~$ id
+uid=1001(sysadmin) gid=1001(sysadmin) groups=1001(sysadmin),4(adm),27(sudo
+sysadmin@localhost:~$ id root
+uid=0(root) gid=0(root) groups=0(root)
+sysadmin@localhost:~$
+```
+
+La salida de los comandos muestra tu identidad de usuario en forma de un número y un nombre: *uid=1001(sysadmin)*. También muestra tu identidad de grupo principal, *ggid=1001(sysadmin)*, y de todos los grupos a los que perteneces *groups=1001(sysadmin)*, *4(adm)* y *27(sudo)*.. En este caso, tu cuenta de usuario sólo pertenece a tres grupos.
+
+El archivo */etc/group*, junto con */etc/passwd*, determina tu pertenencia a grupos. Tu grupo principal predeterminado se determina haciendo coincidir tu GID ubicado en */etc/passwd* con el GID definido para un grupo en el */etc/group*. Cualquier pertenencias a grupos secundarios se definen en el archivo */etc/group*.
+
+El formato de las entradas en el archivo */etc/group* para cada línea es:
+
+`group_name:password:GID:user_list`

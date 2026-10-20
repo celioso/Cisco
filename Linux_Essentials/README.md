@@ -12093,3 +12093,48 @@ El archivo */etc/group*, junto con */etc/passwd*, determina tu pertenencia a gru
 El formato de las entradas en el archivo */etc/group* para cada línea es:
 
 `group_name:password:GID:user_list`
+
+## 13.2.6 Paso 6
+
+El comando `getent` puede recuperar información acerca de las entradas en el archivo */etc/group*. Utiliza el comando `getent` para recuperar la información acerca de *sysadmin* y los grupos *adm*:
+
+```text
+getent group sysadmin
+getent group adm
+```
+
+```bash
+sysadmin@localhost:~$ getent group sysadmin
+sysadmin:x:1001:
+sysadmin@localhost:~$ getent group adm
+adm:x:4:sysadmin
+sysadmin@localhost:~$
+```
+
+Los grupos se utilizan para controlar el acceso a los archivos.
+
+Por defecto cualquier archivo nuevo que creas será propiedad de tu grupo primario. Para tener todos los archivos nuevos que creas en propiedad de uno de tus grupos secundarios, utiliza el comando el newgrp. El formato básico de este comando es `newgrpgroup_name`. Tienes que ser miembro de un grupo para poder utilizar el comando `newgrp`. El comando id mostrará entonces ese `group_name` como tu grupo principal.
+
+Para cambiar la propiedad de grupo de uno de los archivos existentes que tu usuario posee, puedes utilizar el comando `chgrp`. El formato básico de este comando es `chgrpgroup_name file_name`.
+
+Tienes ser miembro de un grupo para cambiar una propiedad de grupo de los archivos a ese grupo y tienes que poseer el archivo.
+
+## 13.2.7 Paso 7
+
+Dos comandos con salida sencilla para comprender de tu identidad son `whoami` y `groups`. El comando `groups` también se puede utilizar para obtener la lista de grupos para otro usuario. Utiliza el comando `whoami` y `groups` para tu cuenta y el comando groups para el usuario root:
+
+```text
+whoami
+groups
+groups root
+```
+
+```bash
+sysadmin@localhost:~$ whoami
+sysadmin
+sysadmin@localhost:~$ groups
+sysadmin adm sudo
+sysadmin@localhost:~$ groups root
+root : root
+sysadmin@localhost:~$
+```

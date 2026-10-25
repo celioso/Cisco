@@ -12138,3 +12138,62 @@ sysadmin@localhost:~$ groups root
 root : root
 sysadmin@localhost:~$
 ```
+
+## 13.3 ¿Quién está en el Sistema?
+
+En esta tarea vas a ejecutar algunos comandos para ver quién está registrado en el sistema.
+
+## 13.3.1 Paso 1
+
+Utiliza el comando who para obtener la lista actual de los usuarios en el sistema:
+
+`who`
+```bash
+sysadmin@localhost:~$ who                                                 
+sysadmin tty      Apr 11 14:32                                           
+sysadmin@localhost:~$
+```
+
+La salida del comando `who` tiene cuatro columnas:
+
+**El nombre de usuario**: la primera columna muestra el nombre del usuario (sysadmin en el ejemplo anterior).
+
+**La terminal**: la segunda columna muestra un identificador para un tipo de la terminal (tty en el ejemplo anterior). Cada terminal tiene un nombre que se utiliza por el superusuario para controlar los procesos.
+
+**Fecha/hora**: la tercera columna es la fecha y hora en que se inició la sesión (Apr 11 14:32 en la primera línea de salida en el ejemplo anterior).
+
+**Host**: aunque no hay una salida para la cuarta columna en este caso, puede ser un nombre o una dirección IP de un host local o remoto. Las siguientes formas indican los inicios de sesión locales: (:#) o (:#.#).. De lo contrario, un host remoto se puede mostrar por nombre (si es resoluble) o por dirección IP.
+
+## 13.3.2 Paso 2
+
+Utiliza el comando `w` para obtener una visión más detallada de los usuarios que están actualmente en tu sistema:
+
+`w`
+
+Tu salida del comando `w` muestra:
+
+```bash
+sysadmin@localhost:~$ w                                                  
+ 15:17:08 up 6 days, 15 min,  1 user,  load average: 0.39, 0.34, 0.37     
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT      
+sysadmin console                   14:32    4.00s  0.16s  0.00s w         
+sysadmin@localhost:~$
+```
+
+Un resumen de cuánto tiempo el sistema ha estado funcionando, cuántos usuarios están conectados y la carga promedio del sistema durante los últimos 1, 5 y 15 minutos.
+
+Una entrada para cada usuario con su nombre de usuario, nombre tty, host, el tiempo del inicio de sesión, el tiempo de inactividad, JCPU (tiempo de CPU utilizado por trabajos en segundo plano), PCPU (tiempo de CPU utilizado por el proceso actual) y lo que se está ejecutando en la línea de comando actual.
+
+## 13.4 El Usuario root
+
+En esta tarea, aprenderás cómo acceder a la cuenta de usuario *root* en un par de maneras diferentes.
+
+La cuenta del usuario root es especial en Linux, ya que tiene una cantidad prácticamente ilimitada de control y acceso al sistema. En realidad no es el nombre del usuario, pero el UID con un valor de cero que otorga esta autoridad.
+
+En general, no se considera una buena práctica iniciar sesión en el sistema como usuario root. Esto es especialmente cierto en el entorno gráfico.
+
+Para acceder a la cuenta de usuario root, normalmente se utilizan los comandos `su` o `sudo`.
+
+El comando `su` por lo general se utiliza para cambiar de usuario para iniciar un nuevo shell como otro usuario; el valor predeterminado es el usuario root. El comando `su` se utiliza normalmente cuando necesitas ejecutar una serie de comando como usuario root.
+
+El comando `sudo` se suele utilizar para ejecutar un solo comando como usuario root colocando el prefijo `sudo` a ese comando. El comando `sudo` debe ser configurado por el usuario root antes de que un usuario normal pueda utilizarlo.

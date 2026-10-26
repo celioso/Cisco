@@ -12197,3 +12197,81 @@ Para acceder a la cuenta de usuario root, normalmente se utilizan los comandos `
 El comando `su` por lo general se utiliza para cambiar de usuario para iniciar un nuevo shell como otro usuario; el valor predeterminado es el usuario root. El comando `su` se utiliza normalmente cuando necesitas ejecutar una serie de comando como usuario root.
 
 El comando `sudo` se suele utilizar para ejecutar un solo comando como usuario root colocando el prefijo `sudo` a ese comando. El comando `sudo` debe ser configurado por el usuario root antes de que un usuario normal pueda utilizarlo.
+
+## 13.5 Usando el Comando su
+
+El comando `su` te permite ejecutar el shell como un usuario diferente. Por defecto, si no se especifica una cuenta de usuario, el comando `su` abre un nuevo shell como usuario root. Aunque el comando `su` es más frecuentemente usado para cambiar al usuario root, también puede cambiar a otros usuarios.
+
+Una opción común que se utiliza con el comando `su` es la opción `-l`, que hace que el nuevo shell sea un shell de inicio de sesión. Utilizando el comando `su` con una opción de shell de inicio de sesión es a menudo importante para asegurar que cualquier comando ejecutado se ejecute correctamente, ya que el shell del inicio de sesión configura totalmente el nuevo shell con la configuración del nuevo usuario. Un non-login shell sólo cambia el UID, pero no conecta al usuario completamente. La opción `-l` puede ser abreviada simplemente como *-* o deletreada como `--login`.
+
+Ya que la cuenta root se utiliza de forma predeterminada con el comando `su`, los siguientes dos comandos son maneras equivalentes de iniciar un shell como usuario root:
+
+```bash
+su - root
+su -
+```
+
+Después de presionar **Entrar** para ejecutar uno de estos comandos, el usuario debe proporcionar la contraseña del usuario root para iniciar el shell como usuario root. Si no sabes la contraseña de la cuenta a la que te estás moviendo, entonces el comando `su` fallará.
+
+Después de usar el shell iniciado con el comando `su` para realizar las tareas administrativas necesarias, vuelve a tu shell original (y a la cuenta de usuario original) mediante el comando `exit`.
+
+```bash
+sysadmin@localhost:~$ su -
+Password:
+root@localhost:~# id
+uid=0(root) gid=0(root) groups=0(root)
+root@localhost:~# exit
+logout       
+sysadmin@localhost:~$ id
+uid=1001(sysadmin) gid=1001(sysadmin) groups=1001(sysadmin),4(adm),27(sudo)
+sysadmin@localhost:~$
+```
+
+## 13.6 Utilizando el comando sudo
+
+En las distribuciones que no permiten que el usuario root acceda directamente o a través del comando `su`, el proceso de instalación configura automáticamente una cuenta de usuario para poder utilizar el comando `sudo` para ejecutar los comandos como si fueran ejecutados por el usuario root.
+
+Igual que el comando `su`, el comando `sudo` asume por defecto que la cuenta del usuario root debe utilizarse para ejecutar comandos; para especificar una cuenta de usuario diferente, utiliza la opción `-u`.
+
+Cuando utilizas el comando `sudo` para ejecutar un comando como usuario root, el comando pedirá la contraseña del usuario (no la del usuario root). Esta es una característica de seguridad que impide el acceso root no autorizados si el usuario deja su computadora desatendido. El prompt de la contraseña no aparecerá de nuevo mientras el usuario continúa ejecutando comandos `sudo` con menos de cinco minutos de diferencia.
+
+Utilizar el comando `sudo` para ejecutar un comando de administración resultará en una entrada en un archivo de registro. Esta entrada incluye el nombre de usuario que ejecuta el comando, el comando ejecutado y la fecha y hora cuando se ejecutó el comando. Esto permite mayor rendición de cuentas en comparación con un sistema donde muchos usuarios saben la contraseña de root y pueden entrar directamente como root o usar el comando `su` para ejecutar los comandos como el usuario root.
+
+Puedes utilizar el comando `sudo` para ejecutar un comando que requiera privilegios de root. Por ejemplo, es necesario ser un usuario root para poder ver el archivo */etc/shadow*. El comando `sudo head /etc/shadow` ejecuta el comando `head` como un usuario root:
+
+```bash
+sysadmin@localhost:~$ head /etc/shadow
+head: cannot open `/etc/shadow' for reading: Permission denied
+sysadmin@localhost:~$ sudo head /etc/shadow
+[sudo] password for sysadmin
+root:$6$4Yga95H9$8HbxqsMEIBTZ0YomlMffYCV9VE1SQ4T2H3SHXw41M02SQtfAdDVE9mqGp2hr20q
+.ZuncJpLyWkYwQdKlSJyS8.:16464:0:99999:7:::
+daemon:*:16463:0:99999:7:::
+bin:*:16463:0:99999:7:::
+sys:*:16463:0:99999:7:::
+sync:*:16463:0:99999:7:::
+games:*:16463:0:99999:7:::
+man:*:16463:0:99999:7:::
+lp:*:16463:0:99999:7:::
+mail:*:16463:0:99999:7:::
+news:*:16463:0:99999:7:::
+sysadmin@localhost:~$
+```
+
+Una gran ventaja por usar `sudo` para ejecutar los comandos administrativos es que reduce el riesgo de que un usuario accidentalmente ejecute un comando como root. La intención de ejecutar un comando es clara; el comando se ejecuta como root si tiene como prefijo el comando `sudo`. De lo contrario, se ejecuta el comando como un usuario normal.
+
+## 13.6.1 Configurar el Comando sudo
+
+Si el comando `sudo` no es configurado automáticamente durante la instalación, se puede configurar manualmente después de la instalación. Inicialmente, esto requerirá iniciar sesión como usuario root (o usando el comando `su` para cambiar a la cuenta de root), pero después de su configuración, los usuarios especificados podrán ejecutar los comandos `sudo`. Puedes configurar el acceso al comando `sudo` ejecutando el comando `visudo`.
+
+El comando `visudo` te pasa al programa editor, por defecto el editor `vi` (o `vim`) en la mayoría de los sistemas, el que puede ser un reto para los usuarios principiantes Linux. Para configurar otro editor, exporta la variable *EDITOR* con el valor del editor que prefieres. Por ejemplo, para usar el editor `gedit` en vez de `vi`/`vim`, ejecutarías el comando `export EDITOR=gedit` antes de ejecutar el comando `visudo`.
+
+Utilizando el comando `visudo` se abrirá el archivo de configuración `/etc/sudoers` para editar. Configuraciones avanzadas del comando `sudo` se pueden realizar a través de este archivo, pero están más allá del alcance de este curso. Básicamente, en este archivo se realizan las entradas para especificar qué usuario (usuarios) y en cuáles de las máquinas pueden utilizar el comando `sudo` para ejecutar los comandos como otro usuario.
+
+Esta entrada predeterminada...
+
+`root	ALL=(ALL) 	ALL``
+
+...se puede leer como, «el usuario root puede actuar como TODOS los usuarios en TODAS las máquina para ejecutar TODOS los comandos.» Para que un usuario como el *sysadmin* ejecute todos los comandos como todos los usuarios utilizando el comando `sudo`, podría añadirse una entrada similar a la siguiente:
+
+`sysadmin ALL=(ALL) ALL`

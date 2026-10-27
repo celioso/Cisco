@@ -12275,3 +12275,62 @@ Esta entrada predeterminada...
 ...se puede leer como, «el usuario root puede actuar como TODOS los usuarios en TODAS las máquina para ejecutar TODOS los comandos.» Para que un usuario como el *sysadmin* ejecute todos los comandos como todos los usuarios utilizando el comando `sudo`, podría añadirse una entrada similar a la siguiente:
 
 `sysadmin ALL=(ALL) ALL`
+
+## 13.7 Utilizando el Comando who
+
+El comando `who` muestra una lista de usuarios que están conectados actualmente en el sistema, desde dónde están conectados y cuándo iniciaron sesión. Mediante el uso de opciones este comando puede mostrar información como el nivel de ejecución actual (un estado funcional de la computadora) y la hora del arranque del sistema.
+
+Por ejemplo:
+
+```bash
+sysadmin@localhost:~$ who
+root     	tty2        2013-10-11 10:00
+sysadmin	tty1        2013-10-11 09:58 (:0)
+sysadmin 	pts/0       2013-10-11 09:59 (:0.0)
+sysadmin 	pts/1       2013-10-11 10:00 (example.com)
+```
+
+La tabla siguiente describe la salida del comando `who`:
+
+| Columna | Ejemplo | Descripción |
+|---|---|---|
+| username | root | Esta columna indica el nombre del usuario que inició la sesión. Ten en cuenta que por "sesión" nos referimos a «cualquier proceso de inicio de sesión y cualquier ventana de la terminal abierta». |
+| terminal | tty2 | Esta columna indica en qué ventana de terminal está trabajando el usuario.<br>Si el nombre de la terminal inicia con *tty*, entonces esto es una indicación de un inicio de sesión local, está es una terminal de línea de comandos regular.<br>Si el nombre de la terminal inicia con *pts*, entonces esto indica que el usuario está usando una pseudo terminal o corriendo un proceso que actúa como la terminal. Esto puede significar que el usuario tiene una aplicación de terminal corriendo en X Windows, como `gnome-terminal` o `xterm` o pueden haber usado un protocolo de red para conectarse al sistema, como `ssh` o `telnet`. |
+|date | 2013-10-11 10:00 (example.com) | l
+Esto indica cuándo inició sesión el usuario.<br>Después de la fecha y la hora en que el usuario inició sesión en el sistema, puede aparecer alguna información de localización.<br>Si la información de localización contiene un nombre de host, nombre de dominio o dirección IP, entonces el usuario inició sesión remotamente.<br>Si hay dos puntos y un número, entonces esto indica que han hecho un inicio de sesión gráfico local.<br>Si no se muestra información de localización en la última columna, entonces esto significa que el usuario inició sesión mediante un proceso de línea de comandos local. |
+
+Si quieres visualizar la información sobre el estado del sistema, el comando `who` puede hacerlo utilizando varias opciones. Por ejemplo, la opción `-b` mostrará la última vez que el sistema se inició (fue arrancado) y la opción `-r` mostrará el tiempo en el cual el sistema haya alcanzado un cierto nivel ejecución:
+
+```bash
+sysadmin@localhost:~$ who -b -r
+         system boot  	2013-10-11 09:54
+         run-level 5    2013-10-11 09:54
+```
+
+## 13.8 Usando el Comando w
+
+El comando `w` proporciona una lista más detallada sobre los usuarios que actualmente están en el sistema que el comando `who`. También proporciona un resumen del estado del sistema. Por ejemplo:
+
+```bash
+sysadmin@localhost:~$ w
+ 10:44:03 up 50 min,  4 users,  load average: 0.78, 0.44, 0.19
+USER     	TTY     FROM	    LOGIN@   IDLE  	JCPU   	PCPU    WHAT
+root     	tty2    -           10:00    43:44 	0.01s  	0.01s   -bash
+sysadmin 	tty1    :0          09:58    50:02	5.68s 	0.16s   pam: gdm-password
+sysadmin	pts/0   :0.0        09:59    0.00s      0.14s  	0.13s   ssh 192.168.1.2
+sysadmin 	pts/1   example.com 10:00    0.00s  	0.03s  	0.01s   w
+```
+La primera línea de la salida del comando `w` es idéntica a la comando `uptime`. Muestra la hora actual, cuánto tiempo el sistema ha estado funcionando, el número total de inicios de sesión actuales (usuarios) y el promedio de la carga en el sistema en los últimos 1, 5 y 15 minutos. El promedio de carga es el uso de la CPU donde un valor de 100 significaría un uso completo de la CPU durante ese periodo de tiempo.
+
+La tabla siguiente describe el resto de la salida del comando `w`:
+
+| Column | Ejemplo | Descipción |
+|---|---|---|
+| *USER* | *root* | Esta columna indica el nombre del usuario que inició la sesión. |
+| *TTY* | *tty2* | Esta columna indica en qué ventana de terminal el usuario está trabajando. |
+| *FROM* | *example.com* | Desde dónde inició sesión el usuario. |
+| *LOGIN@* | *10:00* | Cuándo inició sesión el usuario. |
+| *IDLE* | *43:44* | Cuánto tiempo el usuario ha estado inactivo desde la ejecución del último comando. |
+| *JCPU* | *0.01s* | El tiempo total de cpu (*s*=segundos) utilizado por todos los procesos (programas) ejecutados desde el inicio de sesión. |
+| *PCPU* | *0.01s* | El tiempo total de cpu para el proceso actual. |
+| *WHAT* | *-bash* | El proceso actual que está ejecutando el usuario. |

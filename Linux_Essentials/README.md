@@ -16,7 +16,7 @@ La definición de la palabra Linux depende del contexto en el que se utiliza. Li
 
 El término que más complica las cosas es UNIX. UNIX era originalmente un sistema operativo desarrollado en los laboratorios de Bell AT&T en la década de 1970. Éste fue modificado y bifurcado (es decir, las personas lo modificaron y estas modificaciones sirvieron de base para otros sistemas). En la actualidad hay muchas variantes de UNIX. Sin embargo, UNIX es ahora una marca registrada y una especificación, propiedad de un consorcio industrial llamado Open Group. Sólo el software que ha sido certificado por el Open Group puede llamarse UNIX. A pesar de la adopción de todos los requisitos de la especificación de UNIX, Linux no ha sido certificado. ¡Eso significa que Linux realmente no es un UNIX! Es sólo... como UNIX.
 
-##1.2.1 Rol del Kernel
+## 1.2.1 Rol del Kernel
 
 El kernel del sistema operativo es como un controlador de tráfico aéreo en un aeropuerto. El kernel determina que programa obtiene que pedazos de memoria, arranca y mata a los programas, y se encarga de mostrar texto en un monitor. Cuando una aplicación necesita escribir en disco, debe pedir al sistema operativo que lo haga. Si dos aplicaciones piden el mismo recurso, el kernel decide cuál de las dos lo recibe y en algunos casos, mata a una de las aplicaciones para salvar el resto del sistema.
 
@@ -12212,3 +12212,209 @@ sysadmin@localhost:~$
 ```
 
 El resultado muestra que el comando `visudo` falla debido a que intentó modificar el archivo */etc/sudoers*, un archivo que los usuarios normales no pueden modificar debido a los permisos. Este archivo controla el acceso al comando `sudo` y nunca debe ser modificado directamente, sino más bien con el comando `visudo`.
+
+## 13.4.2 Paso 2
+
+Cambia el usuario al usuario root y proporciona la contraseña root de *netlab123* cuando se te solicite:
+
+```bash
+su -
+netlab123
+```
+```bash
+sysadmin@localhost:~$ su -
+Password:
+root@localhost:~#
+```
+El guión después del comando `su` es una abreviatura de la opción `-l`, que hace que la entrada realizada por `su` sea un inicio de sesión completo mediante la ejecución de los scripts de entrada que pertenecen al usuario root.
+
+Sin `-`, o `-l`, el comando `su` cambiará tu identidad de usuario, pero no va a ejecutar las secuencias de comandos de inicio de sesión del nuevo usuario. Esto puede causar algunos problemas, sobre todo cuando se cambia a la cuenta *root*. En la mayoría de los casos cuando cambias de usuario, quieres llevar a cabo un inicio de sesión completo para que puedas inicializar las variables de entorno, las funciones y los alias que normalmente se inicializan para un usuario.
+
+## 13.4.3 Paso 3
+
+Ahora que ya estás en el sistema como usuario root, deberías poder ejecutar el comando para configurar el acceso sudo:
+
+`visudo`
+
+```bash
+root@localhost:~# visudo
+```
+
+## 13.4.4 Paso 4
+
+Para habilitar el acceso básico a la utilización del comando `sudo`, debes añadir una entrda al archivo */etc/sudoers* que estás editando ahora. Ya que estás en el `vi` editor por defecto, escribe lo siguiente para encontrar esta entrada:
+
+| Qué escribir | Significado |
+| G | Ir al final del archivo |
+| o | Abrir una nueva línea debajo del cursor |
+| sysadmin ALL=(ALL) ALL | La entrada que permite al administrador de sistema acceder al `sudo` |
+| ESC | La tecla **Escape** regresa al modo de comando |
+| :wq | Guardar los cambios y salir |
+
+```bash
+#includedir /etc/sudoers.d
+sysadmin ALL=(ALL) ALL
+-- INSERT --
+```
+
+Si introduces los datos al archivo correctamente, debes regresar al prompt de shell. Sin embargo, si al salir de la edición, se te presenta un mensaje que dice «What now», presiona **Entrar** para ver tus opciones. Se recomienda que escribas *x* para salir sin guardar los cambios en el archivo *sudoers* y repitas este paso.
+
+## 13.4.5 Paso 5
+
+Vuelve a la cuenta *sysadmin* para verificar que `sudo` proporciona acceso root escribiendo lo siguiente:
+
+`exit`
+
+```bash
+root@localhost:~#  exit
+logout
+sysadmin@localhost:~$
+```
+
+## 13.4.6 Paso 6
+
+Trata de ver las primeras líneas del archivo */etc/shadow*, un archivo que contiene las contraseñas cifradas de los usuarios y la información sobre el su caducidad:
+
+`head -3 /etc/shadow`
+
+```bash
+sysadmin@localhost:~$ head -3 /etc/shadow
+head: cannot open `/etc/shadow' for reading: Permission denied
+sysadmin@localhost:~$
+```
+
+Observa el mensaje de error del comando *head*. Esto se debe a que el usuario *sysadmin* no tiene derechos para ver este archivo. El usuario root, sin embargo, puede mostrar este archivo.
+
+## 13.4.7 Paso 7
+
+Ten en cuenta que los permisos en el archivo */etc/shadow* indican que sólo los miembros del grupo *shadow* tienen permiso para ver el archivo:
+
+`ls -l /etc/shadow`
+
+Ten en cuenta que el usuario *root* puede ver cualquier archivo. Esto se debe a que la cuanta *root* tiene privilegios especiales que trascienden los permisos de archivos regulares.
+
+```bash
+sysadmin@localhost:~$ ls -l /etc/shadow
+-rw-r----- 1 root shadow 838 Mar 14 17:34 /etc/shadow
+sysadmin@localhost:~$
+```
+
+## 13.4.8 Paso 8
+
+Utiliza el comando *sudo* para ver las primeras líneas del archivo */etc/shadow*:
+
+```text
+sudo head -3 /etc/shadow
+(proporciona la contraseña del usuario sysadmin: netlab123)
+```
+```bash
+sysadmin@localhost:~$ sudo head -3 /etc/shadow
+[sudo] password for sysadmin:
+root:$6$T3W2rbrt$N/2Jrt1EzQ8TqOvxWkYjEpIf3tCbPOyFwU7ZYkToosXB4AGmtb0.W6f8Gb7Vmihnj76yZezNPwMbTGoQFs5Kx1:16874:0:99999:7:::
+daemon:*:16863:0:99999:7:::
+bin:*:16863:0:99999:7:::
+sysadmin@localhost:~$
+```
+Nota importante: La contraseña que proporcionaste era para tu cuenta *sysadmin*, no para la cuenta *root*. Una vez configurado el `sudo` para tu cuenta, no necesitas saber la contraseña *root* para ejecutar los comandos `sudo` como el usuario *root*.
+
+## 14.1 Introducción
+
+En el capítulo anterior viste que la información de la cuenta de usuario se almacena en el archivo */etc/passwd* y la información de autenticación de usuario (datos de la contraseña) se almacena en el archivo */etc/shadow*. La creación de un nuevo usuario puede lograrse añadiendo una nueva línea manualmente a cada uno de estos archivos, pero generalmente no es la técnica recomendada. Mediante el uso de un comando adecuado para agregar un nuevo usuario, estos archivos pueden ser modificados automáticamente y de forma segura. Si fueras a modificar manualmente estos archivos, corres el riesgo de cometer un error que podría impedir el acceso normal de todos los usuarios.
+
+En algunas distribuciones, creando una nueva cuenta de usuario automáticamente se crea una cuenta de grupo para el usuario, llamado un *Grupo Privado de Usuario*(UPG «User Private Group» en inglés). En estos sistemas, el grupo y nombre de usuario serían los mismos y el único miembro de este nuevo grupo sería el nuevo usuario.
+
+Para las distribuciones que no crean un UPG, los nuevos usuarios reciben el grupo de "users" («usuarios» en español) como su grupo primario. El administrador puede crear manualmente cuentas de grupo que sean privadas para el usuario, pero es más común que el administrador cree grupos para varios usuarios que deben colaborar. Las cuentas de usuario pueden ser modificadas en cualquier momento para agregar o quitar membresías de cuenta de grupo, pero los usuarios deben pertenecer por lo menos a un grupo para usarlo como su grupo primario.
+
+Antes de empezar a crear los usuarios, debes planear cómo vas a utilizar los grupos. Los usuarios pueden crearse con membresías en grupos que ya existen o los usuarios existentes pueden ser modificados para tener membresías en grupos existentes.
+
+Si ya tienes previsto qué usuarios y grupos quieres crear, es más eficiente primero crear sus grupos y después crear los usuarios con sus pertenencias a grupos. Por otra parte, si creas primero tus usuarios, y luego sus grupos, necesitarás un paso extra para modificar los usuarios para que sean miembros de sus grupos.
+
+![Who is LPI?](images/13-LPI-Graphics.png)
+
+**¿Quién es LPI?** El Linux Professional Institute (o «Instituto Profesional de Linux» en español) es una organización comprometida en ayudar miembros de la comunidad de Linux y de código abierto, crecer en sus oportunidades profesionales, ofreciendo recursos profesionales y certificaciones de habilidades.
+
+## 14.2 Crear un Grupo
+
+La razón más común para crear un grupo es que los usuarios puedan compartir archivos. Un ejemplo de esto podría ser cuando hay varias personas trabajando juntas en el mismo proyecto y necesitan colaborar en documentos almacenados en archivos para el proyecto. En este escenario, el administrador puede hacer a estas personas miembros de un grupo común, cambiar la propiedad del directorio al nuevo grupo y establecer permisos en el directorio que sólo permitirá a los miembros del grupo acceder a los archivos.
+
+Después de crear o modificar un grupo, puedes verificar los cambios mediante la visualización de la información de configuración del grupo en el archivo */etc/group* con el comando `grep`. Si trabajas con los servicios de autenticación de red, entonces el comando `getent` puede mostrar los grupos locales y en la red. Para uso local, estos comandos muestran el mismo resultado, en este caso para el grupo de root:
+
+```bash
+root@localhost:~# grep root /etc/group
+root:x:0:
+root@localhost:~# getent group root
+root:x:0:
+```
+
+El comando `groupadd` puede ser ejecutado por el usuario root para crear un nuevo grupo. El comando requiere solamente el nombre del grupo que se creará. La opción `-g` puede utilizarse para especificar un `id` de grupo para el grupo nuevo:
+
+```bash
+root@localhost:~# groupadd -g 506 research
+root@localhost:~# grep research /etc/group
+research:x:506:
+```
+Si no se proporciona la opción `-g`, el comando `groupadd` proporcionará automáticamente un GID para el grupo nuevo. Para lograr esto, el comando groupadd ve el archivo */etc/group* y utiliza un número que es de un valor mayor que el mayor número GID actual. La ejecución de los comandos siguientes ilustra esto:
+
+```bash
+root@localhost:~# grep research /etc/group
+research:x:506:
+root@localhost:~# groupadd development
+root@localhost:~# grep development /etc/group
+development:x:507:
+```
+
+## 14.2.1 Consideraciones para el ID de Grupo
+
+En algunas distribuciones de Linux, particularmente las basadas en Red Hat, cuando se crea un ID de usuario (UID), también se crea un grupo privado de usuario (UPG) con ese usuario como único miembro. En estas distribuciones, el UID del usuario y el id de grupo privado deben coincidir (tener el mismo número).
+
+Por lo tanto, no debes crear los GIDs en los mismos rangos numéricos donde se espera crear identificadores de usuario (UIDs), con el fin de evitar un conflicto entre un GID creado frente a un número UPG que se crea para que coincida con un UID.
+
+Recuerda que los GID bajo 500 están reservados para uso del sistema. Puede haber ocasiones en las que quieras asignar un GID menor de 500. Para lograr esto, utiliza *-r*. La opción *-r* asignará un GID al nuevo grupo que será menor que el estándar más bajo de UID:
+
+```bash
+root@localhost:~# groupadd -r sales
+root@localhost:~# getent group sales 
+sales:x:491:
+```
+
+## 14.2.2 Consideraciones para Nombrar un Grupo
+
+Seguir estas directrices para los nombres de grupo te ayudará a seleccionar un nombre de grupo que sea portable (funcione correctamente con otros sistemas o servicios):
+
+- El primer carácter del nombre debe ser un guión bajo *_* o un carácter alfabético en minúsculas *a-z*.
+- En la mayoría de las distribuciones de Linux se permite hasta 32 caracteres, pero usar más de 16 puede ser problemático, ya que algunas distribuciones no pueden aceptar más de 16.
+- Después del primer carácter, los caracteres restantes pueden ser alfanuméricos, un guión *-* o un guión bajo *_*.
+- El último carácter no debe ser un guión *-*.
+
+Lamentablemente estas pautas no se aplican siempre. El problema no es que el comando `groupadd` fracase, sino que otros comandos o servicios del sistema no funcionen correctamente.
+
+## 14.3 Modificar un Grupo
+
+El comando `groupmod` se puede utilizar para cambiar el nombre del grupo (con la opción `-n`) o cambiar el GID (con la opción `-g`) para el grupo.
+
+**ADVERTENCIA**: Cambiar el nombre del grupo puede causar confusión para los usuarios que estaban familiarizados con el antiguo nombre y no hayan sido informados del nombre nuevo. Sin embargo, cambiar el nombre del grupo no causará problemas con el acceso a los archivos, ya que los archivos son propiedad del GID, no de los nombres de grupo. Por ejemplo:
+
+```bash
+root@localhost:~# ls -l index.html
+-rw-r-----. 1 root sales 0 Aug  1 13:21 index.html
+root@localhost:~# groupmod -n clerks sales
+root@localhost:~# ls -l index.html
+-rw-r-----. 1 root clerks 0 Aug  1 13:21 index.html
+```
+
+Después del comando `groupmod` anterior, el archivo *index.html* tiene un nombre de propietario de grupo diferente. Sin embargo, todos los usuarios que estaban en el grupo *sales* están ahora en el grupo *clerks*, así pues, todos los usuarios aún pueden acceder el archivo *index.html*. Una vez más, esto es porque el grupo se define por el GID, no por el nombre del grupo.
+
+Por otro lado, si cambias el GID para un grupo, entonces todos los archivos que fueron asociados a ese grupo ya no estarán asociados a ese grupo. De hecho, todos los archivos que fueron asociados a ese grupo ya no estarán asociados con ningún nombre de grupo. Por el contrario, estos archivos serán propiedad de un GID solamente tal como se muestra a continuación:
+
+```bash
+root@localhost:~# groupmod -g 10003 clerks
+root@localhost:~# ls -l index.html
+-rw-r-----. 1 root 491 13370 Aug  1 13:21 index.html
+```
+
+Estos archivos sin nombre de grupo se denominan archivos «huérfanos». Como usuario root, probablemente quieras buscar todos los archivos que son propiedad de solamente un GID (no asociado con un nombre de grupo). Esto puede lograrse con la opción `-nogroup` para el comando `find`:
+
+```bash
+root@localhost:~# find / -nogroup 
+/root/index.html
+```

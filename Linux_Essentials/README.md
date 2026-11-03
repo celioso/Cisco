@@ -12428,3 +12428,49 @@ Sólo se puede eliminar a los grupos suplementarios, por lo que si un grupo es e
 Mientras que el grupo que se vaya a eliminar no sea el grupo principal del usuario, eliminar el grupo se logra mediante el comando `groupdel` junto con el nombre del grupo:
 
 `root@localhost:~# groupdel clerks`
+
+## 14.5 Archivo /etc/default/useradd
+
+Antes de empezar a crear los usuarios para el sistema, debes verificar o establecer los valores prácticos que se utilizarán por defecto con el comando `useradd`. Esto se puede lograr modificando la configuración en los archivos de configuración utilizados por el comando `useradd`.
+
+Asegurarse de que los valores en estos archivos de configuración sean razonables antes de agregar usuarios puede ayudarte a ahorrar tiempo y la molestia de tener que corregir la configuración de la cuenta de usuario después de agregar los usuarios.
+
+La opción `-D` del comando `useradd` te permitirá visualizar o modificar algunos de los valores por defecto utilizados por el comando `useradd`. Los valores indicados por `useradd -D` también pueden visualizarse o actualizar mediante la manipulación del archivo */etc/default/useradd*:
+
+```bash
+root@localhost:~# useradd -D 
+GROUP=100
+HOME=/home
+INACTIVE=-1
+EXPIRE=
+SHELL=/bin/bash
+SKEL=/etc/skel
+CREATE_MAIL_SPOOL=yes
+```
+La siguiente tabla describe cada uno de estos valores:
+
+| Campo | Ejamplo	| Descripción |
+|---|---|---|
+| GROUP	| 100	| En las distribuciones que no usan UPG, este será el grupo principal de forma predeterminada para un usuario nuevo, si no se ha especificado uno con el comando `useradd`. Este normalmente es el grupo de «users» («usuarios» en español) con un GID de 100.<br>Esta configuración afecta a la configuración por defecto del archivo */etc/passwd* resaltado abajo:<br>*bob:x:600:600:bob:/home/bob:/bin/bash*<br>La opción `-g` para el comando `useradd` permite utilizar un grupo principal diferente al predeterminado, cuando se crea una nueva cuenta de usuario. |
+| HOME | /home | El directorio */home* es el directorio base predeterminado, en el cuál se creará un nuevo directorio home del usuario. Esto significa que un usuario con un nombre de cuenta de bob tendría un directorio de */home/bob*.<br>Esta configuración afecta a la configuración por defecto del archivo */etc/passwd* resaltado abajo:<br>*bob:x:600:600:bob:/home/bob:/bin/bash*<br>La opción ``-b`` para el comando ``useradd`` permite utilizar un directorio base diferente al predeterminado, cuando se crea una nueva cuenta de usuario. |
+| INACTIVE	| -1 | Este valor representa el número de días después de que caduca la contraseña hasta que la cuenta será deshabilitada. Un valor de -1 significa que esta función no está habilitada por defecto y no se proporciona ningún valor «inactivo» para las nuevas cuentas por defecto.<br>Esta configuración afecta a la configuración por defecto del archivo */etc/shadow* resaltado abajo:<br>*bob:pw:15020:5:30:7:60:15050:*<br>La opción `-f` para el comando `useradd` permite utilizar un valor *INACTIVE* diferente al predeterminado, cuando se crea una nueva cuenta de usuario. |
+| EXPIRE | | Por defecto, no hay ningún valor para la fecha de caducidad. Generalmente, una fecha de vencimiento se configura para una cuenta individual, no a todas las cuentas.<br>Por ejemplo, si tuvieras un contratista que fuese contratado para trabajar hasta el final del día 01 de noviembre de 2013, podrías asegurarte de que no pueda iniciar sesión después de esa fecha, utilizando el campo de *EXPIRE*.<br>Esta configuración afecta a la configuración por defecto del archivo */etc/shadow* resaltado abajo:<br>*bob:pw:15020:5:30:7:60:15050:*<br>La opción `-e` para el comando `useradd` permite utilizar un valor EXPIRE diferente al predeterminado, cuando se crea una nueva cuenta de usuario. |
+| SHELL	| /bin/bash	| El valor de SHELL indica el shell por defecto para los usuarios cuando inician sesión en el sistema.<br>Esta configuración afecta a la configuración por defecto del archivo */etc/passwd* resaltado abajo:<br>*bob:x:600:600:bob:/home/bob:/bin/bash*<br>La opción `-s` para el comando `useradd` permite utilizar un shell de inicio de sesión diferente al predeterminado, cuando se crea una nueva cuenta de usuario. |
+| SKEL	| /etc/skel	| El valor *SKEL* determina qué directorio «esqueleto» tendrá su contenido copiado en el directorio home de los usuarios nuevos. El contenido de este directorio se copia en el directorio home del usuario nuevo y el nuevo usuario recibe la propiedad de los nuevos archivos.<br>Esto proporciona a los administradores una manera fácil de «rellenar» una nueva cuenta de usuario con los archivos de configuración clave.<br>La opción `-k` para el comando `useradd` permite utilizar un directorio *SKEL* diferente al predeterminado, cuando se crea una nueva cuenta de usuario. |
+| CREATE_MAIL_SPOOL	| yes	| El «mail spool» («carrete de correo» en español) es un archivo donde se coloca el correo entrante.<br>Actualmente el valor para crear un mail spool es yes, lo que significa que los usuarios por defecto están configurados con la capacidad de recibir y guardar correo local. Si no piensas usar el correo local, este valor puede cambiarse a no. |
+
+Para modificar uno de los valores por defecto del `useradd`, el archivo */etc/default/useradd* puede editarse con un editor de texto. Otra técnica (más segura) es usar el comando `useradd -D`.
+
+Por ejemplo, si quieres permitir a los usuarios con una contraseña caducada seguir iniciando la sesión con un máximo de treinta días, puedes ejecutar lo siguiente:
+
+```bash
+root@localhost:~# useradd -D -f 30
+root@localhost:~# useradd -D
+GROUP=100
+HOME=/home
+INACTIVE=30
+EXPIRE=
+SHELL=/bin/bash
+SKEL=/etc/skel
+CREATE_MAIL_SPOOL=yes
+```

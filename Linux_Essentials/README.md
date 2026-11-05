@@ -12517,3 +12517,52 @@ El ejemplo anterior representa un típico archivo /etc/login.defs de la distribu
 | USERGROUPS_ENAB	| yes	| En las distribuciones que cuentan con un grupo privado para cada usuario, como se muestra en este ejemplo CentOS, el *USERGROUPS_ENAB* tendrá un valor de *yes*. Si no se utiliza la UPG en la distribución, entonces esto tendrá un valor *no*. |
 | ENCRYPT_METHOD | SHA512	| El método de cifrado que se utiliza para cifrar las contraseñas de los usuarios en el archivo */etc/shadow*. El valor de *ENCRYPT_METHOD* anula la configuración de *MD5_CRYPT_ENAB* (véase el siguiente renglón). |
 | MD5_CRYPT_ENAB | no	| Este ajuste obsoleto originalmente permitía al administrador especificar el uso del cifrado de contraseñas MD5 en lugar del cifrado original DES. Ahora es reemplazado por el valor de ENCRYPT_METHOD. |
+
+## 14.7 Crear un Usuario
+
+Durante el proceso de instalación, la mayoría de los instaladores crean un usuario normal y ya sea da a este usuario el permiso para ejecutar comandos administrativos con `sudo` o bien requiere que se configure una contraseña de usuario root como parte del proceso de instalación. Esto significa que la mayoría de los sistemas Linux se configuran de tal manera que permitan que un usuario (no root) sin privilegios inicie sesión, y que tenga la capacidad de ejecutar los comandos como el usuario root, ya sea directa o indirectamente.
+
+Si la computadora se va a utilizar por sólo una persona, puede ser suficiente tener sólo una cuenta de usuario normal. Sin embargo, si una computadora debe de ser compartida por varias personas, entonces es bueno tener una cuenta separada para cada persona que la utiliza. Hay varias ventajas para los individuos si tienen sus propias cuentas separadas:
+
+- Las cuentas pueden utilizarse para conceder acceso selectivo a archivos o servicios. Por ejemplo, el usuario de cada cuenta tiene un directorio separado que generalmente no es accesible para otros usuarios.
+
+- El comando `sudo` se puede configurar para conceder la capacidad de ejecutar comandos administrativos selectos. Si los usuarios están obligados a utilizar el comando `sudo` para llevar a cabo los comandos administrativos, el sistema registra cuando los usuarios realizaron tales comandos.
+
+- Cada cuenta puede tener membresías de grupos y los derechos asociados con ellos, lo que permite una mayor flexibilidad de gestión.
+
+## 14.7.1 Consideraciones de la Cuenta
+
+Crear una cuenta de usuario para usarlo con un sistema Linux puede requerir que reúnas varias piezas de información. Mientras que todo lo que puede ser necesario es el nombre de la cuenta, probablemente quieras planificar el UID, el grupo principal, los grupos suplementarios, el directorio home, el esqueleto de directorio y el shell que vayas a utilizar. A la hora de planificar estos valores, considera lo siguiente:
+
+**nombre de usuario**: El único argumento necesario para el comando `useradd` es el nombre que le quieras dar a la cuenta. Este nombre debe seguir las mismas pautas que vimos anteriormente en este capítulo para los nombres de grupo. Para resumir, debe tener 32 caracteres o menos, empezar con una letra en minúscula o un guión bajo y luego sólo debe contener letras minúsculas, números, guiones y guiones bajos. Si el usuario necesita tener acceso a múltiples sistemas, generalmente se recomienda que el nombre de la cuenta sea igual en esos sistemas. El nombre de la cuenta debe ser único para cada usuario.
+
+**identificador de usuario (UID)**: Una vez creado un usuario con un UID específico, el sistema generalmente incrementará el UID solo por uno para el siguiente usuario que vayas a crear. Si estás conectado a una red con otros sistemas, probablemente quieras asegurarte que este UID sea el mismo en todos los sistemas para ayudar a proveer un acceso consistente. La opción `-u` para el comando `useradd` te permite especificar el número UID. Los UID por lo general pueden variar de cero a más de 4 mil millones, pero para mayor compatibilidad con los sistemas antiguos, el máximo valor recomendado para el UID es de 60,000.
+
+Tal como habíamos visto previamente, el usuario root tiene un identificador de usuario (UID) de 0, lo que hace que la cuenta tenga privilegios especiales. Cualquier cuenta con un UID de cero actuaría como «administrador».
+
+Las cuentas del sistema son las cuentas que generalmente se utilizan para ejecutar los servicios en segundo plano (llamados *daemons*). Al no tener los servicios ejecutados como usuario root, se limita la cantidad de daño que se puede hacer con una cuenta de servicio que ha sido comprometida. Las cuentas del sistema utilizadas por los servicios generalmente utilizarán los UID que están en el rango de «reservados». Una cuenta de sistema que es una excepción a esta regla es el usuario *nfsnobody*, que tiene un UID *65534*.
+
+El rango reservado utilizado para las cuentas de servicio se ha ampliado con el tiempo. Originalmente, era para los UID entre 1 y 99. La tendencia actual entre distribuciones es que las cuentas del sistema sean cualquier cuenta que tenga un UID entre 1 y 999, pero se sigue utilizando también el rango de 1-499.
+
+Si estás configurando un nuevo sistema, es una buena práctica a empezar tus UID no inferiores a 1000. Esto también tiene la ventaja para asegurar que tendrás suficientes UID disponibles para muchos servicios del sistema y darte la habilidad de crear muchos GID en el rango «reservado».
+
+**grupo primario**: En las distribuciones que utilizan UPG, este grupo se creará automáticamente con un GID y un nombre de grupo que coincida con el UID y el nombre de usuario de la cuenta de usuario recién creado. En las distribuciones que no usan UPG, el grupo primario normalmente por defecto es el grupo de «users» («usuarios» en inglés) con un GID de 100. Para especificar un grupo primario con el comando `useradd`, utiliza la opción `-g` con el nombre o el GID del grupo.
+
+**grupo(s) suplementario(s)**: Si quieres que el usuario fuera miembro de uno o más grupos suplementarios, la opción `-G` se puede utilizar para especificar una lista separada por comas de nombres de grupos o números.
+
+**directorio home**: Por defecto, la mayoría de las distribuciones crearán el directorio home del usuario con el mismo nombre que la cuenta de usuario bajo */home*. Por ejemplo, si creas una cuenta de usuario llamada *sam*, el nuevo directorio home del usuario sería */home/sam*. Hay varias opciones para el comando `useradd` que pueden afectar la creación del directorio home del usuario:
+
+- La opción `-b` te permite especificar un directorio diferente bajo el cual se creará el directorio home del usuario. Por ejemplo: `-b /test` resultaría en */test/sam* siendo el directorio home para una cuenta de usuario llamada *sam*.
+
+- La opción `-d` te permite especificar un directorio existente o un nuevo directorio para el usuario. Esto debe ser una ruta de acceso completa para el directorio home del usuario. Por ejemplo: `-d /home/sam`.
+
+- La opción `-m` le dice a `useradd` que cree el directorio home; esto no es normalmente necesario ya que es el comportamiento predeterminado del comando `useradd`. Sin embargo, cuando utilices la opción `-k` (véase abajo) para especificar un esqueleto de directorio diferente, entonces necesitarás la opción `-m`.
+
+- La opción `-M` se utiliza para especificarle al comando `useradd` que no debe crear el directorio home.
+
+**esqueleto de directorio**: De forma predeterminada, el contenido del directorio */etc/skel* se copia en el directorio home del usuario nuevo. Los archivos resultantes también son propiedad del nuevo usuario. Usando la opción `-k` con el comando `useradd`, el contenido de un directorio diferente se puede utilizar para rellenar el directorio home de un usuario nuevo. Cuando se especifica el directorio esqueleto con la opción `-k`, debe utilizarse la opción `-m`, de lo contrario el comando `useradd` fallará mostrando un error que dice: «*-k flag is only allowed with the -m flag*» (o «La opción `-k` solo se permite con la opción `-m`» en español).
+
+**shell**: Mientras el shell por defecto se especifica en el archivo */etc/default/useradd*, también puede ser cambaido con la opción de `useradd -s` en el momento de la creación de cuentas. Más tarde, el administrador puede usar la opción `usermod -s` para cambiar el shell o el usuario puede cambiar su shell con el comando `chsh`. Es común especificar el shell */sbin/nologin* para las cuentas que se vayan a utilizar como cuentas del sistema.
+
+**comentario**: El campo de comentario, originalmente llamado el campo General Electric Comprehensive Operating System (GECOS), normalmente se utiliza para contener el nombre completo del usuario. Muchos programas gráficos muestran el valor de este campo en lugar del nombre de la cuenta. La opción `-c` de los comandos `useradd` y `usermod` permite especificar el valor de este campo.
+

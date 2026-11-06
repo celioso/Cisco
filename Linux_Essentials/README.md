@@ -12566,3 +12566,43 @@ Si estás configurando un nuevo sistema, es una buena práctica a empezar tus UI
 
 **comentario**: El campo de comentario, originalmente llamado el campo General Electric Comprehensive Operating System (GECOS), normalmente se utiliza para contener el nombre completo del usuario. Muchos programas gráficos muestran el valor de este campo en lugar del nombre de la cuenta. La opción `-c` de los comandos `useradd` y `usermod` permite especificar el valor de este campo.
 
+## 14.7.2 El Comando useradd
+
+Una vez hayas comprobado qué valores se utilizarán por defecto y hayas reunido la información sobre el usuario, entonces estás listo para crear una cuenta de usuario. Un ejemplo de un comando `useradd` usando algunas opciones sería el siguiente:
+
+`root@localhost:~# useradd -u 1000 -g users -G wheel,research -c 'Jane Doe' jane`
+
+Este ejemplo del comando `useradd` crea un usuario con UID de *1000*, un grupo primario de *users*(«usuarios»), membresías suplementarias en los grupos *wheel* y *research*, un comentario de «*Jane Doe*» y un nombre de cuenta *jane*.
+
+La información sobre la cuenta de usuario de *jane* se agregará automáticamente a los archivos */etc/passwd* y */etc/shadow*, mientras que la información sobre el acceso a grupos suplementarios de jane se añadirá automáticamente al archivo */etc/group* y */etc/gshadow*. Por ejemplo:
+
+```bash
+root@localhost:~# useradd -u 1000 -g users -G wheel,research -c "Jane Doe" jane
+root@localhost:~# grep jane /etc/passwd
+jane:x:1000:100:Jane Doe:/home/jane:/bin/bash
+root@localhost:~# grep jane /etc/shadow
+jane:!!:16003:0:99999:7:::
+root@localhost:~# grep jane /etc/group
+wheel:x:10:jane
+research:x:2000:jane
+root@localhost:~# grep jane /etc/gshadow
+wheel:::jane
+research:!::jane
+root@localhost:~#
+```
+
+Ten en cuenta que la cuenta aún no tiene una contraseña válida!
+
+Además, se crearía el archivo mail spool */var/spool/mail/jane*, el directorio */home/jane* se crearía con permisos de sólo permitir el acceso al usuario *jane* y el contenido del directorio */etc/skel* se copiaría en el directorio:
+
+```bash
+root@localhost:~# ls /var/spool/mail
+jane root rpc sysadmin
+root@localhost:~# ls /home
+jane sysadmin
+root@localhost:~# ls -a /home/jane
+.  ..  .bash_logout  .bashrc  .profile  .selected_editor
+root@localhost:~# ls -a /etc/skel
+.  ..  .bash_logout  .bashrc  .profile  .selected_editor
+root@localhost:~#
+```

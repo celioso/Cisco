@@ -12606,3 +12606,61 @@ root@localhost:~# ls -a /etc/skel
 .  ..  .bash_logout  .bashrc  .profile  .selected_editor
 root@localhost:~#
 ```
+
+## 14.8 Elegir una Contraseña
+
+Elegir una buena contraseña no es una tarea fácil, pero es fundamental que se haga correctamente, ya que la seguridad de una cuenta (tal vez todo el sistema) puede verse comprometida. Escoger una buena contraseña es únicamente un comienzo; tienes que ser cuidadoso con tu contraseña para que otras personas no la puedan ver. Nunca debes decir a nadie tu contraseña y nunca dejes que alguien te vea escribir tu contraseña. Si quieres apuntar tu contraseña, entonces la debes guardar en un lugar seguro como una caja fuerte.
+
+¡Es fácil crear una mala contraseña! Si utilizas cualquier información en tu contraseña que tenga que ver contigo, entonces otras personas pueden llegar a conocerla o descubrir tal información, por lo tanto tu contraseña podría verse fácilmente comprometida. Tu contraseña nunca debe contener información sobre ti o alguien que conoces, tales como:
+
+- nombre
+- segundo nombre
+- apellido
+- cumpleaños
+- teléfono
+- nombres de mascotas
+- licencia de conducir
+- seguro social
+
+Hay numerosos factores a considerar al elegir una contraseña para una cuenta:
+
+- **Longitud**: El archivo */etc/login.defs* permite al administrador especificar la longitud mínima de la contraseña. Aunque hay personas que consideran que una contraseña larga es mejor, esto no es realmente correcto. El problema con las contraseñas que son demasiado largas es que no se recuerdan fácilmente y, consecuentemente, la gente las apunta a menudo en un lugar donde pueden ser fácilmente encontradas y comprometidas.
+
+- **Composición**: Una buena contraseña debe estar compuesta por una combinación de caracteres alfabéticos, numéricos y simbólicos.
+
+- **Vigencia**: La cantidad de tiempo que una contraseña se puede utilizar como máximo debe ser limitada por varias razones:
+
+  - Si una cuenta está comprometida y se limita el tiempo que la contraseña es válida, el intruso perderá el acceso puesto que eventualmente la contraseña se volverá invalidada.
+  - Si una cuenta no se usa, entonces se puede desactivar automáticamente cuando la contraseña no sea válida.
+  - Si los atacantes intentan atacar con «fuerza bruta» con cada contraseña posible, entonces la contraseña puede cambiarse antes de que el ataque tenga éxito.
+
+Sin embargo, el hecho de requerir a un usuario que cambie su contraseña a menudo podría plantear problemas de seguridad, incluyendo:
+
+  - La calidad de la contraseña que el usuario elija, podría ser inferior.
+   - El usuario puede empezar a apuntar su contraseña en papel, lo que aumenta la posibilidad de que la contraseña sea descubierta.
+   - Las cuentas de usuario rara vez utilizadas se pueden caducar y requierir atención administrativa para reiniciar.
+
+Las opiniones varían sobre la frecuencia con la que los usuarios deben ser forzados a cambiar sus contraseñas. Para cuentas muy sensibles, se recomienda cambiar las contraseñas con mayor frecuencia, como cada 30 días. Por otro lado, para cuentas no críticas sin ningún tipo de acceso a información sensible, hay menos necesidad de cambio frecuente. Para cuentas con mínimo riesgo, una vigencia razonable sería 90 días.
+
+## 14.9 Establecer una Contraseña de Usuario
+
+Existen varias formas de cambiar una contraseña de usuario: el usuario puede ejecutar el comando `passwd`, el administrador puede ejecutar el comando `passwd` proporcionando el nombre de usuario como argumento y las herramientas gráficas también están disponibles.
+
+El administrador puede utilizar el comando `passwd` para cambiar la contraseña de la cuenta o establecer una contraseña inicial. Por ejemplo, si el administrador hubiera creado la cuenta *jane*, entonces ejecutando `passwd jane` proporcionaría al administrador un prompt para configurar la contraseña para *jane*. Si se completa con éxito, el archivo */etc/shadow* se actualizará con la nueva contraseña del usuario.
+
+Mientras que los usuarios regulares deben seguir muchas reglas de contraseña, el usuario root solo debe seguir una regla: la contraseña no se puede dejar en blanco. Todas otras reglas de contraseña que el usuario root no cumpla, simplemente resultarán en una advertencia que se imprime a la pantalla y la regla no se aplica:
+
+```bash
+root@localhost:~# passwd jane                                                 
+Enter new UNIX password: 
+BAD PASSWORD: it is WAY to short
+BAD PASSWORD: is too simple                                                   
+Retype new UNIX password:                                                     
+passwd: password updated successfully  
+root@localhost:~#
+```
+Suponiendo que el administrador estableció una contraseña para una cuenta de usuario, el usuario puede entonces iniciar sesión con el nombre de cuenta y la contraseña. Cuando el usuario abre una terminal, puede ejecutar el comando `passwd` sin argumentos para cambiar su propia contraseña. Se le pide su contraseña actual y luego se pedirá que introduzca la nueva contraseña dos veces.
+
+Para un usuario común puede ser difícil establecer una contraseña válida, porque debe seguir todas las reglas para la contraseña. El usuario normalmente tiene tres intentos para proporcionar una contraseña válida antes de que el comando `passwd` salga con un error.
+
+Con los privilegios del usuario root, las contraseñas encriptadas y otra información relacionada a la contraseña puede verse consultando el archivo */etc/shadow*. Hay que recordar que los usuarios normales no pueden ver el contenido de este archivo.

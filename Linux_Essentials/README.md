@@ -12664,3 +12664,22 @@ Suponiendo que el administrador estableció una contraseña para una cuenta de u
 Para un usuario común puede ser difícil establecer una contraseña válida, porque debe seguir todas las reglas para la contraseña. El usuario normalmente tiene tres intentos para proporcionar una contraseña válida antes de que el comando `passwd` salga con un error.
 
 Con los privilegios del usuario root, las contraseñas encriptadas y otra información relacionada a la contraseña puede verse consultando el archivo */etc/shadow*. Hay que recordar que los usuarios normales no pueden ver el contenido de este archivo.
+
+## 14.10 Usando el Comando chage
+
+Aunque no aparezca como un comando que deber saber según los objetivos del curso, el comando `chage` ofrece muchas opciones para la gestión de la información de vencimiento de contraseña que se encuentra en el archivo */etc/shadow*.
+
+Aquí está un resumen de las opciones de *chage*:
+
+| Opción corta	| Opción larga	| Descripción |
+-l	--list	Listar la información de vencimiento de la cuenta
+-d LAST_DAY	--lastday LAST_DAY	Fijar la fecha del último cambio de contraseña a LAST_DAY
+-E EXPIRE_DATE	--expiredate EXPIRE_DATE	Configurar cuenta para que expire el EXPIRE_DATE
+-h	--help	Mostrar la ayuda para chage
+-I INACTIVE	--inactive INACTIVE	Configurar la cuenta para permitir acceso INACTIVE días después de que la contraseña caduque.
+-m MIN_DAYS	--mindays MIN_DAYS	Definir el número mínimo de días antes de que se pueda cambiar la contraseña a MIN_DAY
+-M MAX_DAYS	--maxdays MAX_DAYS	Definir el número máximo de días antes de que se pueda cambiar la contraseña a MAX_DAY
+-W WARN_DAYS	--warndays WARN_DAYS	Establecer el número de días antes de que caduque una contraseña para mostrar una advertencia a WARN_DAYS
+Un buen ejemplo del comando chage sería cambiar el número máximo de días para la validez de la contraseña de una persona a 60 días:
+
+root@localhost:~# chage -M 60 jane

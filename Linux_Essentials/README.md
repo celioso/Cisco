@@ -12730,3 +12730,4 @@ Si utilizas la opción -a sin la opción -G, solamente tienes que listar los gru
 
 root@localhost:~# usermod -aG development jane
 
+lklk

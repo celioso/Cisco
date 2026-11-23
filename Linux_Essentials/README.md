@@ -12707,27 +12707,53 @@ Proporcionando un nombre de usuario o un nombre de *tty* (terminal) como argumen
 El comando `usermod` ofrece muchas opciones para modificar una cuenta de usuario existente. Observa que la mayoría de estas opciones también están disponible con el comando `useradd` en el momento de crear la cuenta. La siguiente tabla proporciona un resumen de las opciones `usermod`:
 
 | Opción corta	| Opción larga	| Descripción |
+|---|---|---|
 | -c	| COMMENT	| Establecer el valor del campo GECOS o comentario a COMMENT.
--d HOME_DIR	--home HOME_DIR	Establecer un nuevo directorio home para el usuario.
--e EXPIRE_DATE	--expiredate EXPIRE_DATE	Configurar la fecha de caducidad de la cuenta a EXPIRE_DATE.
--f INACTIVE	--inactive INACTIVE	Configurar la cuenta para permitir acceso INACTIVE días después de que la contraseña caduque.
--g GROUP	--gid GROUP	Establecer GROUP como grupo primario.
--G GROUPS	--groups GROUPS	Establecer grupos adicionales a una lista especificada en GROUPS.
--a	--append	Añadir grupos adicionales del usuario especificados por -G.
--h	--help	Mostrar la ayuda para usermod.
--l NEW_LOGIN	--login NEW_LOGIN	Cambiar el nombre de inicio de sesión del usuario.
--L	--lock	Bloquear la cuenta de usuario.
--s SHELL	--shell SHELL	Especificar el shell de inicio de sesión para la cuenta.
--u NEW_UID	--uid NEW_UID	Especificarque el UID del usuario sea NEW_UID.
--U	--unlock	Desbloquear la cuenta de usuario.
-Varias de estas opciones son importantes debido a la forma en la que afectan la administración de usuarios. Puede ser muy complicado cambiar el UID del usuario con la opción -u, ya que los archivos pertenecientes al usuario quedarán huérfanos. Por otra parte, especificando un nuevo nombre de inicio de sesión para el usuario con la opción -l no resulta en archivos huérfanos.
+| -d HOME_DIR	| --home HOME_DIR	| Establecer un nuevo directorio home para el usuario. |
+| -e EXPIRE_DATE | --expiredate EXPIRE_DATE	| Configurar la fecha de caducidad de la cuenta a *EXPIRE_DATE*. |
+| -f INACTIVE	| --inactive INACTIVE	| Configurar la cuenta para permitir acceso *INACTIVE* días después de que la contraseña caduque. |
+| -g GROUP	| --gid GROUP	| Establecer GROUP como grupo primario. |
+| -G GROUPS	| --groups GROUPS	| Establecer grupos adicionales a una lista especificada en GROUPS. |
+| -a	| --append	| Añadir grupos adicionales del usuario especificados por -G. |
+| -h	| --help	| Mostrar la ayuda para usermod. |
+| -l NEW_LOGIN	| --login NEW_LOGIN	| Cambiar el nombre de inicio de sesión del usuario. |
+| -L	| --lock	| Bloquear la cuenta de usuario. |
+| -s SHELL	| --shell SHELL	| Especificar el shell de inicio de sesión para la cuenta. |
+| -u NEW_UID	| --uid NEW_UID	| Especificarque el UID del usuario sea NEW_UID. |
+| -U	| --unlock	| Desbloquear la cuenta de usuario. |
 
-Borrar un usuario con el comando userdel (véase la sección siguiente) puede resultar en archivos huérfanos o eliminados del usuario del sistema. En vez de eliminar la cuenta, otra opción es bloquear la cuenta con la opción -L del comando usermod. El bloqueo de una cuenta evita que la cuenta se utilice, pero sigue siendo propietario de los archivos.
+Varias de estas opciones son importantes debido a la forma en la que afectan la administración de usuarios. Puede ser muy complicado cambiar el UID del usuario con la opción ``-u``, ya que los archivos pertenecientes al usuario quedarán huérfanos. Por otra parte, especificando un nuevo nombre de inicio de sesión para el usuario con la opción -l no resulta en archivos huérfanos.
 
-Hay algunas cosas importantes que debes saber sobre el manejo de los grupos suplementarios. Si utilizas la opción -G sin la opción -a, debes listar todos los grupos a los que perteneciera el usuario. Usando solamente la opción -G puede accidentalmente quitar un usuario de todos los anteriores grupos suplementarios a los que pertenece.
+Borrar un usuario con el comando `userdel` (véase la sección siguiente) puede resultar en archivos huérfanos o eliminados del usuario del sistema. En vez de eliminar la cuenta, otra opción es bloquear la cuenta con la opción `-L` del comando `usermod`. El bloqueo de una cuenta evita que la cuenta se utilice, pero sigue siendo propietario de los archivos.
 
-Si utilizas la opción -a sin la opción -G, solamente tienes que listar los grupos nuevos a los que perteneciera el usuario. Por ejemplo, si el usuario jane pertenece actualmente a los grupos wheel y research, entonces para agregar su cuenta al grupo de desarrollo, ejecuta el siguiente comando:
+Hay algunas cosas importantes que debes saber sobre el manejo de los grupos suplementarios. Si utilizas la opción `-G` sin la opción `-a`, debes listar todos los grupos a los que perteneciera el usuario. Usando solamente la opción `-G` puede accidentalmente quitar un usuario de todos los anteriores grupos suplementarios a los que pertenece.
 
-root@localhost:~# usermod -aG development jane
+Si utilizas la opción `-a` sin la opción `-G`, solamente tienes que listar los grupos nuevos a los que perteneciera el usuario. Por ejemplo, si el usuario jane pertenece actualmente a los grupos `wheel` y `research`, entonces para agregar su cuenta al grupo de desarrollo, ejecuta el siguiente comando:
 
-lklk
+`root@localhost:~# usermod -aG development jane`
+
+## 14.12 Eliminar a un Usuario
+
+Cuando eliminas una cuenta de usuario, también necesitas decidir si quieres eliminar el directorio home del usuario. Los archivos del usuario pueden ser importantes para tu organización, e incluso, puede que existan requisitos legales para mantener los datos durante un cierto periodo de tiempo, así que ten cuidado de no tomar esta decisión a la ligera. También, a menos que hayas hecho copias de seguridad de los datos, una vez que ejecutes el comando para borrar al usuario y sus archivos, tal acción no se puede revertir.
+
+Para eliminar al usuario *jane* sin eliminar el directorio home del usuario (*/home/jane*) se puede ejecutar:
+
+`root@localhost:~# userdel jane`
+
+Ten en cuenta que borrar un usuario sin borrar su directorio home significa que los archivos del directorio home del usuario son ahora huérfanos y estos archivos serán propiedad únicamente de sus previos UID y GID.
+
+Para eliminar al usuario *jane* y borrar el directorio */home/jane*, utiliza la opción `-r`:
+
+`root@localhost:~# userdel -r jane`
+
+**ADVERTENCIA**: El comando anterior solo borra los archivos del usuario en su directorio home y mail spool. Si el usuario posee otros archivos fuera de su directorio, los archivos seguirán existiendo como archivos huérfanos.
+
+## 14.1 Introducción
+
+Este es Lab 14: Crear un Usuario. Mediante la realización de esta práctica de laboratorio, los estudiantes aprenderán acerca de cómo crear una nueva cuenta de usuario, establecer la contraseña inicial para esta cuenta, y realizar otras modificaciones, como por ejemplo hacerlos miembros de un grupo secundario.
+
+En este laboratorio llevarás a cabo las siguientes tareas:
+
+- Crear un nuevo usuario con el comando `useradd`
+- Establecer y reiniciar la contraseña de un usuario con el comando `passwd`
+- Realizar cambios en la cuenta de usuario con el comando `usermod`
